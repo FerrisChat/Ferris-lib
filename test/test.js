@@ -1,0 +1,1 @@
+const Ferrislib = require('../build')
