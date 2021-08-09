@@ -7,12 +7,28 @@ export enum Urls {
 export const API_VERSION = 0
 
 export class Endpoints {
-    static GUILD = (guildId) => `/guilds/${guildId}`
-    static USER = (userId) => `/users/${userId}`
-    static CHANNEL = (channelId) => `/channels/${channelId}`
+    //Note not all Endpoints work, some are planned others are not deployed to the api yet
 
-    //Auth Flow
-    static AUTH = (userId) => `/auth/${userId}`
+    //Guilds
+    static GUILD = (guildId) => `/guilds/${guildId}`
+    static GUILDS = () => `/guilds`
+
+    //Channels    
+    static CHANNEL = (guildId, channelId) => `/guilds/${guildId}/channels/${channelId}`
+    static CHANNELS = (guildId) => `/guilds/${guildId}/channels`
+
+    //Messages
+    static MESSAGE = (guildId, channelId, messageId) => `/guilds/${guildId}/channels/${channelId}/messages/${messageId}`
+    static MESSAGES = (guildId, channelId) => `/guilds/${guildId}/channels/${channelId}/messages`
+
+    //Members
+    static MEMBER = (guildId, memberId) => `/guilds/${guildId}/members/${memberId}`
+    static MEMBERS = (guildId) => `/guilds/${guildId}/members` //SUBJECT TO CHANGE
+
+    //Users
+    static USER = (userId) => `/users/${userId}`
+    static USER_GUILDS = (userId) => `/users/${userId}/guilds`
+
 }
 
 export type RequestMethods = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
