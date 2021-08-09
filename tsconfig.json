@@ -11,6 +11,7 @@
       "DOM"
     ],
     "outDir": "build",
+    "resolveJsonModule": true,
     "strict": false,
     "strictFunctionTypes": false,
     "skipLibCheck": true,
