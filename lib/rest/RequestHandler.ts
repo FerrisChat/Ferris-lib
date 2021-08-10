@@ -9,10 +9,10 @@ export class RequestHandler {
 
     constructor(client: any) {
 
-        this.baseUrl = "https://fallback-api.ferrischat.hydrostaticcog.me" + Urls.Base_Api + API_VERSION
+        this.baseUrl = Urls.Api + Urls.Base_Api + API_VERSION
         this.userAgent = `FerrisLib (https://github.com/Drxckzyz/Ferris-lib, ${require('../../package.json').version})`
         //this is a test token to be able interact with the api
-        this.tempAuth = "MA==.2gwqJT9ODJTDjwv3sfRHt0XN7NVs_B4vJLqWqKO3YBf_QDUoGJbrl1JUAhpTCd1kGV_bLNaKCI7J74YE8dRXuSZmo7yWez4UBhD4RQ55PD_5hyJsXCvt8AS19VA5KNdksFWmqpieMykSJ6P5NKOqTJKffttXwELe5WXFg_R5ZBK63HvIQifmaWXMwER-FqffcFGMyhZeA25pXIUCm-yD8thDNMy9T90Viz7nzEfiLJmKeNM8ymf6JqZjqok9txjmt201FUNQxwlPOoQOvnki-Yfj3WWxZ_3I0fo0LfEStsrs_2iqQLru0FK2hY-MdCOajNDz5V1X4MjS2_USqJ8sAw=="
+        this.tempAuth = "MjgzNDcyODkzNDcy.9NiKkbutW_39gE8blHOnWHfFptL_4lcXgJ2OaBNykE5nYFdTzrAx_NNXrRnoCv74ybSyCn8slOIaoY0Kou_uWwJl6s9PqREScwZjZyspGkYJdiLGJzWean5THKN6uyFBiGrOXTW_jrFmFYQXuDJ1jbebVX3QcMpISkWHk2VcChUw9MXgMEntto_JsgjNIpsxzBwkWQNeIyMOp-aFN3i3hjmUh2kj245ePzRBE3mbdxoZ5C9vHJ-nu17Kc-EAogJPJCp-guV2i0CfKaAqIdCRMg7yCr-hNwYSmOWSGEwhauea1hQ8vN2zi7H0ReeQ98L537FWfPqu3xicjBCsYCETGw=="
     }
 
     async request(method: RequestMethods, url: string, body?: any) {
@@ -38,7 +38,7 @@ export class RequestHandler {
             if (res.ok) {
                 resolve(this.parseResponse(res))
             }
-
+            console.log(res.status, res.statusText)
             if (res.status === 401 || res.status === 403) {
                 console.log("Invalid Something")
             } if (res.status >= 400 && res.status <= 500) {
