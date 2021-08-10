@@ -1,3 +1,13 @@
+export interface ClientOptions {
+    token: string;
+    rest?: {
+        requestTimeout?: number;
+        retryLimit?: number;
+        retryAfter?: number;
+        headers?: object;
+    }
+}
+
 export enum Urls {
     Client = "https://ferris.chat",
     Api = "https://api.ferris.chat",

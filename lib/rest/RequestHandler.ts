@@ -1,32 +1,40 @@
 import fetch from "node-fetch"
+import { Client } from "../Client";
 import { API_VERSION, RequestMethods, Urls } from "../Constants";
+import { APIError } from "../errors/ApiError";
+import { HTTPError } from "../errors/HttpError";
 
 export class RequestHandler {
 
     userAgent: string;
-    tempAuth: string;
     baseUrl: string;
+    client: Client;
+    status: {
+        retires: number;
+    }
 
-    constructor(client: any) {
+    constructor(client: Client) {
 
         this.baseUrl = Urls.Api + Urls.Base_Api + API_VERSION
-        this.userAgent = `FerrisLib (https://github.com/Drxckzyz/Ferris-lib, ${require('../../package.json').version})`
-        //this is a test token to be able interact with the api
-        this.tempAuth = "MjgzNDcyODkzNDcy.9NiKkbutW_39gE8blHOnWHfFptL_4lcXgJ2OaBNykE5nYFdTzrAx_NNXrRnoCv74ybSyCn8slOIaoY0Kou_uWwJl6s9PqREScwZjZyspGkYJdiLGJzWean5THKN6uyFBiGrOXTW_jrFmFYQXuDJ1jbebVX3QcMpISkWHk2VcChUw9MXgMEntto_JsgjNIpsxzBwkWQNeIyMOp-aFN3i3hjmUh2kj245ePzRBE3mbdxoZ5C9vHJ-nu17Kc-EAogJPJCp-guV2i0CfKaAqIdCRMg7yCr-hNwYSmOWSGEwhauea1hQ8vN2zi7H0ReeQ98L537FWfPqu3xicjBCsYCETGw=="
+        this.client = client
+        this.userAgent = `FerrisLib (https://github.com/Drxckzyz/Ferris-lib, ${require('../../package.json').version})`,
+            this.status = {
+                retires: 0,
+            }
     }
 
     async request(method: RequestMethods, url: string, body?: any) {
         return new Promise(async (resolve, reject) => {
             const headers = {
                 "User-Agent": this.userAgent,
-                "Authorization": this.tempAuth,
+                "Authorization": this.client.options.token,
                 "Content-type": "application/json"
             };
 
             const finalURL = this.baseUrl + url
 
             const controller = new AbortController()
-            const timeout = setTimeout(() => controller.abort(), 1000 * 30)
+            const timeout = setTimeout(() => controller.abort(), this.client.options.rest.requestTimeout * 1000).unref()
 
             const res = await fetch(finalURL, {
                 headers,
@@ -49,13 +57,19 @@ export class RequestHandler {
                 try {
                     data = await this.parseResponse(res)
                 } catch (error) {
-                    //reject(error)
-                    console.error("Malformed Response")
+                    reject(new HTTPError(error.message, error.constructor.name, res.status, res))
                 }
 
-                console.error("Throw Some Api Error Here")
+                reject(new APIError(data, res.status, res))
             } else if (res.status >= 500 && res.status < 600) {
-                console.warn("Server Issuses")
+                if (this.status.retires >= this.client.options.rest.retryLimit) {
+                    this.status.retires = 0
+                    reject(new Error(`Error: RequestHandler Hit the Http Retry Limit with the Status code ${res.status}.`))
+                    return
+                }
+                this.status.retires++
+                await new Promise((resolve) => setTimeout(resolve, this.client.options.rest.retryAfter * 1000))
+                resolve(this.request(method, url, body))
             }
         })
     }
