@@ -46,7 +46,7 @@ export class RequestHandler {
             if (res.ok) {
                 resolve(this.parseResponse(res))
             }
-            console.log(res.status, res.statusText)
+            //console.log(res.status, res.statusText)
             if (res.status === 401 || res.status === 403) {
                 console.log("Invalid Something")
             } if (res.status >= 400 && res.status <= 500) {

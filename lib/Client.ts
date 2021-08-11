@@ -1,8 +1,11 @@
 import { EventEmitter } from "events"
-import { ClientOptions } from "./Constants";
+import { ClientOptions, Endpoints } from "./Constants";
 import { RequestHandler } from "./rest/RequestHandler";
+import { StorageBox } from "./util/StorageBox";
 
 export class Client extends EventEmitter {
+    public guilds: StorageBox<string, any>;
+    public users: StorageBox<string, any>;
     public requestHandler: RequestHandler;
     public options: ClientOptions;
 
@@ -24,6 +27,27 @@ export class Client extends EventEmitter {
         this._validateOptions()
 
         this.requestHandler = new RequestHandler(this)
+
+        this.guilds = new StorageBox()
+
+        this.users = new StorageBox()
+    }
+
+    // temp, will be removed
+    public getGuild(id: string): any {
+        return this.requestHandler.request("GET", Endpoints.GUILD(id)).then((guild) => {
+            if (!this.guilds.has(id)) this.guilds.set(id, guild)
+            return guild
+        })
+    }
+
+    // the way this operates is temporary
+    public getUser(id: string, options?: { cache?: boolean; force?: boolean }): any {
+        if (!options.force && this.users.has(id)) return this.users.get(id)
+        return this.requestHandler.request("GET", Endpoints.USER(id)).then((user) => {
+            if (options.cache && !this.users.has(id)) this.users.set(id, user)
+            return user
+        })
     }
 
     private _validateOptions() {
