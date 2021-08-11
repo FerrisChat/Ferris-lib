@@ -3,7 +3,7 @@ export class HTTPError extends Error {
     method: string;
     path: string;
 
-    constructor(message, name, code, request) {
+    constructor(message, name, code, method, path) {
         super(message);
 
         /**
@@ -22,12 +22,12 @@ export class HTTPError extends Error {
          * The HTTP method used for the request
          * @type {string}
          */
-        this.method = request.method;
+        this.method = method;
 
         /**
          * The path of the request relative to the HTTP endpoint
          * @type {string}
          */
-        this.path = request.path;
+        this.path = path;
     }
 }

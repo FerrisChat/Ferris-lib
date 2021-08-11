@@ -1,8 +1,8 @@
 import fetch from "node-fetch"
 import { Client } from "../Client";
 import { API_VERSION, RequestMethods, Urls } from "../Constants";
-import { APIError } from "../errors/ApiError";
-import { HTTPError } from "../errors/HttpError";
+import { FerrisAPIError } from "./FerrisApiError";
+import { HTTPError } from "./HttpError";
 
 export class RequestHandler {
 
@@ -57,14 +57,14 @@ export class RequestHandler {
                 try {
                     data = await this.parseResponse(res)
                 } catch (error) {
-                    reject(new HTTPError(error.message, error.constructor.name, res.status, res))
+                    reject(new HTTPError(error.message, error.constructor.name, res.status, method, finalURL))
                 }
 
-                reject(new APIError(data, res.status, res))
+                reject(new FerrisAPIError(data, res.status, method, finalURL))
             } else if (res.status >= 500 && res.status < 600) {
                 if (this.status.retires >= this.client.options.rest.retryLimit) {
                     this.status.retires = 0
-                    reject(new Error(`Error: RequestHandler Hit the Http Retry Limit with the Status code ${res.status}.`))
+                    reject(new HTTPError(`The RequestHandler has reached the RetryLimit.`, "Retry Limit Reached", res.status, method, finalURL))
                     return
                 }
                 this.status.retires++

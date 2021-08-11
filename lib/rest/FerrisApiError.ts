@@ -1,24 +1,24 @@
-export class APIError extends Error {
+export class FerrisAPIError extends Error {
     method: string;
     path: string;
     code: number;
     httpStatus: number;
 
-    constructor(error, status, request) {
+    constructor(error, status, method, path) {
         super();
-        this.name = 'APIError';
+        this.name = 'FerrisAPIError';
 
         /**
          * The HTTP method used for the request
          * @type {string}
          */
-        this.method = request.method;
+        this.method = method;
 
         /**
          * The path of the request relative to the HTTP endpoint
          * @type {string}
          */
-        this.path = request.path;
+        this.path = path;
 
         /**
          * HTTP error code returned by Discord
