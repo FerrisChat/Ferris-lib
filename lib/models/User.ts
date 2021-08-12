@@ -6,17 +6,17 @@ export class User extends Base {
     public name: string;
     public guilds: unknown;
     public flags: number;
-    private client: Client;
+    #_client: Client;
 
     constructor(data: any, client: Client) {
         super(data.id);
 
-        this.client = client
         this._patch(data)
+        this.#_client = client
     }
 
     fetch() {
-        return this.client.requestHandler.request("GET", Endpoints.USER(this.id)).then((user) => {
+        return this.#_client.requestHandler.request("GET", Endpoints.USER(this.id)).then((user) => {
             this._patch(user)
             return this
         })
@@ -26,10 +26,10 @@ export class User extends Base {
         if ("name" in data) {
             this.name = data.name
         }
-        if ("guilds" in data.guilds) {
+        if ("guilds" in data) {
             this.guilds = data.guilds
         } else this.guilds = null
-        if ("flags" in data.flags) {
+        if ("flags" in data) {
             this.flags = data.flags
         }
     }

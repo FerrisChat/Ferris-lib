@@ -35,20 +35,22 @@ export class RequestHandler {
             const finalURL = this.baseUrl + url
 
             const controller = new AbortController()
-            const timeout = setTimeout(() => controller.abort(), this.client.options.rest.requestTimeout * 1000).unref()
+            //const timeout = setTimeout(() => controller.abort(), this.client.options.rest.requestTimeout * 1000).unref()
+
             console.log(finalURL)
             const res = await fetch(finalURL, {
                 headers,
                 body: body ? JSON.stringify(body) : null,
                 signal: controller.signal,
                 method,
-            }).finally(() => clearTimeout(timeout))
+            })//.finally(() => clearTimeout(timeout))
+
+            console.log(res.status, res.statusText)
 
             if (res.ok) {
-                console.log(res)
                 resolve(this.parseResponse(res))
             }
-            console.log(res.status, res.statusText)
+
             if (res.status === 401 || res.status === 403) {
                 console.log("Invalid Something")
             } else if (res.status >= 400 && res.status <= 500) {
@@ -76,6 +78,8 @@ export class RequestHandler {
         })
     }
     private parseResponse(res) {
-        return res.json().catch((e) => null);
+        const cloneres = res.clone()
+
+        return res.json().catch((e) => cloneres.text())
     }
 }

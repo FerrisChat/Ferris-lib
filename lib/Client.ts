@@ -17,14 +17,14 @@ export class Client extends EventEmitter {
         if (!clientOptions) throw new Error("No options were provided to the client Class")
         else if (!clientOptions.token) throw new Error("No Token was provided, Please specify one.")
 
-        this.options = Object.assign({
+        this.options = Object.assign(clientOptions, {
             rest: {
                 requestTimeout: 7,
                 retryLimit: 1,
                 retryAfter: 10,
                 headers: {},
             }
-        }, clientOptions)
+        })
 
         this._validateOptions()
 
@@ -60,7 +60,7 @@ export class Client extends EventEmitter {
             throw new TypeError("The Rest Retry Limit must be a number.")
         }
         if (typeof this.options.rest.requestTimeout != "number" || isNaN(this.options.rest.requestTimeout)) {
-            throw new TypeError("The Request Limit must be a number.")
+            throw new TypeError("The Request Timeout must be a number.")
         }
         if (typeof this.options.rest.headers != "object") {
             throw new TypeError("The Rest Headers must be an object.")
