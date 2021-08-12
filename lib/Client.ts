@@ -1,11 +1,13 @@
 import { EventEmitter } from "events"
 import { ClientOptions, Endpoints } from "./Constants";
+import { Guild } from "./models/Guild";
+import { User } from "./models/User";
 import { RequestHandler } from "./rest/RequestHandler";
 import { StorageBox } from "./util/StorageBox";
 
 export class Client extends EventEmitter {
-    public guilds: StorageBox<string, any>;
-    public users: StorageBox<string, any>;
+    public guilds: StorageBox<string, Guild>;
+    public users: StorageBox<string, User>;
     public requestHandler: RequestHandler;
     public options: ClientOptions;
 
@@ -34,19 +36,21 @@ export class Client extends EventEmitter {
     }
 
     // temp, will be removed
-    public getGuild(id: string): any {
+    public fetchGuild(id: string): Promise<Guild> {
         return this.requestHandler.request("GET", Endpoints.GUILD(id)).then((guild) => {
-            if (!this.guilds.has(id)) this.guilds.set(id, guild)
-            return guild
+            const fetchedGuild = new Guild(guild, this)
+            if (!this.guilds.has(id)) this.guilds.set(id, fetchedGuild)
+            return fetchedGuild
         })
     }
 
     // the way this operates is temporary
-    public getUser(id: string, options?: { cache?: boolean; force?: boolean }): any {
+    public fetchUser(id: string, options?: { cache?: boolean; force?: boolean }): User | Promise<User> {
         if (!options.force && this.users.has(id)) return this.users.get(id)
         return this.requestHandler.request("GET", Endpoints.USER(id)).then((user) => {
-            if (options.cache && !this.users.has(id)) this.users.set(id, user)
-            return user
+            const fetchUser = new User(user, this)
+            if (options.cache && !this.users.has(id)) this.users.set(id, fetchUser)
+            return fetchUser
         })
     }
 

@@ -23,7 +23,7 @@ export class RequestHandler {
             }
     }
 
-    async request(method: RequestMethods, url: string, body?: any) {
+    async request(method: RequestMethods, url: string, body?: any): Promise<any> {
         return new Promise(async (resolve, reject) => {
             const headers = {
                 "User-Agent": this.userAgent,
@@ -51,7 +51,7 @@ export class RequestHandler {
             console.log(res.status, res.statusText)
             if (res.status === 401 || res.status === 403) {
                 console.log("Invalid Something")
-            } if (res.status >= 400 && res.status <= 500) {
+            } else if (res.status >= 400 && res.status <= 500) {
                 if (res.status === 429) return console.warn("Ratelimit")
                 else if (res.status === 404) return console.warn("Whatever was requested was not found")
 

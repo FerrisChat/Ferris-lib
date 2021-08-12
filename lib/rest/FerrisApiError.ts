@@ -24,7 +24,7 @@ export class FerrisAPIError extends Error {
          * HTTP error code returned by Discord
          * @type {number}
          */
-        this.code = error.code ?? 500;
+        this.code = status
 
         /**
          * The HTTP status code
