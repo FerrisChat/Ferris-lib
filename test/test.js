@@ -12,8 +12,9 @@ async function test() {
 test()
 */
 
+/** */
 async function getAuthToken() {
-    const data = await sys.requestHandler.request("GET", Ferrislib.Constants.Endpoints.AUTH_USER("45"))
+    const data = await sys.requestHandler.request("GET", Ferrislib.Constants.Endpoints.AUTH_USER("13194139533312"))
     console.log(data)
 }
 getAuthToken()

@@ -28,14 +28,15 @@ export class RequestHandler {
             const headers = {
                 "User-Agent": this.userAgent,
                 "Authorization": this.client.options.token,
-                "Content-type": "application/json"
+                "Content-type": "application/json",
+                ...this.client.options.rest.headers,
             };
 
             const finalURL = this.baseUrl + url
 
             const controller = new AbortController()
             const timeout = setTimeout(() => controller.abort(), this.client.options.rest.requestTimeout * 1000).unref()
-
+            console.log(finalURL)
             const res = await fetch(finalURL, {
                 headers,
                 body: body ? JSON.stringify(body) : null,
@@ -44,7 +45,7 @@ export class RequestHandler {
             }).finally(() => clearTimeout(timeout))
 
             if (res.ok) {
-                console.log(res.body)
+                console.log(res)
                 resolve(this.parseResponse(res))
             }
             console.log(res.status, res.statusText)
@@ -75,6 +76,6 @@ export class RequestHandler {
         })
     }
     private parseResponse(res) {
-        return res.json();
+        return res.json().catch((e) => null);
     }
 }
