@@ -38,15 +38,16 @@ export class RequestHandler {
 
             const res = await fetch(finalURL, {
                 headers,
-                body,
+                body: body ? JSON.stringify(body) : null,
                 signal: controller.signal,
                 method,
             }).finally(() => clearTimeout(timeout))
 
             if (res.ok) {
+                console.log(res.body)
                 resolve(this.parseResponse(res))
             }
-            //console.log(res.status, res.statusText)
+            console.log(res.status, res.statusText)
             if (res.status === 401 || res.status === 403) {
                 console.log("Invalid Something")
             } if (res.status >= 400 && res.status <= 500) {

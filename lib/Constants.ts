@@ -38,6 +38,10 @@ export class Endpoints {
     //Users
     static USER = (userId) => `/users/${userId}`
     static USER_GUILDS = (userId) => `/users/${userId}/guilds`
+    static USERS = () => `/users`
+
+    //Auth
+    static AUTH_USER = (userId) => `/auth/${userId}`
 
 }
 
