@@ -29,6 +29,9 @@ export class Member extends Base {
         }
         if ("guild" in data) {
             this.guild = new Guild(data.guild, this.#_client)
+        } else {
+            this.guild = this.#_client.guilds.get(this.guildId)
         }
+        if (this.guildId === null && this.guild != null) this.guildId = this.guild.id
     }
 }
