@@ -1,6 +1,6 @@
 {
   "name": "ferrislib",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "An Api wrapper to interact with FerrisChat Api",
   "main": "build/index.js",
   "directories": {
@@ -13,6 +13,7 @@
     "type": "git",
     "url": "git+https://github.com/Drxckzyz/Ferris-lib.git"
   },
+  "types": "build/typings/index.d.ts",
   "keywords": [
     "Rust",
     "FerrisChat",
