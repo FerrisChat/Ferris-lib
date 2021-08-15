@@ -23,6 +23,8 @@ export class Member extends Base {
         }
         if ("user" in data) {
             this.user = new User(data.user, this.#_client)
+        } else {
+            this.user = this.#_client.users.get(this.userId)
         }
         if ("guild_id" in data) {
             this.guildId = data.guild_id
@@ -33,5 +35,6 @@ export class Member extends Base {
             this.guild = this.#_client.guilds.get(this.guildId)
         }
         if (this.guildId === null && this.guild != null) this.guildId = this.guild.id
+        if (this.userId === null && this.userId != null) this.userId = this.user.id
     }
 }
