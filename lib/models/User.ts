@@ -2,6 +2,10 @@ import { Client } from "../Client";
 import { Endpoints } from "../Constants";
 import Base from "./Base";
 
+
+/**
+ * The user model
+ */
 export class User extends Base {
     public name: string;
     public guilds: unknown;

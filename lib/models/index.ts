@@ -1,0 +1,6 @@
+export * as Base from "./Base"
+export { Channel } from "./Channel"
+export { Guild } from "./Guild"
+export { Member } from "./Member"
+export { Message } from "./Message"
+export { User } from "./User"

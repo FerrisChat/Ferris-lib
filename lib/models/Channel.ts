@@ -1,6 +1,9 @@
 import { Client } from "../Client";
 import Base from "./Base";
 
+/**
+ * The Channel Model
+ */
 export class Channel extends Base {
     public name: string
     #_client: Client;

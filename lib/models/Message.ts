@@ -1,6 +1,10 @@
 import { Client } from "../Client";
 import Base from "./Base";
 
+
+/**
+ * The Message Model
+ */
 export class Message extends Base {
     public content: string;
     public channelId: string;

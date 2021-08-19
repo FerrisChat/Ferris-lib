@@ -3,6 +3,10 @@ import { StorageBox } from "../util/StorageBox";
 import Base from "./Base";
 import { Channel } from "./Channel";
 
+
+/**
+ * The Guild Model
+ */
 export class Guild extends Base {
     public ownerId: string;
     public name: string;

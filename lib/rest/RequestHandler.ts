@@ -4,6 +4,9 @@ import { API_VERSION, RequestMethods, Urls } from "../Constants";
 import { FerrisAPIError } from "./FerrisApiError";
 import { HTTPError } from "./HttpError";
 
+/**
+ * The class the Client uses for Interacting with the APi.
+ */
 export class RequestHandler {
 
     userAgent: string;

@@ -5,6 +5,10 @@ import { User } from "./models/User";
 import { RequestHandler } from "./rest/RequestHandler";
 import { StorageBox } from "./util/StorageBox";
 
+/**
+ * Main class for interacting with Api and Gateway
+ * @param ClientOptions
+ */
 export class Client extends EventEmitter {
     public guilds: StorageBox<string, Guild>;
     public users: StorageBox<string, User>;
@@ -45,6 +49,12 @@ export class Client extends EventEmitter {
     }
 
     // the way this operates is temporary
+    /**
+     * Fetches a user from the api
+     * @param id 
+     * @param options 
+     * @returns A User
+     */
     public fetchUser(id: string, options?: { cache?: boolean; force?: boolean }): User | Promise<User> {
         if (!options.force && this.users.has(id)) return this.users.get(id)
         return this.requestHandler.request("GET", Endpoints.USER(id)).then((user) => {

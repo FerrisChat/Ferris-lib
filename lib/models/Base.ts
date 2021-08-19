@@ -1,5 +1,9 @@
 import { Client } from "../Client";
 
+/**
+ * The base class for all the models
+ * @param id
+ */
 export default class Base {
     id: string;
 

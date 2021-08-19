@@ -1,3 +1,6 @@
+/**
+ * Options for the Client
+ */
 export interface ClientOptions {
     token: string;
     rest?: {
@@ -8,14 +11,23 @@ export interface ClientOptions {
     }
 }
 
+/**
+ * Urls for the RequestHandler (Websocket Manager Soon)
+ */
 export enum Urls {
     Client = "https://ferris.chat",
     Api = "https://api.ferris.chat",
     Base_Api = "/api/v"
 }
 
+/**
+ * The version of FerrisChat's Api
+ */
 export const API_VERSION = 0
 
+/**
+ * A list of functions that return Urls that can be used to interact with the api
+ */
 export class Endpoints {
     //Note not all Endpoints work, some are planned others are not deployed to the api yet
 
@@ -45,4 +57,7 @@ export class Endpoints {
 
 }
 
+/**
+ * Methods for the Request Handler Param "Method"
+ */
 export type RequestMethods = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"

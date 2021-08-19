@@ -3,6 +3,10 @@ import Base from "./Base";
 import { Guild } from "./Guild";
 import { User } from "./User";
 
+
+/**
+ * The Member Model
+ */
 export class Member extends Base {
     public userId: string;
     public user: User;

@@ -1,3 +1,8 @@
+/**
+ * A cache that holds data
+ * @param Limit
+ * @extends Map
+ */
 export class StorageBox<K, V> extends Map<K, V> {
     public limit: number;
     constructor(limit: number = 1000) {
