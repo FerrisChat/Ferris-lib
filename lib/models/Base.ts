@@ -1,18 +1,21 @@
 import { Client } from "../Client";
+import { SnowFlake } from "../Constants";
 
 /**
  * The base class for all the models
- * @param {string} id of the Model
  */
 export default class Base {
+    /**
+ * The Id of the Model
+ * @type {string}
+ */
     Id: string;
 
-    constructor(id: string) {
+    /**
+     * @param {SnowFlake} id The Id of the model that extends this class
+     */
+    constructor(id: SnowFlake) {
 
-        /**
-         * The Id of the Model
-         * @type {string}
-         */
         this.Id = id
     }
 

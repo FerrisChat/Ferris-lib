@@ -1,4 +1,5 @@
 import { Client } from "../Client";
+import { SnowFlake } from "../Constants";
 import Base from "./Base";
 import { Guild } from "./Guild";
 import { User } from "./User";
@@ -6,14 +7,37 @@ import { User } from "./User";
 
 /**
  * The Member Model
+ * @extends Base
  */
 export class Member extends Base {
-    public userId: string;
+    /**
+     * The user data of the Member
+     * @type {User}
+     */
     public user: User;
-    public guildId: string;
+
+    /**
+     * The GuildId that this Member belongs to
+     * @type {SnowFlake}
+     */
+    public guildId: SnowFlake;
+
+    /**
+     * The Guild that this Member is apart of
+     * @type {Guild}
+     */
     public guild: Guild;
 
+    /**
+     * The client that this Member belongs to
+     * @type {Client}
+     */
     #_client: Client;
+
+    /**
+     * @param {any} data The Member data
+     * @param {Client} client 
+     */
     constructor(data: any, client: Client) {
         super(data.id);
 
@@ -23,12 +47,12 @@ export class Member extends Base {
 
     _patch(data: any) {
         if ("user_id" in data) {
-            this.userId = data.user_id
+            this.Id = data.user_id
         }
         if ("user" in data) {
             this.user = new User(data.user, this.#_client)
         } else {
-            this.user = this.#_client.users.get(this.userId)
+            this.user = this.#_client.users.get(this.Id)
         }
         if ("guild_id" in data) {
             this.guildId = data.guild_id
@@ -39,6 +63,5 @@ export class Member extends Base {
             this.guild = this.#_client.guilds.get(this.guildId)
         }
         if (this.guildId === null && this.guild != null) this.guildId = this.guild.Id
-        if (this.userId === null && this.userId != null) this.userId = this.user.Id
     }
 }

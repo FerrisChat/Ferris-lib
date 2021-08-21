@@ -1,19 +1,48 @@
 import { Client } from "../Client";
+import { SnowFlake } from "../Constants";
 import { StorageBox } from "../util/StorageBox";
+import { Channel, Member } from "./"
 import Base from "./Base";
-import { Channel } from "./Channel";
-
 
 /**
  * The Guild Model
+ * @extends Base
  */
 export class Guild extends Base {
-    public ownerId: string;
+    /**
+     * The owner of the guild
+     * @type {SnowFlake}
+     */
+    public ownerId: SnowFlake;
+
+    /**
+     * The name of the Guild
+     * @type {string}
+     */
     public name: string;
-    public channels: StorageBox<string, Channel>;
-    public members: StorageBox<string, any>;
+
+    /**
+     * A Cache with the Channels for the Guild
+     * @type {StorageBox<SnowFlake, Channel>}
+     */
+    public channels: StorageBox<SnowFlake, Channel>;
+
+    /**
+     * A cache with the Members for the Guild
+     * @type {StorageBox<SnowFlake, Member>}
+     */
+    public members: StorageBox<SnowFlake, Member>;
+
+    /**
+     * The client for the Guild
+     * @type {Client}
+     */
     #_client: Client;
 
+    /**
+     * @param {any} data The Guild data
+     * @param {Client} client 
+     */
     constructor(data: any, client: Client) {
         super(data.id);
 

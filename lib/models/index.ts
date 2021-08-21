@@ -1,4 +1,3 @@
-export * as Base from "./Base"
 export { Channel } from "./Channel"
 export { Guild } from "./Guild"
 export { Member } from "./Member"

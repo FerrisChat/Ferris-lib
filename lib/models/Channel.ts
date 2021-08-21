@@ -3,8 +3,7 @@ import Base from "./Base";
 
 /**
  * The Channel Model
- * @param {any} data The raw channel data
- * @param {Client} client The Client
+ * @extends Base
  */
 export class Channel extends Base {
     /**
@@ -19,6 +18,10 @@ export class Channel extends Base {
      */
     #_client: Client;
 
+    /**
+     * @param {any} data The Channel data 
+     * @param {Client} client The Client for this Channel
+     */
     constructor(data: any, client: Client) {
         super(data.id);
 

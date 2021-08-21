@@ -123,5 +123,12 @@ export class Endpoints {
 
 /**
  * Methods for the Request Handler Param "Method"
+ * @type {string}
  */
 export type RequestMethods = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
+
+/**
+ * For ids
+ * @type {string}
+ */
+export type SnowFlake = string;
