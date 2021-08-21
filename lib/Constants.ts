@@ -1,13 +1,77 @@
+import { Guild, User, Channel, Message, Member } from "./models"
+
+/**
+ * Base Options for the Client Caches
+ */
+export interface BaseCacheOptions {
+    /**
+     * What is the max amount of items this cache will hold
+     */
+    limit?: number;
+    /**
+     * A number in milliseconds that you would like the cache to be cleared.
+     */
+    sweepInterval?: number;
+}
+
+/**
+ * The cache options for the Guild cache
+ */
+export interface GuildCacheOpiions extends BaseCacheOptions {
+    /**
+     * The filter that will remove items if they dont meet the condition
+     */
+    sweepFilter?: (guild: Guild) => boolean;
+}
+
+export interface UserCacheOptions extends BaseCacheOptions {
+    /**
+     * The filter that will remove items if they dont meet the condition
+     */
+    sweepFilter?: (user: User) => boolean;
+}
+
 /**
  * Options for the Client
  */
 export interface ClientOptions {
+    /**
+     * The token for your Bot.
+     */
     token: string;
+    /**
+     * Options for the RequestHandler
+     */
     rest?: {
+        /**
+         * How long should the Handler wait before Aborting a request (in seconds)
+         */
         requestTimeout?: number;
+        /**
+         * Ho wmany times should the client retry a Request
+         */
         retryLimit?: number;
+        /**
+         * How long should the RequestHandler wait before Retry the Request (in seconds)
+         */
         retryAfter?: number;
+        /**
+         * Additional Headers you would like passed to the client
+         */
         headers?: object;
+    };
+    /**
+     * Options for each cache 
+     */
+    cache?: {
+        /**
+         * Wether you want guilds cached or Select specific Options for the Cache
+         */
+        guilds?: GuildCacheOpiions | boolean;
+        /**
+         * Wether you want Users cached or Select specific Options for the Cache
+         */
+        users?: UserCacheOptions
     }
 }
 
