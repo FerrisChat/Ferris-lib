@@ -38,7 +38,7 @@ export class Member extends Base {
         } else {
             this.guild = this.#_client.guilds.get(this.guildId)
         }
-        if (this.guildId === null && this.guild != null) this.guildId = this.guild.id
-        if (this.userId === null && this.userId != null) this.userId = this.user.id
+        if (this.guildId === null && this.guild != null) this.guildId = this.guild.Id
+        if (this.userId === null && this.userId != null) this.userId = this.user.Id
     }
 }

@@ -20,7 +20,7 @@ export class User extends Base {
     }
 
     fetch() {
-        return this.#_client.requestHandler.request("GET", Endpoints.USER(this.id)).then((user) => {
+        return this.#_client.requestHandler.request("GET", Endpoints.USER(this.Id)).then((user) => {
             this._patch(user)
             return this
         })

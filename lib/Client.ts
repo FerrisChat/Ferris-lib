@@ -7,7 +7,7 @@ import { StorageBox } from "./util/StorageBox";
 
 /**
  * Main class for interacting with Api and Gateway
- * @param ClientOptions
+ * @param {ClientOptions} clientOptions The options for the client
  */
 export class Client extends EventEmitter {
     public guilds: StorageBox<string, Guild>;

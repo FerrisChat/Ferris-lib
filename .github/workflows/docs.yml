@@ -4,8 +4,8 @@ jobs:
   docs:
     strategy:
       matrix:
-        node: ['16']
-    name: Documentation (Node v${{ matrix.node }})
+        node: ["16"]
+    name: Documentation Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
