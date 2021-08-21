@@ -73,6 +73,10 @@
 					<dl class="tsd-comment-tags">
 						<dt>param</dt>
 						<dd></dd>
+						<dt>param</dt>
+						<dd></dd>
+						<dt>param</dt>
+						<dd></dd>
 					</dl>
 				</div>
 			</section>
@@ -116,6 +120,8 @@
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="StorageBox.html#_toStringTag_" class="tsd-kind-icon">[to<wbr>String<wbr>Tag]</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="StorageBox.html#limit" class="tsd-kind-icon">limit</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="StorageBox.html#size" class="tsd-kind-icon">size</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="StorageBox.html#sweepFilter" class="tsd-kind-icon">sweep<wbr>Filter</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="StorageBox.html#sweepInterval" class="tsd-kind-icon">sweep<wbr>Interval</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="StorageBox.html#_species_" class="tsd-kind-icon">[species]</a></li>
 							</ul>
 						</section>
@@ -138,6 +144,7 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="StorageBox.html#random" class="tsd-kind-icon">random</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-overwrite"><a href="StorageBox.html#set" class="tsd-kind-icon">set</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="StorageBox.html#some" class="tsd-kind-icon">some</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><a href="StorageBox.html#sweep" class="tsd-kind-icon">sweep</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="StorageBox.html#values" class="tsd-kind-icon">values</a></li>
 							</ul>
 						</section>
@@ -150,14 +157,14 @@
 					<a name="constructor" class="tsd-anchor"></a>
 					<h3>constructor</h3>
 					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class tsd-has-type-parameter tsd-is-overwrite">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Storage<wbr>Box&lt;K, V&gt;<span class="tsd-signature-symbol">(</span>limit<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="StorageBox.html" class="tsd-signature-type" data-tsd-kind="Class">StorageBox</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Storage<wbr>Box&lt;K, V&gt;<span class="tsd-signature-symbol">(</span>limit<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, sweepInterval<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span>, sweepFilter<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">(</span>v<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="StorageBox.html" class="tsd-signature-type" data-tsd-kind="Class">StorageBox</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<p>Overrides Map&lt;K, V&gt;.constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/777adcd/lib/util/StorageBox.ts#L8">lib/util/StorageBox.ts:8</a></li>
+									<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/8952e5c/lib/util/StorageBox.ts#L13">lib/util/StorageBox.ts:13</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -174,6 +181,30 @@
 								<li>
 									<h5>limit: <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> = 1000</span></h5>
 								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> sweepInterval: <span class="tsd-signature-type">number</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> sweepFilter: <span class="tsd-signature-symbol">(</span>v<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span></h5>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter-signature">
+											<ul class="tsd-signatures tsd-kind-type-literal">
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>v<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+											</ul>
+											<ul class="tsd-descriptions">
+												<li class="tsd-description">
+													<h4 class="tsd-parameters-title">Parameters</h4>
+													<ul class="tsd-parameters">
+														<li>
+															<h5>v: <span class="tsd-signature-type">V</span></h5>
+														</li>
+													</ul>
+													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="StorageBox.html" class="tsd-signature-type" data-tsd-kind="Class">StorageBox</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">K</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
@@ -187,7 +218,7 @@
 					<h3><span class="tsd-flag ts-flagReadonly">Readonly</span> [to<wbr>String<wbr>Tag]</h3>
 					<div class="tsd-signature tsd-kind-icon">[to<wbr>String<wbr>Tag]<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from Map.__@toStringTag@76</p>
+						<p>Inherited from Map.__@toStringTag@60</p>
 						<ul>
 							<li>Defined in node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:135</li>
 						</ul>
@@ -199,7 +230,7 @@
 					<div class="tsd-signature tsd-kind-icon">limit<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/777adcd/lib/util/StorageBox.ts#L7">lib/util/StorageBox.ts:7</a></li>
+							<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/8952e5c/lib/util/StorageBox.ts#L9">lib/util/StorageBox.ts:9</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -214,12 +245,53 @@
 						</ul>
 					</aside>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="sweepFilter" class="tsd-anchor"></a>
+					<h3>sweep<wbr>Filter</h3>
+					<div class="tsd-signature tsd-kind-icon">sweep<wbr>Filter<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>v<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/8952e5c/lib/util/StorageBox.ts#L11">lib/util/StorageBox.ts:11</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-class">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>v<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>v: <span class="tsd-signature-type">V</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="sweepInterval" class="tsd-anchor"></a>
+					<h3>sweep<wbr>Interval</h3>
+					<div class="tsd-signature tsd-kind-icon">sweep<wbr>Interval<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/8952e5c/lib/util/StorageBox.ts#L10">lib/util/StorageBox.ts:10</a></li>
+						</ul>
+					</aside>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
 					<a name="_species_" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagStatic">Static</span> <span class="tsd-flag ts-flagReadonly">Readonly</span> [species]</h3>
 					<div class="tsd-signature tsd-kind-icon">[species]<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">MapConstructor</span></div>
 					<aside class="tsd-sources">
-						<p>Inherited from Map.__@species@66</p>
+						<p>Inherited from Map.__@species@50</p>
 						<ul>
 							<li>Defined in node_modules/typescript/lib/lib.es2015.symbol.wellknown.d.ts:317</li>
 						</ul>
@@ -237,7 +309,7 @@
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
-								<p>Inherited from Map.__@iterator@74</p>
+								<p>Inherited from Map.__@iterator@58</p>
 								<ul>
 									<li>Defined in node_modules/typescript/lib/lib.es2015.iterable.d.ts:121</li>
 								</ul>
@@ -320,15 +392,20 @@
 					<a name="filter" class="tsd-anchor"></a>
 					<h3>filter</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">filter<span class="tsd-signature-symbol">(</span>func<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></li>
+						<li class="tsd-signature tsd-kind-icon">filter<span class="tsd-signature-symbol">(</span>func<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>item<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">[]</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/777adcd/lib/util/StorageBox.ts#L14">lib/util/StorageBox.ts:14</a></li>
+									<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/8952e5c/lib/util/StorageBox.ts#L27">lib/util/StorageBox.ts:27</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Filters out items from the Cache that matches the function</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -353,7 +430,8 @@
 									</ul>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">[]</span></h4>
+							<p>An Array of the filtered items</p>
 						</li>
 					</ul>
 				</section>
@@ -367,9 +445,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/777adcd/lib/util/StorageBox.ts#L24">lib/util/StorageBox.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/8952e5c/lib/util/StorageBox.ts#L42">lib/util/StorageBox.ts:42</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Find something from the cache</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -408,10 +491,11 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/777adcd/lib/util/StorageBox.ts#L33">lib/util/StorageBox.ts:33</a></li>
+									<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/8952e5c/lib/util/StorageBox.ts#L55">lib/util/StorageBox.ts:55</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">V</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">[]</span></h4>
+							<p>The first value of the cache</p>
 						</li>
 					</ul>
 				</section>
@@ -500,10 +584,11 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/777adcd/lib/util/StorageBox.ts#L39">lib/util/StorageBox.ts:39</a></li>
+									<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/8952e5c/lib/util/StorageBox.ts#L64">lib/util/StorageBox.ts:64</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">V</span><span class="tsd-signature-symbol">[]</span></h4>
+							<p>All values in an Array</p>
 						</li>
 					</ul>
 				</section>
@@ -564,9 +649,14 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/777adcd/lib/util/StorageBox.ts#L47">lib/util/StorageBox.ts:47</a></li>
+									<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/8952e5c/lib/util/StorageBox.ts#L80">lib/util/StorageBox.ts:80</a></li>
 								</ul>
 							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Maps all The Data in an Array</p>
+								</div>
+							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
@@ -592,6 +682,7 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">[]</span></h4>
+							<p>An Array</p>
 						</li>
 					</ul>
 				</section>
@@ -605,10 +696,11 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/777adcd/lib/util/StorageBox.ts#L43">lib/util/StorageBox.ts:43</a></li>
+									<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/8952e5c/lib/util/StorageBox.ts#L71">lib/util/StorageBox.ts:71</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">V</span></h4>
+							<p>A random Value</p>
 						</li>
 					</ul>
 				</section>
@@ -623,7 +715,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides Map.set</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/777adcd/lib/util/StorageBox.ts#L55">lib/util/StorageBox.ts:55</a></li>
+									<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/8952e5c/lib/util/StorageBox.ts#L88">lib/util/StorageBox.ts:88</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -649,7 +741,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/777adcd/lib/util/StorageBox.ts#L61">lib/util/StorageBox.ts:61</a></li>
+									<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/8952e5c/lib/util/StorageBox.ts#L94">lib/util/StorageBox.ts:94</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -677,6 +769,23 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-is-private">
+					<a name="sweep" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagPrivate">Private</span> sweep</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-is-private">
+						<li class="tsd-signature tsd-kind-icon">sweep<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/8952e5c/lib/util/StorageBox.ts#L103">lib/util/StorageBox.ts:103</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -716,7 +825,19 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class">
+						<a href="Channel.html" class="tsd-kind-icon">Channel</a>
+					</li>
+					<li class=" tsd-kind-class">
 						<a href="Client.html" class="tsd-kind-icon">Client</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="Guild.html" class="tsd-kind-icon">Guild</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="Member.html" class="tsd-kind-icon">Member</a>
+					</li>
+					<li class=" tsd-kind-class">
+						<a href="Message.html" class="tsd-kind-icon">Message</a>
 					</li>
 				</ul>
 				<ul class="current">
@@ -734,6 +855,12 @@
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="StorageBox.html#size" class="tsd-kind-icon">size</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="StorageBox.html#sweepFilter" class="tsd-kind-icon">sweep<wbr>Filter</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="StorageBox.html#sweepInterval" class="tsd-kind-icon">sweep<wbr>Interval</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
 								<a href="StorageBox.html#_species_" class="tsd-kind-icon">[species]</a>
@@ -786,6 +913,9 @@
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="StorageBox.html#some" class="tsd-kind-icon">some</a>
 							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-private">
+								<a href="StorageBox.html#sweep" class="tsd-kind-icon">sweep</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="StorageBox.html#values" class="tsd-kind-icon">values</a>
 							</li>
@@ -793,6 +923,9 @@
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-class">
+						<a href="User.html" class="tsd-kind-icon">User</a>
+					</li>
 				</ul>
 			</nav>
 		</div>
@@ -808,6 +941,11 @@
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
 			</ul>
 		</div>

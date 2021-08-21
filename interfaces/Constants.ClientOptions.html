@@ -90,6 +90,7 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="Constants.ClientOptions.html#cache" class="tsd-kind-icon">cache</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="Constants.ClientOptions.html#rest" class="tsd-kind-icon">rest</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="Constants.ClientOptions.html#token" class="tsd-kind-icon">token</a></li>
 							</ul>
@@ -100,28 +101,89 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
+					<a name="cache" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> cache</h3>
+					<div class="tsd-signature tsd-kind-icon">cache<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>guilds<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><a href="Constants.GuildCacheOpiions.html" class="tsd-signature-type" data-tsd-kind="Interface">GuildCacheOpiions</a><span class="tsd-signature-symbol">; </span>users<span class="tsd-signature-symbol">?: </span><a href="Constants.UserCacheOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">UserCacheOptions</a><span class="tsd-signature-symbol"> }</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/8952e5c/lib/Constants.ts#L66">lib/Constants.ts:66</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Options for each cache</p>
+						</div>
+					</div>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> guilds<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> | </span><a href="Constants.GuildCacheOpiions.html" class="tsd-signature-type" data-tsd-kind="Interface">GuildCacheOpiions</a></h5>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>Wether you want guilds cached or Select specific Options for the Cache</p>
+									</div>
+								</div>
+							</li>
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> users<span class="tsd-signature-symbol">?: </span><a href="Constants.UserCacheOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">UserCacheOptions</a></h5>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>Wether you want Users cached or Select specific Options for the Cache</p>
+									</div>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
 					<a name="rest" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagOptional">Optional</span> rest</h3>
 					<div class="tsd-signature tsd-kind-icon">rest<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>headers<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">object</span><span class="tsd-signature-symbol">; </span>requestTimeout<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>retryAfter<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>retryLimit<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/777adcd/lib/Constants.ts#L6">lib/Constants.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/8952e5c/lib/Constants.ts#L45">lib/Constants.ts:45</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>Options for the RequestHandler</p>
+						</div>
+					</div>
 					<div class="tsd-type-declaration">
 						<h4>Type declaration</h4>
 						<ul class="tsd-parameters">
 							<li class="tsd-parameter">
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> headers<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">object</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>Additional Headers you would like passed to the client</p>
+									</div>
+								</div>
 							</li>
 							<li class="tsd-parameter">
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> request<wbr>Timeout<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>How long should the Handler wait before Aborting a request (in seconds)</p>
+									</div>
+								</div>
 							</li>
 							<li class="tsd-parameter">
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> retry<wbr>After<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>How long should the RequestHandler wait before Retry the Request (in seconds)</p>
+									</div>
+								</div>
 							</li>
 							<li class="tsd-parameter">
 								<h5><span class="tsd-flag ts-flagOptional">Optional</span> retry<wbr>Limit<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">number</span></h5>
+								<div class="tsd-comment tsd-typography">
+									<div class="lead">
+										<p>Ho wmany times should the client retry a Request</p>
+									</div>
+								</div>
 							</li>
 						</ul>
 					</div>
@@ -132,9 +194,14 @@
 					<div class="tsd-signature tsd-kind-icon">token<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/777adcd/lib/Constants.ts#L5">lib/Constants.ts:5</a></li>
+							<li>Defined in <a href="https://github.com/Drxckzyz/Ferris-lib/blob/8952e5c/lib/Constants.ts#L41">lib/Constants.ts:41</a></li>
 						</ul>
 					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The token for your Bot.</p>
+						</div>
+					</div>
 				</section>
 			</section>
 		</div>
@@ -143,6 +210,9 @@
 				<ul>
 					<li class=" ">
 						<a href="../modules.html">Exports</a>
+					</li>
+					<li class=" tsd-kind-namespace">
+						<a href="../modules/Base.html">Base</a>
 					</li>
 					<li class="current tsd-kind-namespace">
 						<a href="../modules/Constants.html">Constants</a>
@@ -157,11 +227,17 @@
 					<li class=" tsd-kind-class tsd-parent-kind-namespace">
 						<a href="../classes/Constants.Endpoints.html" class="tsd-kind-icon">Endpoints</a>
 					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
+						<a href="Constants.BaseCacheOptions.html" class="tsd-kind-icon">Base<wbr>Cache<wbr>Options</a>
+					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-namespace">
 						<a href="Constants.ClientOptions.html" class="tsd-kind-icon">Client<wbr>Options</a>
 						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="Constants.ClientOptions.html#cache" class="tsd-kind-icon">cache</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface">
 								<a href="Constants.ClientOptions.html#rest" class="tsd-kind-icon">rest</a>
 							</li>
@@ -172,6 +248,12 @@
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
+						<a href="Constants.GuildCacheOpiions.html" class="tsd-kind-icon">Guild<wbr>Cache<wbr>Opiions</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
+						<a href="Constants.UserCacheOptions.html" class="tsd-kind-icon">User<wbr>Cache<wbr>Options</a>
+					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-namespace">
 						<a href="../modules/Constants.html#RequestMethods" class="tsd-kind-icon">Request<wbr>Methods</a>
 					</li>
@@ -193,10 +275,15 @@
 				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
 			</ul>
 			<ul class="tsd-legend">
-				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited"><span class="tsd-kind-icon">Inherited method</span></li>
 			</ul>
 			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private property</span></li>
 				<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private"><span class="tsd-kind-icon">Private method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
 			</ul>
 		</div>
 	</div>
