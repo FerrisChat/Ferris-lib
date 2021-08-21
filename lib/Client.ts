@@ -1,5 +1,5 @@
 import { EventEmitter } from "events"
-import { ClientOptions, Endpoints } from "./Constants";
+import { ClientOptions, Endpoints, SnowFlake } from "./Constants";
 import { Guild } from "./models/Guild";
 import { User } from "./models/User";
 import { RequestHandler } from "./rest/RequestHandler";
@@ -8,6 +8,7 @@ import { StorageBox } from "./util/StorageBox";
 /**
  * Main class for interacting with Api and Gateway
  * @param {ClientOptions} clientOptions The options for the client
+ * @extends EventEmitter
  */
 export class Client extends EventEmitter {
     public guilds: StorageBox<string, Guild>;
@@ -27,10 +28,14 @@ export class Client extends EventEmitter {
                 retryLimit: 1,
                 retryAfter: 10,
                 headers: {},
+            },
+            cache: {
+                guilds: false,
+                users: false,
             }
         })
 
-        this._validateOptions()
+        this.validateOptions()
 
         this.requestHandler = new RequestHandler(this)
 
@@ -51,11 +56,11 @@ export class Client extends EventEmitter {
     // the way this operates is temporary
     /**
      * Fetches a user from the api
-     * @param id 
-     * @param options 
-     * @returns A User
+     * @param {SnowFlake} id The id of the user
+     * @param {{ cache: boolean; force: boolean }} options Whether to cache the user upon fetch or Force a request even if the user is in the cache
+     * @returns {User|Promise<User>}
      */
-    public fetchUser(id: string, options?: { cache?: boolean; force?: boolean }): User | Promise<User> {
+    public fetchUser(id: SnowFlake, options?: { cache?: boolean; force?: boolean }): User | Promise<User> {
         if (!options.force && this.users.has(id)) return this.users.get(id)
         return this.requestHandler.request("GET", Endpoints.USER(id)).then((user) => {
             const fetchUser = new User(user, this)
@@ -64,7 +69,7 @@ export class Client extends EventEmitter {
         })
     }
 
-    private _validateOptions() {
+    private validateOptions() {
         if (typeof this.options.token != "string") throw new TypeError("The Token Provided is not a string.")
         if (typeof this.options.rest.retryLimit != "number" || isNaN(this.options.rest.retryLimit)) {
             throw new TypeError("The Rest Retry Limit must be a number.")

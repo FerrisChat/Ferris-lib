@@ -71,7 +71,7 @@ export interface ClientOptions {
         /**
          * Wether you want Users cached or Select specific Options for the Cache
          */
-        users?: UserCacheOptions
+        users?: UserCacheOptions | boolean;
     }
 }
 

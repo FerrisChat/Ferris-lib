@@ -27,7 +27,7 @@
   "bugs": {
     "url": "https://github.com/Drxckzyz/Ferris-lib/issues"
   },
-  "homepage": "https://github.com/Drxckzyz/Ferris-lib#readme",
+  "homepage": "https://ferrischat.github.io/Ferris-lib/",
   "devDependencies": {
     "@types/node": "^16.4.13",
     "@types/node-fetch": "^2.5.12",
