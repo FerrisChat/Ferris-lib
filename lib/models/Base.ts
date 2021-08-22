@@ -7,9 +7,9 @@ import { SnowFlake } from "../Constants";
 export default class Base {
     /**
  * The Id of the Model
- * @type {string}
+ * @type {SnowFlake }
  */
-    Id: string;
+    Id: SnowFlake;
 
     /**
      * @param {SnowFlake} id The Id of the model that extends this class

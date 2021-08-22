@@ -131,4 +131,4 @@ export type RequestMethods = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
  * For ids
  * @type {string}
  */
-export type SnowFlake = string;
+export type SnowFlake = bigint;

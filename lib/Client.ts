@@ -11,11 +11,33 @@ import { StorageBox } from "./util/StorageBox";
  * @extends EventEmitter
  */
 export class Client extends EventEmitter {
-    public guilds: StorageBox<string, Guild>;
-    public users: StorageBox<string, User>;
+    /**
+     * A cache that holds all the Guilds the client is apart of
+     * @type {StorageBox<SnowFlake, Guild>}
+     */
+    public guilds: StorageBox<SnowFlake, Guild>;
+
+    /**
+     * A cache that holds all the Users that have been cached by the client
+     * @type {StorageBox<SnowFlake, User>}
+     */
+    public users: StorageBox<SnowFlake, User>;
+
+    /**
+     * The Class used to make requests to the Api
+     * @type {RequestHandler}
+     */
     public requestHandler: RequestHandler;
+
+    /**
+     * The options passed to the client
+     * @type {ClientOptions}
+     */
     public options: ClientOptions;
 
+    /**
+     * @param {ClientOptions} clientOptions The options for the Client
+     */
     constructor(clientOptions: ClientOptions) {
         super();
 
@@ -44,8 +66,12 @@ export class Client extends EventEmitter {
         this.users = new StorageBox()
     }
 
-    // temp, will be removed
-    public fetchGuild(id: string): Promise<Guild> {
+    /**
+     * Fetch a Guild from the Api
+     * @param {SnowFlake} id The Id for the Guild to fetch
+     * @returns {Promise<Guild>} 
+     */
+    public fetchGuild(id: SnowFlake): Promise<Guild> {
         return this.requestHandler.request("GET", Endpoints.GUILD(id)).then((guild) => {
             const fetchedGuild = new Guild(guild, this)
             if (!this.guilds.has(id)) this.guilds.set(id, fetchedGuild)
@@ -53,9 +79,8 @@ export class Client extends EventEmitter {
         })
     }
 
-    // the way this operates is temporary
     /**
-     * Fetches a user from the api
+     * Fetche a user from the api
      * @param {SnowFlake} id The id of the user
      * @param {{ cache: boolean; force: boolean }} options Whether to cache the user upon fetch or Force a request even if the user is in the cache
      * @returns {User|Promise<User>}
@@ -69,6 +94,9 @@ export class Client extends EventEmitter {
         })
     }
 
+    /**
+     * @private
+     */
     private validateOptions() {
         if (typeof this.options.token != "string") throw new TypeError("The Token Provided is not a string.")
         if (typeof this.options.rest.retryLimit != "number" || isNaN(this.options.rest.retryLimit)) {
