@@ -107,6 +107,7 @@
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="Client.html#options" class="tsd-kind-icon">options</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="Client.html#requestHandler" class="tsd-kind-icon">request<wbr>Handler</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="Client.html#users" class="tsd-kind-icon">users</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="Client.html#ws" class="tsd-kind-icon">ws</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="Client.html#captureRejectionSymbol" class="tsd-kind-icon">capture<wbr>Rejection<wbr>Symbol</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="Client.html#captureRejections" class="tsd-kind-icon">capture<wbr>Rejections</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external"><a href="Client.html#defaultMaxListeners" class="tsd-kind-icon">default<wbr>Max<wbr>Listeners</a></li>
@@ -117,6 +118,7 @@
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="Client.html#addListener" class="tsd-kind-icon">add<wbr>Listener</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="Client.html#createGuild" class="tsd-kind-icon">create<wbr>Guild</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="Client.html#emit" class="tsd-kind-icon">emit</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external"><a href="Client.html#eventNames" class="tsd-kind-icon">event<wbr>Names</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="Client.html#fetchGuild" class="tsd-kind-icon">fetch<wbr>Guild</a></li>
@@ -156,7 +158,7 @@
 							<aside class="tsd-sources">
 								<p>Overrides EventEmitter.constructor</p>
 								<ul>
-									<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/d580cf2/lib/Client.ts#L41">lib/Client.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/21844d1/lib/Client.ts#L48">lib/Client.ts:48</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -183,7 +185,7 @@
 					<div class="tsd-signature tsd-kind-icon">guilds<span class="tsd-signature-symbol">:</span> <a href="StorageBox.html" class="tsd-signature-type" data-tsd-kind="Class">StorageBox</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">bigint</span><span class="tsd-signature-symbol">, </span><a href="Guild.html" class="tsd-signature-type" data-tsd-kind="Class">Guild</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/d580cf2/lib/Client.ts#L18">lib/Client.ts:18</a></li>
+							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/21844d1/lib/Client.ts#L19">lib/Client.ts:19</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -198,7 +200,7 @@
 					<div class="tsd-signature tsd-kind-icon">options<span class="tsd-signature-symbol">:</span> <a href="../interfaces/Constants.ClientOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">ClientOptions</a></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/d580cf2/lib/Client.ts#L36">lib/Client.ts:36</a></li>
+							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/21844d1/lib/Client.ts#L43">lib/Client.ts:43</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
@@ -213,12 +215,12 @@
 					<div class="tsd-signature tsd-kind-icon">request<wbr>Handler<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">RequestHandler</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/d580cf2/lib/Client.ts#L30">lib/Client.ts:30</a></li>
+							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/21844d1/lib/Client.ts#L31">lib/Client.ts:31</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
-							<p>The Class used to make requests to the Api</p>
+							<p>The Handler {@link RequestHandler} used for interacting with the api</p>
 						</div>
 					</div>
 				</section>
@@ -228,12 +230,27 @@
 					<div class="tsd-signature tsd-kind-icon">users<span class="tsd-signature-symbol">:</span> <a href="StorageBox.html" class="tsd-signature-type" data-tsd-kind="Class">StorageBox</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">bigint</span><span class="tsd-signature-symbol">, </span><a href="User.html" class="tsd-signature-type" data-tsd-kind="Class">User</a><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/d580cf2/lib/Client.ts#L24">lib/Client.ts:24</a></li>
+							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/21844d1/lib/Client.ts#L25">lib/Client.ts:25</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-comment tsd-typography">
 						<div class="lead">
 							<p>A cache that holds all the Users that have been cached by the client</p>
+						</div>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="ws" class="tsd-anchor"></a>
+					<h3>ws</h3>
+					<div class="tsd-signature tsd-kind-icon">ws<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">WebsocketManager</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/21844d1/lib/Client.ts#L37">lib/Client.ts:37</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<div class="lead">
+							<p>The Manager {@link WebsocketManager} used to interacting with the Gateway</p>
 						</div>
 					</div>
 				</section>
@@ -351,6 +368,29 @@
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="Client.html" class="tsd-signature-type" data-tsd-kind="Class">Client</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="createGuild" class="tsd-anchor"></a>
+					<h3>create<wbr>Guild</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">create<wbr>Guild<span class="tsd-signature-symbol">(</span>data<span class="tsd-signature-symbol">: </span><a href="../interfaces/Constants.createGuildOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">createGuildOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Guild.html" class="tsd-signature-type" data-tsd-kind="Class">Guild</a><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/21844d1/lib/Client.ts#L78">lib/Client.ts:78</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>data: <a href="../interfaces/Constants.createGuildOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">createGuildOptions</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="Guild.html" class="tsd-signature-type" data-tsd-kind="Class">Guild</a><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -474,7 +514,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/d580cf2/lib/Client.ts#L74">lib/Client.ts:74</a></li>
+									<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/21844d1/lib/Client.ts#L90">lib/Client.ts:90</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -505,7 +545,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/d580cf2/lib/Client.ts#L88">lib/Client.ts:88</a></li>
+									<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/21844d1/lib/Client.ts#L104">lib/Client.ts:104</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -1255,7 +1295,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/d580cf2/lib/Client.ts#L100">lib/Client.ts:100</a></li>
+									<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/21844d1/lib/Client.ts#L116">lib/Client.ts:116</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -1445,6 +1485,9 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="Client.html#users" class="tsd-kind-icon">users</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="Client.html#ws" class="tsd-kind-icon">ws</a>
+							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-inherited tsd-is-static tsd-is-external">
 								<a href="Client.html#captureRejectionSymbol" class="tsd-kind-icon">capture<wbr>Rejection<wbr>Symbol</a>
 							</li>
@@ -1459,6 +1502,9 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="Client.html#addListener" class="tsd-kind-icon">add<wbr>Listener</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="Client.html#createGuild" class="tsd-kind-icon">create<wbr>Guild</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-is-inherited tsd-is-external">
 								<a href="Client.html#emit" class="tsd-kind-icon">emit</a>
