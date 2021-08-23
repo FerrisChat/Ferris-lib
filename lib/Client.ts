@@ -147,6 +147,10 @@ export class Client extends EventEmitter {
         })
     }
 
+    getWsInfo(): Promise<any> {
+        return this.requestHandler.request("GET", Endpoints.WS_INFO())
+    }
+
     /**
      * @private
      */

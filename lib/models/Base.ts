@@ -1,5 +1,5 @@
 import { Client } from "../Client";
-import { SnowFlake } from "../Constants";
+import { FERRIS_EPOCH, SnowFlake } from "../Constants";
 
 /**
  * The base class for all the models
