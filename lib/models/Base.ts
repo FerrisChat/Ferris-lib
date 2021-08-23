@@ -16,7 +16,7 @@ export default class Base {
      */
     constructor(id: SnowFlake) {
 
-        this.id = id
+        this.id = BigInt(id)
     }
 
     get createdAt(): number {

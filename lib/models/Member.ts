@@ -47,7 +47,7 @@ export class Member extends Base {
 
     _patch(data: any) {
         if ("user_id" in data) {
-            this.id = data.user_id
+            this.id = BigInt(data.user_id)
         }
         if ("user" in data) {
             this.user = new User(data.user, this.#_client)
@@ -55,7 +55,7 @@ export class Member extends Base {
             this.user = this.#_client.users.get(this.id)
         }
         if ("guild_id" in data) {
-            this.guildId = data.guild_id
+            this.guildId = BigInt(data.guild_id)
         }
         if ("guild" in data) {
             this.guild = new Guild(data.guild, this.#_client)

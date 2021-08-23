@@ -1,3 +1,4 @@
+import { Channel } from "diagnostics_channel";
 import { EventEmitter } from "events"
 import { ClientOptions, createChannelOptions, createGuildOptions, Endpoints, MessageData, SnowFlake } from "./Constants";
 import { WebsocketManager } from "./gateway/WebsocketManager";
@@ -14,11 +15,14 @@ import { StorageBox } from "./util/StorageBox";
  * @extends EventEmitter
  */
 export class Client extends EventEmitter {
+    public channels: StorageBox<SnowFlake, Channel>;
     /**
      * A cache that holds all the Guilds the client is apart of
      * @type {StorageBox<SnowFlake, Guild>}
      */
     public guilds: StorageBox<SnowFlake, Guild>;
+
+    public messages: StorageBox<SnowFlake, Message>;
 
     /**
      * A cache that holds all the Users that have been cached by the client
@@ -75,6 +79,10 @@ export class Client extends EventEmitter {
         this.guilds = new StorageBox()
 
         this.users = new StorageBox()
+    }
+
+    connect(): void {
+        //this.ws.start()
     }
 
     createChannel(guildId: SnowFlake, channelData: createChannelOptions): Promise<GuildChannel> {

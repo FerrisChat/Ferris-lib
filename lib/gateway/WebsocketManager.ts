@@ -7,6 +7,7 @@ import { Client } from "../Client";
  */
 export class WebsocketManager extends EventEmitter {
     client: Client;
+    gatewayUrl: string;
 
     constructor(client: Client) {
         super()
@@ -15,6 +16,7 @@ export class WebsocketManager extends EventEmitter {
     }
 
     async start() {
-
+        const data = await this.client.getWsInfo()
+        console.log(data)
     }
 }

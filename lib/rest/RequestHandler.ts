@@ -26,7 +26,7 @@ export class RequestHandler {
             }
     }
 
-    async request(method: RequestMethods, url: string, body?: any): Promise<any> {
+    request(method: RequestMethods, url: string, body?: any): Promise<any> {
         return new Promise(async (resolve, reject) => {
             const headers = {
                 "User-Agent": this.userAgent,
@@ -51,10 +51,12 @@ export class RequestHandler {
             console.log(res.status, res.statusText)
 
             if (res.ok) {
-                resolve(this.parseResponse(res))
+                return resolve(this.parseResponse(res))
             }
-
-            if (res.status === 401 || res.status === 403) {
+            const data = await this.parseResponse(res)
+            console.log(data)
+            resolve(data)
+            /*if (res.status === 401 || res.status === 403) {
                 console.log("Invalid Something")
             } else if (res.status >= 400 && res.status <= 500) {
                 if (res.status === 429) return console.warn("Ratelimit")
@@ -77,7 +79,7 @@ export class RequestHandler {
                 this.status.retires++
                 await new Promise((resolve) => setTimeout(resolve, this.client.options.rest.retryAfter * 1000))
                 resolve(this.request(method, url, body))
-            }
+            }*/
         })
     }
     private parseResponse(res) {

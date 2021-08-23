@@ -120,7 +120,7 @@ export interface ClientOptions {
  */
 export enum Urls {
     Client = "https://ferris.chat",
-    Api = "https://api.ferris.chat",
+    Api = "https://ferris.chat",
     Base_Api = "/api/v"
 }
 

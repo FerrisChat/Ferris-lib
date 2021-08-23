@@ -41,7 +41,7 @@ export class Message extends Base {
             this.content = data.content
         }
         if ("channel_id" in data) {
-            this.channelId = data.channel_id
+            this.channelId = BigInt(data.channel_id)
         }
     }
 }

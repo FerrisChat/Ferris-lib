@@ -1,41 +1,15 @@
 const Ferrislib = require('../build')
 const sys = new Ferrislib.Client({
-    token: "MTMxOTQxMzk1MzMzMTI=.rqabyqIIlhHYaEeSQrvXrMyD0_P8YpiGyu1ZMzBl3M7aUlepa8jgA6nKfd_tQfWwu_ac28Yl3gp3cml6w2t1txirO_0-xhktf7ndNxSAYFZUWQYVM1j526bHcqu9xpuD28kkB6HXh3UrNjZG533YLIhkrg01TvosA8yZ60Yngn7JK0xhDNwQF4Az2CdZGL1vR1YUVi7AoOixkEMzSxJlro29CCkwIXExOKN-P5hGy8rld86Z-yKnpaxwILMIRONDVpFtUn9fj1BvKV2EvQLcg840gh5x-s9vVgzym73Ln5Y_iAm9bCOd2jiFEsgr3WsY0cSj6bi3ywKRoDRUYwK5QQ=="
+    token: "OTU3ODU3NjAxMzE3Mzk4OTU4Njk5NjE0MDQ0MTYw.51vcGt4fTMzgqYsFdWAufi1jibaW4swIQxul8H5QsoED-K5L_esPiA8nvvRmHx4P8w3tpImQpm_yihjg3RYMXmqHwWJpP0n0gRTqSCZIDgkB9B1vcTbKTZjtxs54UbnZUajju9QtooE9uWM9R7e0X0Xl9e4MXBo6nhl4VrryEu0kKOQWdo0X-ce_Ks3sxHBas4qOr5xOCAdpCaHwU5C_VhZ8nXa9Q-g_t_lEYHYuBNfmswU4tfA9iWldQW-I5-sKPy5T1JNXBIifikszAtoou7p_hCU56sFBfvXrO8D_5uDIsV72tKOJb_Hw5vm-MNMScwUkpQn_7lkr1FTdRNkOaA=="
 })
 
 /** */
 async function test() {
-    //test user: 13194139533312
-    // test guild: 
-
-    const test = await sys.requestHandler.request("POST", Ferrislib.Constants.Endpoints.GUILDS())
-    console.log(test)
+    //test guild: 957859405648704982857948332032n
+    const data = await sys.createGuild({ name: "FerrisLib Support" })
+    console.log(data)
 }
 test()
-
-
-
-/** 
-async function getAuthToken() {
-    const data = await sys.requestHandler.request("GET", Ferrislib.Constants.Endpoints.AUTH_USER("13194139533312"))
-    console.log(data)
-}
-getAuthToken()
-*/
-
-
-
-/** 
-async function createAccount() {
-    const data = await sys.requestHandler.request("POST", Ferrislib.Constants.Endpoints.USERS(), {
-        username: "name",
-        password: "password",
-        email: "email",
-    })
-    console.log(data)
-}
-createAccount()
-*/
 
 
 setInterval(() => {
