@@ -172,3 +172,5 @@ export type RequestMethods = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
  * @type {string}
  */
 export type SnowFlake = bigint;
+
+export const FERRIS_EPOCH = 1_577_836_800_000
