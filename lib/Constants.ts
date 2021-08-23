@@ -80,7 +80,7 @@ export interface ClientOptions {
  */
 export enum Urls {
     Client = "https://ferris.chat",
-    Api = "https://api.ferris.chat",
+    Api = "https://ferris.chat",
     Base_Api = "/api/v"
 }
 
@@ -100,11 +100,11 @@ export class Endpoints {
     static GUILDS = () => `/guilds`
 
     //Channels    
-    static CHANNEL = (guildId, channelId) => `/guilds/${guildId}/channels/${channelId}`
+    static CHANNEL = (channelId) => `/channels/${channelId}`
     static CHANNELS = (guildId) => `/guilds/${guildId}/channels`
 
     //Messages
-    static MESSAGE = (guildId, channelId, messageId) => `/guilds/${guildId}/channels/${channelId}/messages/${messageId}`
+    static MESSAGE = (messageId) => `/messages/${messageId}`
     static MESSAGES = (guildId, channelId) => `/guilds/${guildId}/channels/${channelId}/messages`
 
     //Members

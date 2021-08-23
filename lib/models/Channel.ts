@@ -1,5 +1,6 @@
 import { Client } from "../Client";
 import Base from "./Base";
+import { TextChannel } from "./TextChannel";
 
 /**
  * The Channel Model
@@ -27,6 +28,10 @@ export class Channel extends Base {
 
         this._patch(data)
         this.#_client = client
+    }
+
+    isText(): this is TextChannel {
+        return false
     }
 
     _patch(data: any) {
