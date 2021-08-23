@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>BaseCacheOptions | Ferris-lib</title>
+	<title>createChannelOptions | Ferris-lib</title>
 	<meta name="description" content="Documentation for Ferris-lib">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -58,45 +58,21 @@
 					<a href="../modules/Constants.html">Constants</a>
 				</li>
 				<li>
-					<a href="Constants.BaseCacheOptions.html">BaseCacheOptions</a>
+					<a href="Constants.createChannelOptions.html">createChannelOptions</a>
 				</li>
 			</ul>
-			<h1>Interface BaseCacheOptions</h1>
+			<h1>Interface createChannelOptions</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-comment">
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>Base Options for the Client Caches</p>
-					</div>
-				</div>
-			</section>
 			<section class="tsd-panel tsd-hierarchy">
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">BaseCacheOptions</span>
-						<ul class="tsd-hierarchy">
-							<li>
-								<a href="Constants.ChannelCacheOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">ChannelCacheOptions</a>
-							</li>
-							<li>
-								<a href="Constants.GuildCacheOpiions.html" class="tsd-signature-type" data-tsd-kind="Interface">GuildCacheOpiions</a>
-							</li>
-							<li>
-								<a href="Constants.MemberCacheOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">MemberCacheOptions</a>
-							</li>
-							<li>
-								<a href="Constants.MessageCacheOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">MessageCacheOptions</a>
-							</li>
-							<li>
-								<a href="Constants.UserCacheOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">UserCacheOptions</a>
-							</li>
-						</ul>
+						<span class="target">createChannelOptions</span>
 					</li>
 				</ul>
 			</section>
@@ -107,8 +83,7 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="Constants.BaseCacheOptions.html#limit" class="tsd-kind-icon">limit</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="Constants.BaseCacheOptions.html#sweepInterval" class="tsd-kind-icon">sweep<wbr>Interval</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface"><a href="Constants.createChannelOptions.html#name" class="tsd-kind-icon">name</a></li>
 							</ul>
 						</section>
 					</div>
@@ -117,34 +92,14 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Properties</h2>
 				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="limit" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> limit</h3>
-					<div class="tsd-signature tsd-kind-icon">limit<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+					<a name="name" class="tsd-anchor"></a>
+					<h3>name</h3>
+					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/9cf26b8/lib/Constants.ts#L10">lib/Constants.ts:10</a></li>
+							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/9cf26b8/lib/Constants.ts#L18">lib/Constants.ts:18</a></li>
 						</ul>
 					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>What is the max amount of items this cache will hold</p>
-						</div>
-					</div>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-interface">
-					<a name="sweepInterval" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagOptional">Optional</span> sweep<wbr>Interval</h3>
-					<div class="tsd-signature tsd-kind-icon">sweep<wbr>Interval<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/9cf26b8/lib/Constants.ts#L14">lib/Constants.ts:14</a></li>
-						</ul>
-					</aside>
-					<div class="tsd-comment tsd-typography">
-						<div class="lead">
-							<p>A number in milliseconds that you would like the cache to be cleared.</p>
-						</div>
-					</div>
 				</section>
 			</section>
 		</div>
@@ -167,21 +122,9 @@
 					<li class=" tsd-kind-class tsd-parent-kind-namespace">
 						<a href="../classes/Constants.Endpoints.html" class="tsd-kind-icon">Endpoints</a>
 					</li>
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-interface tsd-parent-kind-namespace">
+					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
 						<a href="Constants.BaseCacheOptions.html" class="tsd-kind-icon">Base<wbr>Cache<wbr>Options</a>
-						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="Constants.BaseCacheOptions.html#limit" class="tsd-kind-icon">limit</a>
-							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-interface">
-								<a href="Constants.BaseCacheOptions.html#sweepInterval" class="tsd-kind-icon">sweep<wbr>Interval</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
 						<a href="Constants.ChannelCacheOptions.html" class="tsd-kind-icon">Channel<wbr>Cache<wbr>Options</a>
 					</li>
@@ -203,9 +146,18 @@
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
 						<a href="Constants.UserCacheOptions.html" class="tsd-kind-icon">User<wbr>Cache<wbr>Options</a>
 					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-interface tsd-parent-kind-namespace">
 						<a href="Constants.createChannelOptions.html" class="tsd-kind-icon">create<wbr>Channel<wbr>Options</a>
+						<ul>
+							<li class=" tsd-kind-property tsd-parent-kind-interface">
+								<a href="Constants.createChannelOptions.html#name" class="tsd-kind-icon">name</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-interface tsd-parent-kind-namespace">
 						<a href="Constants.createGuildOptions.html" class="tsd-kind-icon">create<wbr>Guild<wbr>Options</a>
 					</li>
