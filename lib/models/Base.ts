@@ -19,6 +19,10 @@ export default class Base {
         this.Id = id
     }
 
+    get createdAt() {
+        return this.Id
+    }
+
     /**
      * Clones the Model
      * @returns A clone of the Model
