@@ -14,6 +14,10 @@ export interface BaseCacheOptions {
     sweepInterval?: number;
 }
 
+export interface createGuildOptions {
+    name: string;
+}
+
 /**
  * The cache options for the Guild cache
  */

@@ -1,5 +1,6 @@
 import { EventEmitter } from "events"
-import { ClientOptions, Endpoints, SnowFlake } from "./Constants";
+import { ClientOptions, createGuildOptions, Endpoints, SnowFlake } from "./Constants";
+import { WebsocketManager } from "./gateway/WebsocketManager";
 import { Guild } from "./models/Guild";
 import { User } from "./models/User";
 import { RequestHandler } from "./rest/RequestHandler";
@@ -24,10 +25,16 @@ export class Client extends EventEmitter {
     public users: StorageBox<SnowFlake, User>;
 
     /**
-     * The Class used to make requests to the Api
+     * The Handler {@link RequestHandler} used for interacting with the api
      * @type {RequestHandler}
      */
     public requestHandler: RequestHandler;
+
+    /**
+     * The Manager {@link WebsocketManager} used to interacting with the Gateway
+     * @type {WebsocketManager}
+     */
+    public ws: WebsocketManager;
 
     /**
      * The options passed to the client
@@ -61,9 +68,18 @@ export class Client extends EventEmitter {
 
         this.requestHandler = new RequestHandler(this)
 
+        this.ws = new WebsocketManager(this)
+
         this.guilds = new StorageBox()
 
         this.users = new StorageBox()
+    }
+
+    createGuild(data: createGuildOptions): Promise<Guild> {
+        if (!data.name) throw new Error("A name must be provided for Guild Creation.")
+        else if (typeof data.name != "string") throw new TypeError("Name of Guild must be a string")
+
+        return this.requestHandler.request("POST", Endpoints.GUILDS(), data)
     }
 
     /**
