@@ -19,8 +19,12 @@ export default class Base {
         this.Id = id
     }
 
-    get createdAt() {
-        return this.Id
+    get createdAt(): number {
+        return Math.floor(Number(((this.Id >> 64n) + FERRIS_EPOCH)))
+    }
+
+    get UTCcreatedAt(): string {
+        return new Date(Number(((this.Id >> 64n) + FERRIS_EPOCH))).toUTCString()
     }
 
     /**
