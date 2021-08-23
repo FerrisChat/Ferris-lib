@@ -159,6 +159,9 @@ export class Endpoints {
     //Auth
     static AUTH_USER = (userId) => `/auth/${userId}`
 
+    //websockets
+    static WS_INFO = () => `/ws/info`
+
 }
 
 /**
