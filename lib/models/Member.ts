@@ -47,12 +47,12 @@ export class Member extends Base {
 
     _patch(data: any) {
         if ("user_id" in data) {
-            this.Id = data.user_id
+            this.id = data.user_id
         }
         if ("user" in data) {
             this.user = new User(data.user, this.#_client)
         } else {
-            this.user = this.#_client.users.get(this.Id)
+            this.user = this.#_client.users.get(this.id)
         }
         if ("guild_id" in data) {
             this.guildId = data.guild_id
@@ -62,6 +62,6 @@ export class Member extends Base {
         } else {
             this.guild = this.#_client.guilds.get(this.guildId)
         }
-        if (this.guildId === null && this.guild != null) this.guildId = this.guild.Id
+        if (this.guildId === null && this.guild != null) this.guildId = this.guild.id
     }
 }

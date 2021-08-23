@@ -9,22 +9,22 @@ export default class Base {
  * The Id of the Model
  * @type {SnowFlake }
  */
-    Id: SnowFlake;
+    id: SnowFlake;
 
     /**
      * @param {SnowFlake} id The Id of the model that extends this class
      */
     constructor(id: SnowFlake) {
 
-        this.Id = id
+        this.id = id
     }
 
     get createdAt(): number {
-        return Math.floor(Number(((this.Id >> 64n) + FERRIS_EPOCH)))
+        return Math.floor(Number(((this.id >> 64n) + FERRIS_EPOCH)))
     }
 
     get UTCcreatedAt(): string {
-        return new Date(Number(((this.Id >> 64n) + FERRIS_EPOCH))).toUTCString()
+        return new Date(this.createdAt).toUTCString()
     }
 
     /**
