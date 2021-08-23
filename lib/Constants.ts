@@ -14,14 +14,43 @@ export interface BaseCacheOptions {
     sweepInterval?: number;
 }
 
+export interface createChannelOptions {
+    name: string;
+}
+
 export interface createGuildOptions {
     name: string;
+}
+
+export interface MessageData {
+    content: string;
+}
+
+export interface ChannelCacheOptions extends BaseCacheOptions {
+    /**
+     * The filter that will remove items if they dont meet the condition
+     */
+    sweepFilter?: (guild: Guild) => boolean;
 }
 
 /**
  * The cache options for the Guild cache
  */
 export interface GuildCacheOpiions extends BaseCacheOptions {
+    /**
+     * The filter that will remove items if they dont meet the condition
+     */
+    sweepFilter?: (guild: Guild) => boolean;
+}
+
+export interface MemberCacheOptions extends BaseCacheOptions {
+    /**
+     * The filter that will remove items if they dont meet the condition
+     */
+    sweepFilter?: (guild: Guild) => boolean;
+}
+
+export interface MessageCacheOptions extends BaseCacheOptions {
     /**
      * The filter that will remove items if they dont meet the condition
      */
@@ -72,6 +101,13 @@ export interface ClientOptions {
          * Wether you want guilds cached or Select specific Options for the Cache
          */
         guilds?: GuildCacheOpiions | boolean;
+
+        channels?: ChannelCacheOptions | boolean;
+
+        members?: MemberCacheOptions | boolean;
+
+        messages?: MessageCacheOptions | boolean;
+
         /**
          * Wether you want Users cached or Select specific Options for the Cache
          */
@@ -84,7 +120,7 @@ export interface ClientOptions {
  */
 export enum Urls {
     Client = "https://ferris.chat",
-    Api = "https://ferris.chat",
+    Api = "https://api.ferris.chat",
     Base_Api = "/api/v"
 }
 

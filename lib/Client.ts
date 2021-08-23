@@ -1,7 +1,9 @@
 import { EventEmitter } from "events"
-import { ClientOptions, createGuildOptions, Endpoints, SnowFlake } from "./Constants";
+import { ClientOptions, createChannelOptions, createGuildOptions, Endpoints, MessageData, SnowFlake } from "./Constants";
 import { WebsocketManager } from "./gateway/WebsocketManager";
+import { Message } from "./models";
 import { Guild } from "./models/Guild";
+import { GuildChannel } from "./models/GuildChannel";
 import { User } from "./models/User";
 import { RequestHandler } from "./rest/RequestHandler";
 import { StorageBox } from "./util/StorageBox";
@@ -75,11 +77,46 @@ export class Client extends EventEmitter {
         this.users = new StorageBox()
     }
 
-    createGuild(data: createGuildOptions): Promise<Guild> {
-        if (!data.name) throw new Error("A name must be provided for Guild Creation.")
-        else if (typeof data.name != "string") throw new TypeError("Name of Guild must be a string")
+    createChannel(guildId: SnowFlake, channelData: createChannelOptions): Promise<GuildChannel> {
+        if (!channelData.name) throw new Error("A name must be provided for Guild Creation.")
+        else if (typeof channelData.name != "string") throw new TypeError("Name of Guild must be a string")
 
-        return this.requestHandler.request("POST", Endpoints.GUILDS(), data)
+        return this.requestHandler.request("POST", Endpoints.CHANNELS(guildId), channelData)
+    }
+
+    createGuild(guildData: createGuildOptions): Promise<Guild> {
+        if (!guildData.name) throw new Error("A name must be provided for Guild Creation.")
+        else if (typeof guildData.name != "string") throw new TypeError("Name of Guild must be a string")
+
+        return this.requestHandler.request("POST", Endpoints.GUILDS(), guildData)
+    }
+
+    createMessage(guildId: SnowFlake, channelId: SnowFlake, messageData: MessageData): Promise<Message> {
+        if (!messageData.content) throw new Error("You must provide content for the message.")
+        else if (typeof messageData.content != "string") throw new TypeError("Content for Message must be a string")
+
+        return this.requestHandler.request("POST", Endpoints.MESSAGES(guildId, channelId), messageData)
+    }
+
+    deleteChannel(channelId: SnowFlake): Promise<any> {
+        return this.requestHandler.request("DELETE", Endpoints.CHANNEL(channelId))
+    }
+
+    deleteGuild(guildId: SnowFlake): Promise<any> {
+        return this.requestHandler.request("DELETE", Endpoints.GUILD(guildId))
+    }
+
+    deleteMessage(messageId: SnowFlake): Promise<any> {
+        return this.requestHandler.request("DELETE", Endpoints.MESSAGE(messageId))
+    }
+
+    fetchChannel(channelId: SnowFlake, options?: { cache?: boolean; force?: boolean }): Promise<GuildChannel> | GuildChannel {
+        // no channel cache yet
+        return this.requestHandler.request("GET", Endpoints.CHANNEL(channelId))
+    }
+
+    fetchMessage(messageId: SnowFlake): Promise<Message> {
+        return this.requestHandler.request("GET", Endpoints.MESSAGE(messageId))
     }
 
     /**
