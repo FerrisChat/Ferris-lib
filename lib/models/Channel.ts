@@ -39,5 +39,7 @@ export class Channel extends Base {
         if ("name" in data) {
             this.name = data.name
         }
+
+        return this
     }
 }

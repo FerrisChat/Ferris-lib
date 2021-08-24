@@ -69,10 +69,6 @@ export interface UserCacheOptions extends BaseCacheOptions {
  */
 export interface ClientOptions {
     /**
-     * The token for your Bot.
-     */
-    token: string;
-    /**
      * Options for the RequestHandler
      */
     rest?: {

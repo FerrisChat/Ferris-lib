@@ -62,5 +62,7 @@ export class Guild extends Base {
         if ("members" in data) {
             console.log(data.members)
         }
+
+        return this
     }
 }

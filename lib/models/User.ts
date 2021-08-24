@@ -64,5 +64,7 @@ export class User extends Base {
         if ("flags" in data) {
             this.flags = data.flags
         }
+
+        return this
     }
 }

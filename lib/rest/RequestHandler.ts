@@ -30,7 +30,7 @@ export class RequestHandler {
         return new Promise(async (resolve, reject) => {
             const headers = {
                 "User-Agent": this.userAgent,
-                "Authorization": this.client.options.token,
+                "Authorization": this.client._token,
                 "Content-type": "application/json",
                 ...this.client.options.rest.headers,
             };

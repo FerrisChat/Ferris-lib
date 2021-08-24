@@ -1,6 +1,7 @@
 import { Channel } from "diagnostics_channel";
 import { EventEmitter } from "events"
 import { ClientOptions, createChannelOptions, createGuildOptions, Endpoints, MessageData, SnowFlake } from "./Constants";
+import { FerrisError } from "./errors/FerrislibError";
 import { WebsocketManager } from "./gateway/WebsocketManager";
 import { Message } from "./models";
 import { Guild } from "./models/Guild";
@@ -48,14 +49,17 @@ export class Client extends EventEmitter {
      */
     public options: ClientOptions;
 
+    public readonly _token: string;
+
     /**
      * @param {ClientOptions} clientOptions The options for the Client
      */
-    constructor(clientOptions: ClientOptions) {
+    constructor(token: string, clientOptions: ClientOptions = {}) {
         super();
 
-        if (!clientOptions) throw new Error("No options were provided to the client Class")
-        else if (!clientOptions.token) throw new Error("No Token was provided, Please specify one.")
+        if (!token) throw new FerrisError("TOKEN_MISSING")
+        else if (typeof token != "string") throw new FerrisError("TOKEN_MUST_BE_STRING")
+        else this._token = token
 
         this.options = Object.assign(clientOptions, {
             rest: {
@@ -129,15 +133,11 @@ export class Client extends EventEmitter {
 
     /**
      * Fetch a Guild from the Api
-     * @param {SnowFlake} id The Id for the Guild to fetch
+     * @param {SnowFlake} guildId The Id for the Guild to fetch
      * @returns {Promise<Guild>} 
      */
-    public fetchGuild(id: SnowFlake): Promise<Guild> {
-        return this.requestHandler.request("GET", Endpoints.GUILD(id)).then((guild) => {
-            const fetchedGuild = new Guild(guild, this)
-            if (!this.guilds.has(id)) this.guilds.set(id, fetchedGuild)
-            return fetchedGuild
-        })
+    public fetchGuild(guildId: SnowFlake): Promise<Guild> {
+        return this.requestHandler.request("GET", Endpoints.GUILD(guildId)).then((guild) => this.guilds.has(guild.id) ? this.guilds.get(guild.id)._patch(guild) : this.guilds.set(guild.id, new Guild(guild, this)).get(guild.id))
     }
 
     /**
@@ -163,7 +163,6 @@ export class Client extends EventEmitter {
      * @private
      */
     private validateOptions() {
-        if (typeof this.options.token != "string") throw new TypeError("The Token Provided is not a string.")
         if (typeof this.options.rest.retryLimit != "number" || isNaN(this.options.rest.retryLimit)) {
             throw new TypeError("The Rest Retry Limit must be a number.")
         }

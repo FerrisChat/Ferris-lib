@@ -12,10 +12,11 @@ export class FerrisError extends Error {
     }
 
     get name() {
-        return `AkairoError [${this.code}]`;
+        return `FerrisLibError [${this.code}]`;
     }
 }
 
 class Messages {
-    static TOKEN_MISSING = () => `Please provide a token for the Client.`
+    static TOKEN_MISSING = () => `Please provide a token for the Client.`;
+    static TOKEN_MUST_BE_STRING = () => `Provided Token is not a String.`
 }

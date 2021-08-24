@@ -41,7 +41,7 @@ export default class Base {
      * @returns The updated Data
      */
     _patch(data) {
-        return data;
+        return this;
     }
 
     /**
