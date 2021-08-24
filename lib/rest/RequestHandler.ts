@@ -1,8 +1,8 @@
 import fetch from "node-fetch"
 import { Client } from "../Client";
 import { API_VERSION, RequestMethods, Urls } from "../Constants";
-import { FerrisAPIError } from "./FerrisApiError";
-import { HTTPError } from "./HttpError";
+import { FerrisAPIError } from "../errors/FerrisApiError";
+import { HTTPError } from "../errors/HttpError";
 
 /**
  * The class the Client uses for Interacting with the APi.
@@ -53,14 +53,11 @@ export class RequestHandler {
             if (res.ok) {
                 return resolve(this.parseResponse(res))
             }
-            const data = await this.parseResponse(res)
-            console.log(data)
-            resolve(data)
-            /*if (res.status === 401 || res.status === 403) {
+
+            if (res.status === 401 || res.status === 403) {
                 console.log("Invalid Something")
             } else if (res.status >= 400 && res.status <= 500) {
                 if (res.status === 429) return console.warn("Ratelimit")
-                else if (res.status === 404) return console.warn("Whatever was requested was not found")
 
                 let data;
                 try {
@@ -69,7 +66,7 @@ export class RequestHandler {
                     reject(new HTTPError(error.message, error.constructor.name, res.status, method, finalURL))
                 }
 
-                reject(new FerrisAPIError(data, res.status, method, finalURL))
+                reject(new FerrisAPIError(data, res.status, method, finalURL, body))
             } else if (res.status >= 500 && res.status < 600) {
                 if (this.status.retires >= this.client.options.rest.retryLimit) {
                     this.status.retires = 0
@@ -79,7 +76,7 @@ export class RequestHandler {
                 this.status.retires++
                 await new Promise((resolve) => setTimeout(resolve, this.client.options.rest.retryAfter * 1000))
                 resolve(this.request(method, url, body))
-            }*/
+            }
         })
     }
     private parseResponse(res) {

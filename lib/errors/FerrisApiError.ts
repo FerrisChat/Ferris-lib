@@ -3,9 +3,10 @@ export class FerrisAPIError extends Error {
     path: string;
     code: number;
     httpStatus: number;
+    body: any;
 
-    constructor(error, status, method, path) {
-        super();
+    constructor(error, status, method, path, body) {
+        super(error.message ?? error);
         this.name = 'FerrisAPIError';
 
         /**
@@ -27,10 +28,10 @@ export class FerrisAPIError extends Error {
         this.code = status
 
         /**
-         * The HTTP status code
-         * @type {number}
+         * Http Request Body
+         * @type {any}
          */
-        this.httpStatus = status;
+        this.body = body
     }
 
 }

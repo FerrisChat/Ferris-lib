@@ -6,7 +6,7 @@ const sys = new Ferrislib.Client({
 /** */
 async function test() {
     //test guild: 957859405648704982857948332032n
-    const data = await sys.createGuild({ name: "FerrisLib Support" })
+    const data = await sys.fetchGuild(57859405648704982857948332032n)
     console.log(data)
 }
 test()
