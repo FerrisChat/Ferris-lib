@@ -38,7 +38,7 @@ export class RequestHandler {
             const finalURL = this.baseUrl + url
 
             const controller = new AbortController()
-            //const timeout = setTimeout(() => controller.abort(), this.client.options.rest.requestTimeout * 1000).unref()
+            const timeout = setTimeout(() => controller.abort(), this.client.options.rest.requestTimeout * 1000).unref()
 
             console.log(finalURL)
             const res = await fetch(finalURL, {
@@ -46,7 +46,7 @@ export class RequestHandler {
                 body: body ? JSON.stringify(body) : null,
                 signal: controller.signal,
                 method,
-            })//.finally(() => clearTimeout(timeout))
+            }).finally(() => clearTimeout(timeout))
 
             console.log(res.status, res.statusText)
 
