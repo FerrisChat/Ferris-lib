@@ -4,11 +4,11 @@ const sys = new Ferrislib.Client("OTU3ODU3NjAxMzE3Mzk4OTU4Njk5NjE0MDQ0MTYw.51vcG
 /** */
 async function test() {
     //test guild: 957953270301057319498615357440n
-    const data = await sys.fetchGuild(BigInt(9.57857601317399e+29))
+    const data = await sys.fetchGuild(964142446868206944553778806784n)
     //const data2 = await sys.createChannel(957859405648704982857948332032n, { name: "test" })
     console.log(data)
 }
-test()
+test().catch(console.warn)
 
 
 setInterval(() => {

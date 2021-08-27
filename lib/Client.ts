@@ -100,7 +100,11 @@ export class Client extends EventEmitter {
         if (!guildData.name) throw new Error("A name must be provided for Guild Creation.")
         else if (typeof guildData.name != "string") throw new TypeError("Name of Guild must be a string")
 
-        return this.requestHandler.request("POST", Endpoints.GUILDS(), guildData)
+        return this.requestHandler.request("POST", Endpoints.GUILDS(), guildData).then((guild) => {
+            const newGuild = new Guild(guild, this)
+            this.guilds.set(BigInt(guild.id), newGuild)
+            return newGuild
+        })
     }
 
     createMessage(guildId: SnowFlake, channelId: SnowFlake, messageData: MessageData): Promise<Message> {
@@ -137,7 +141,12 @@ export class Client extends EventEmitter {
      * @returns {Promise<Guild>} 
      */
     public fetchGuild(guildId: SnowFlake): Promise<Guild> {
-        return this.requestHandler.request("GET", Endpoints.GUILD(guildId)).then((guild) => this.guilds.has(guild.id) ? this.guilds.get(guild.id)._patch(guild) : this.guilds.set(guild.id, new Guild(guild, this)).get(guild.id))
+        return this.requestHandler.request("GET", Endpoints.GUILD(guildId)).then((guild) => {
+            if (this.guilds.has(BigInt(guild.id))) return this.guilds.get(BigInt(guild.id))
+            const newGuild = new Guild(guild, this)
+            this.guilds.set(BigInt(guild.id), newGuild)
+            return newGuild
+        })
     }
 
     /**

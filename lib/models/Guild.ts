@@ -3,6 +3,7 @@ import { SnowFlake } from "../Constants";
 import { StorageBox } from "../util/StorageBox";
 import { Channel, Member } from "./"
 import Base from "./Base";
+import { GuildChannel } from "./GuildChannel";
 
 /**
  * The Guild Model
@@ -23,9 +24,9 @@ export class Guild extends Base {
 
     /**
      * A Cache with the Channels for the Guild
-     * @type {StorageBox<SnowFlake, Channel>}
+     * @type {StorageBox<SnowFlake, GuildChannel>}
      */
-    public channels: StorageBox<SnowFlake, Channel>;
+    public channels: StorageBox<SnowFlake, GuildChannel>;
 
     /**
      * A cache with the Members for the Guild
@@ -47,20 +48,28 @@ export class Guild extends Base {
         super(data.id);
 
         this.#_client = client
+
+        this._patch(data)
     }
 
     _patch(data: any) {
         if ("owner_id" in data) {
-            this.ownerId = data.owner_id
+            this.ownerId = BigInt(data.owner_id)
         }
         if ("name" in data) {
             this.name = data.name
         }
         if ("channels" in data) {
-            console.log(data.channels)
+            for (const raw_channel in data.channels) {
+                const channel = new GuildChannel(this, raw_channel, this.#_client)
+                this.channels.set(channel.id, channel)
+            }
         }
         if ("members" in data) {
-            console.log(data.members)
+            for (const raw_member in data.members) {
+                const member = new Member(raw_member, this.#_client)
+                this.members.set(member.id, member)
+            }
         }
 
         return this
