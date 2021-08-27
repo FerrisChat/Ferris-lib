@@ -59,14 +59,14 @@ export class Guild extends Base {
         if ("name" in data) {
             this.name = data.name
         }
-        if ("channels" in data) {
-            for (const raw_channel in data.channels) {
+        if ("channels" in data && data.channels != null) {
+            for (const raw_channel of data.channels) {
                 const channel = new GuildChannel(this, raw_channel, this.#_client)
                 this.channels.set(channel.id, channel)
             }
         }
-        if ("members" in data) {
-            for (const raw_member in data.members) {
+        if ("members" in data && data.members != null) {
+            for (const raw_member of data.members) {
                 const member = new Member(raw_member, this.#_client)
                 this.members.set(member.id, member)
             }
