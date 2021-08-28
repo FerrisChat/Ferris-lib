@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Urls | Ferris-lib</title>
+	<title>ShardStatus | Ferris-lib</title>
 	<meta name="description" content="Documentation for Ferris-lib">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -58,23 +58,16 @@
 					<a href="../modules/Constants.html">Constants</a>
 				</li>
 				<li>
-					<a href="Constants.Urls.html">Urls</a>
+					<a href="Constants.ShardStatus.html">ShardStatus</a>
 				</li>
 			</ul>
-			<h1>Enumeration Urls</h1>
+			<h1>Enumeration ShardStatus</h1>
 		</div>
 	</div>
 </header>
 <div class="container container-main">
 	<div class="row">
 		<div class="col-8 col-content">
-			<section class="tsd-panel tsd-comment">
-				<div class="tsd-comment tsd-typography">
-					<div class="lead">
-						<p>Urls for the RequestHandler (Websocket Manager Soon)</p>
-					</div>
-				</div>
-			</section>
 			<section class="tsd-panel-group tsd-index-group">
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
@@ -82,9 +75,12 @@
 						<section class="tsd-index-section ">
 							<h3>Enumeration members</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="Constants.Urls.html#Api" class="tsd-kind-icon">Api</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="Constants.Urls.html#Base_Api" class="tsd-kind-icon">Base_<wbr><wbr>Api</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="Constants.Urls.html#Client" class="tsd-kind-icon">Client</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="Constants.ShardStatus.html#CONNECTED" class="tsd-kind-icon">CONNECTED</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="Constants.ShardStatus.html#CONNECTING" class="tsd-kind-icon">CONNECTING</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="Constants.ShardStatus.html#DISCONNECTING" class="tsd-kind-icon">DISCONNECTING</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="Constants.ShardStatus.html#IDLE" class="tsd-kind-icon">IDLE</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="Constants.ShardStatus.html#READY" class="tsd-kind-icon">READY</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="Constants.ShardStatus.html#RECONNECTING" class="tsd-kind-icon">RECONNECTING</a></li>
 							</ul>
 						</section>
 					</div>
@@ -93,32 +89,62 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Enumeration members</h2>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="Api" class="tsd-anchor"></a>
-					<h3>Api</h3>
-					<div class="tsd-signature tsd-kind-icon">Api<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;https://ferris.chat&quot;</span></div>
+					<a name="CONNECTED" class="tsd-anchor"></a>
+					<h3>CONNECTED</h3>
+					<div class="tsd-signature tsd-kind-icon">CONNECTED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 5</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/6e714d0/lib/Constants.ts#L132">lib/Constants.ts:132</a></li>
+							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/6e714d0/lib/Constants.ts#L194">lib/Constants.ts:194</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="Base_Api" class="tsd-anchor"></a>
-					<h3>Base_<wbr><wbr>Api</h3>
-					<div class="tsd-signature tsd-kind-icon">Base_<wbr><wbr>Api<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;/api/v&quot;</span></div>
+					<a name="CONNECTING" class="tsd-anchor"></a>
+					<h3>CONNECTING</h3>
+					<div class="tsd-signature tsd-kind-icon">CONNECTING<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 2</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/6e714d0/lib/Constants.ts#L133">lib/Constants.ts:133</a></li>
+							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/6e714d0/lib/Constants.ts#L191">lib/Constants.ts:191</a></li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="Client" class="tsd-anchor"></a>
-					<h3>Client</h3>
-					<div class="tsd-signature tsd-kind-icon">Client<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;https://ferris.chat&quot;</span></div>
+					<a name="DISCONNECTING" class="tsd-anchor"></a>
+					<h3>DISCONNECTING</h3>
+					<div class="tsd-signature tsd-kind-icon">DISCONNECTING<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 4</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/6e714d0/lib/Constants.ts#L131">lib/Constants.ts:131</a></li>
+							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/6e714d0/lib/Constants.ts#L193">lib/Constants.ts:193</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="IDLE" class="tsd-anchor"></a>
+					<h3>IDLE</h3>
+					<div class="tsd-signature tsd-kind-icon">IDLE<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 1</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/6e714d0/lib/Constants.ts#L190">lib/Constants.ts:190</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="READY" class="tsd-anchor"></a>
+					<h3>READY</h3>
+					<div class="tsd-signature tsd-kind-icon">READY<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 0</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/6e714d0/lib/Constants.ts#L189">lib/Constants.ts:189</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="RECONNECTING" class="tsd-anchor"></a>
+					<h3>RECONNECTING</h3>
+					<div class="tsd-signature tsd-kind-icon">RECONNECTING<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = 3</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/6e714d0/lib/Constants.ts#L192">lib/Constants.ts:192</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -140,27 +166,36 @@
 					<li class=" tsd-kind-enum tsd-parent-kind-namespace">
 						<a href="Constants.Events.html" class="tsd-kind-icon">Events</a>
 					</li>
-					<li class=" tsd-kind-enum tsd-parent-kind-namespace">
-						<a href="Constants.ShardStatus.html" class="tsd-kind-icon">Shard<wbr>Status</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-enum tsd-parent-kind-namespace">
-						<a href="Constants.Urls.html" class="tsd-kind-icon">Urls</a>
+						<a href="Constants.ShardStatus.html" class="tsd-kind-icon">Shard<wbr>Status</a>
 						<ul>
 							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="Constants.Urls.html#Api" class="tsd-kind-icon">Api</a>
+								<a href="Constants.ShardStatus.html#CONNECTED" class="tsd-kind-icon">CONNECTED</a>
 							</li>
 							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="Constants.Urls.html#Base_Api" class="tsd-kind-icon">Base_<wbr><wbr>Api</a>
+								<a href="Constants.ShardStatus.html#CONNECTING" class="tsd-kind-icon">CONNECTING</a>
 							</li>
 							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="Constants.Urls.html#Client" class="tsd-kind-icon">Client</a>
+								<a href="Constants.ShardStatus.html#DISCONNECTING" class="tsd-kind-icon">DISCONNECTING</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="Constants.ShardStatus.html#IDLE" class="tsd-kind-icon">IDLE</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="Constants.ShardStatus.html#READY" class="tsd-kind-icon">READY</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="Constants.ShardStatus.html#RECONNECTING" class="tsd-kind-icon">RECONNECTING</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
+					<li class=" tsd-kind-enum tsd-parent-kind-namespace">
+						<a href="Constants.Urls.html" class="tsd-kind-icon">Urls</a>
+					</li>
 					<li class=" tsd-kind-enum tsd-parent-kind-namespace">
 						<a href="Constants.WebSocketCloseCodes.html" class="tsd-kind-icon">Web<wbr>Socket<wbr>Close<wbr>Codes</a>
 					</li>
