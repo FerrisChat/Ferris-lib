@@ -4,7 +4,7 @@ import { FERRIS_EPOCH, SnowFlake } from "../Constants";
 /**
  * The base class for all the models
  */
-export default class Base {
+export class Base {
     /**
  * The Id of the Model
  * @type {SnowFlake }
@@ -16,11 +16,11 @@ export default class Base {
      */
     constructor(id: SnowFlake) {
 
-        this.id = BigInt(id)
+        this.id = BigInt(id).toString()
     }
 
     get createdAt(): number {
-        return Math.floor(Number(((this.id >> 64n) + FERRIS_EPOCH)))
+        return Math.floor(((Number(this.id) >> 64) + FERRIS_EPOCH))
     }
 
     get UTCcreatedAt(): string {

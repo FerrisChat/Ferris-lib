@@ -33,6 +33,12 @@ export interface ChannelCacheOptions extends BaseCacheOptions {
     sweepFilter?: (guild: Guild) => boolean;
 }
 
+export enum Events {
+    DEBUG = "debug",
+    SHARDCLOSED = "shardClosed",
+    SHARDREADY = "shardReady"
+}
+
 /**
  * The cache options for the Guild cache
  */
@@ -62,6 +68,11 @@ export interface UserCacheOptions extends BaseCacheOptions {
      * The filter that will remove items if they dont meet the condition
      */
     sweepFilter?: (user: User) => boolean;
+}
+
+export interface ClientEvents<T> {
+    (event: "debug" | "warn", listener: (message: string) => void): T;
+    (event: "shardClosed", listener: (code: number) => void): T;
 }
 
 /**
@@ -108,7 +119,9 @@ export interface ClientOptions {
          * Wether you want Users cached or Select specific Options for the Cache
          */
         users?: UserCacheOptions | boolean;
-    }
+    };
+    shardCount?: "auto" | number;
+    shardList?: "auto" | number[];
 }
 
 /**
@@ -170,6 +183,19 @@ export type RequestMethods = "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
  * For ids
  * @type {string}
  */
-export type SnowFlake = bigint;
+export type SnowFlake = string;
 
-export const FERRIS_EPOCH = 1_577_836_800_000n
+export enum ShardStatus {
+    READY = 0,
+    IDLE = 1,
+    CONNECTING = 2,
+    RECONNECTING = 3,
+    DISCONNECTING = 4,
+    CONNECTED = 5,
+}
+
+export enum WebSocketCloseCodes {
+    ABNORMAL_CLOSURE = 1006
+}
+
+export const FERRIS_EPOCH = 1_577_836_800_000;

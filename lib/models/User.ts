@@ -1,6 +1,8 @@
 import { Client } from "../Client";
-import { Endpoints } from "../Constants";
-import Base from "./Base";
+import { Endpoints, SnowFlake } from "../Constants";
+import { StorageBox } from "../util/StorageBox";
+import { Base } from "./Base";
+import { Guild } from "./Guild";
 
 
 /**
@@ -16,9 +18,9 @@ export class User extends Base {
 
     /**
      * The guilds of the user
-     * @type {unknown}
+     * @type {StorageBox<SnowFlake, Guild>}
      */
-    public guilds: unknown;
+    public guilds: StorageBox<SnowFlake, Guild>;
 
     /**
      * The flags of the user
@@ -39,8 +41,9 @@ export class User extends Base {
     constructor(data: any, client: Client) {
         super(data.id);
 
-        this._patch(data)
         this.#_client = client
+
+        this._patch(data)
     }
 
     /**
@@ -58,12 +61,20 @@ export class User extends Base {
         if ("name" in data) {
             this.name = data.name
         }
-        if ("guilds" in data) {
-            this.guilds = data.guilds
-        } else this.guilds = null
+
         if ("flags" in data) {
             this.flags = data.flags
         }
+
+        if ("guilds" in data) {
+            this.guilds = new StorageBox()
+            for (const raw_guild of data.guilds) {
+                console.log(raw_guild, BigInt(raw_guild.id).toString())
+                const guild = this.#_client.guilds.has(BigInt(raw_guild.id).toString()) ? this.#_client.guilds.get(BigInt(raw_guild.id).toString())._patch(raw_guild) : this.#_client.guilds.set(BigInt(raw_guild.id).toString(), new Guild(raw_guild, this.#_client)).get(BigInt(raw_guild.id).toString())
+                this.guilds.set(guild.id, guild)
+            }
+        } else this.guilds = null
+
 
         return this
     }

@@ -1,6 +1,6 @@
 import { Client } from "../Client";
 import { SnowFlake } from "../Constants";
-import Base from "./Base";
+import { Base } from "./Base";
 import { Guild } from "./Guild";
 import { User } from "./User";
 
@@ -39,7 +39,6 @@ export class Member extends Base {
      * @param {Client} client 
      */
     constructor(data: any, client: Client) {
-        console.log(data)
         super(data.user_id);
 
         this.#_client = client
@@ -48,7 +47,7 @@ export class Member extends Base {
 
     _patch(data: any) {
         if ("user_id" in data) {
-            this.id = BigInt(data.user_id)
+            this.id = BigInt(data.user_id).toString()
         }
         if ("user" in data) {
             this.user = new User(data.user, this.#_client)
@@ -56,7 +55,7 @@ export class Member extends Base {
             this.user = this.#_client.users.get(this.id)
         }
         if ("guild_id" in data) {
-            this.guildId = BigInt(data.guild_id)
+            this.guildId = BigInt(data.guild_id).toString()
         }
         if ("guild" in data) {
             this.guild = new Guild(data.guild, this.#_client)

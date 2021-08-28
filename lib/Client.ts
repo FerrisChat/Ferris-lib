@@ -1,6 +1,6 @@
 import { Channel } from "diagnostics_channel";
 import { EventEmitter } from "events"
-import { ClientOptions, createChannelOptions, createGuildOptions, Endpoints, MessageData, SnowFlake } from "./Constants";
+import { ClientEvents, ClientOptions, createChannelOptions, createGuildOptions, Endpoints, MessageData, SnowFlake } from "./Constants";
 import { FerrisError } from "./errors/FerrislibError";
 import { WebsocketManager } from "./gateway/WebsocketManager";
 import { Message } from "./models";
@@ -51,6 +51,10 @@ export class Client extends EventEmitter {
 
     public readonly _token: string;
 
+    on: ClientEvents<this>
+    once: ClientEvents<this>
+    off: ClientEvents<this>
+
     /**
      * @param {ClientOptions} clientOptions The options for the Client
      */
@@ -60,8 +64,7 @@ export class Client extends EventEmitter {
         if (!token) throw new FerrisError("TOKEN_MISSING")
         else if (typeof token != "string") throw new FerrisError("TOKEN_MUST_BE_STRING")
         else this._token = token
-
-        this.options = Object.assign(clientOptions, {
+        this.options = Object.assign({
             rest: {
                 requestTimeout: 7,
                 retryLimit: 1,
@@ -71,8 +74,10 @@ export class Client extends EventEmitter {
             cache: {
                 guilds: false,
                 users: false,
-            }
-        })
+            },
+            shardCount: "auto",
+            shardList: "auto",
+        }, clientOptions)
 
         this.validateOptions()
 
@@ -85,8 +90,8 @@ export class Client extends EventEmitter {
         this.users = new StorageBox()
     }
 
-    connect(): void {
-        //this.ws.start()
+    public connect(): void {
+        this.ws.start()
     }
 
     createChannel(guildId: SnowFlake, channelData: createChannelOptions): Promise<GuildChannel> {
@@ -102,7 +107,7 @@ export class Client extends EventEmitter {
 
         return this.requestHandler.request("POST", Endpoints.GUILDS(), guildData).then((guild) => {
             const newGuild = new Guild(guild, this)
-            this.guilds.set(BigInt(guild.id), newGuild)
+            this.guilds.set(BigInt(guild.id).toString(), newGuild)
             return newGuild
         })
     }
@@ -141,10 +146,10 @@ export class Client extends EventEmitter {
      * @returns {Promise<Guild>} 
      */
     public fetchGuild(guildId: SnowFlake): Promise<Guild> {
-        return this.requestHandler.request("GET", Endpoints.GUILD(guildId)).then((guild) => {
-            if (this.guilds.has(BigInt(guild.id))) return this.guilds.get(BigInt(guild.id))
+        return this.requestHandler.request("GET", Endpoints.GUILD(guildId) + "?members=true").then((guild) => {
+            if (this.guilds.has(BigInt(guild.id).toString())) return this.guilds.get(BigInt(guild.id).toString())
             const newGuild = new Guild(guild, this)
-            this.guilds.set(BigInt(guild.id), newGuild)
+            this.guilds.set(BigInt(guild.id).toString(), newGuild)
             return newGuild
         })
     }
@@ -155,11 +160,15 @@ export class Client extends EventEmitter {
      * @param {{ cache: boolean; force: boolean }} options Whether to cache the user upon fetch or Force a request even if the user is in the cache
      * @returns {User|Promise<User>}
      */
-    public fetchUser(id: SnowFlake, options?: { cache?: boolean; force?: boolean }): User | Promise<User> {
+    public fetchUser(id: SnowFlake, options: { cache?: boolean; force?: boolean } = { cache: false, force: false }): User | Promise<User> {
         if (!options.force && this.users.has(id)) return this.users.get(id)
         return this.requestHandler.request("GET", Endpoints.USER(id)).then((user) => {
             const fetchUser = new User(user, this)
             if (options.cache && !this.users.has(id)) this.users.set(id, fetchUser)
+            else if (options.cache && this.users.has(id)) {
+                this.users.delete(id)
+                this.users.set(id, fetchUser)
+            }
             return fetchUser
         })
     }
@@ -167,6 +176,7 @@ export class Client extends EventEmitter {
     getWsInfo(): Promise<any> {
         return this.requestHandler.request("GET", Endpoints.WS_INFO())
     }
+
 
     /**
      * @private

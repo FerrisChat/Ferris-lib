@@ -1,6 +1,6 @@
 import { Client } from "../Client";
 import { SnowFlake } from "../Constants";
-import Base from "./Base";
+import { Base } from "./Base";
 
 
 /**
@@ -41,7 +41,7 @@ export class Message extends Base {
             this.content = data.content
         }
         if ("channel_id" in data) {
-            this.channelId = BigInt(data.channel_id)
+            this.channelId = BigInt(data.channel_id).toString()
         }
 
         return this

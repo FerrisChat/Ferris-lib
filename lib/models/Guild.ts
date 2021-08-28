@@ -2,7 +2,7 @@ import { Client } from "../Client";
 import { SnowFlake } from "../Constants";
 import { StorageBox } from "../util/StorageBox";
 import { Channel, Member } from "./"
-import Base from "./Base";
+import { Base } from "./Base";
 import { GuildChannel } from "./GuildChannel";
 
 /**
@@ -53,11 +53,11 @@ export class Guild extends Base {
     }
 
     _patch(data: any) {
-        if ("owner_id" in data) {
-            this.ownerId = BigInt(data.owner_id)
-        }
         if ("name" in data) {
             this.name = data.name
+        }
+        if ("owner_id" in data) {
+            this.ownerId = BigInt(data.owner_id).toString()
         }
         if ("channels" in data && data.channels != null) {
             for (const raw_channel of data.channels) {
