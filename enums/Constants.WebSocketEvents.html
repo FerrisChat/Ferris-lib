@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Events | Ferris-lib</title>
+	<title>WebSocketEvents | Ferris-lib</title>
 	<meta name="description" content="Documentation for Ferris-lib">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -58,10 +58,10 @@
 					<a href="../modules/Constants.html">Constants</a>
 				</li>
 				<li>
-					<a href="Constants.Events.html">Events</a>
+					<a href="Constants.WebSocketEvents.html">WebSocketEvents</a>
 				</li>
 			</ul>
-			<h1>Enumeration Events</h1>
+			<h1>Enumeration WebSocketEvents</h1>
 		</div>
 	</div>
 </header>
@@ -75,9 +75,7 @@
 						<section class="tsd-index-section ">
 							<h3>Enumeration members</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="Constants.Events.html#DEBUG" class="tsd-kind-icon">DEBUG</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="Constants.Events.html#SHARDCLOSED" class="tsd-kind-icon">SHARDCLOSED</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="Constants.Events.html#SHARDREADY" class="tsd-kind-icon">SHARDREADY</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="Constants.WebSocketEvents.html#IDENTIFYACCEPTED" class="tsd-kind-icon">IDENTIFYACCEPTED</a></li>
 							</ul>
 						</section>
 					</div>
@@ -86,32 +84,12 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Enumeration members</h2>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="DEBUG" class="tsd-anchor"></a>
-					<h3>DEBUG</h3>
-					<div class="tsd-signature tsd-kind-icon">DEBUG<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;debug&quot;</span></div>
+					<a name="IDENTIFYACCEPTED" class="tsd-anchor"></a>
+					<h3>IDENTIFYACCEPTED</h3>
+					<div class="tsd-signature tsd-kind-icon">IDENTIFYACCEPTED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;IdentifyAccepted&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/6978a11/lib/Constants.ts#L37">lib/Constants.ts:37</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="SHARDCLOSED" class="tsd-anchor"></a>
-					<h3>SHARDCLOSED</h3>
-					<div class="tsd-signature tsd-kind-icon">SHARDCLOSED<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;shardClosed&quot;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/6978a11/lib/Constants.ts#L38">lib/Constants.ts:38</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="SHARDREADY" class="tsd-anchor"></a>
-					<h3>SHARDREADY</h3>
-					<div class="tsd-signature tsd-kind-icon">SHARDREADY<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;shardReady&quot;</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/6978a11/lib/Constants.ts#L39">lib/Constants.ts:39</a></li>
+							<li>Defined in <a href="https://github.com/FerrisChat/Ferris-lib/blob/6978a11/lib/Constants.ts#L203">lib/Constants.ts:203</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -130,24 +108,9 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
-				</ul>
-				<ul class="current">
-					<li class="current tsd-kind-enum tsd-parent-kind-namespace">
+					<li class=" tsd-kind-enum tsd-parent-kind-namespace">
 						<a href="Constants.Events.html" class="tsd-kind-icon">Events</a>
-						<ul>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="Constants.Events.html#DEBUG" class="tsd-kind-icon">DEBUG</a>
-							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="Constants.Events.html#SHARDCLOSED" class="tsd-kind-icon">SHARDCLOSED</a>
-							</li>
-							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="Constants.Events.html#SHARDREADY" class="tsd-kind-icon">SHARDREADY</a>
-							</li>
-						</ul>
 					</li>
-				</ul>
-				<ul class="after-current">
 					<li class=" tsd-kind-enum tsd-parent-kind-namespace">
 						<a href="Constants.ShardStatus.html" class="tsd-kind-icon">Shard<wbr>Status</a>
 					</li>
@@ -157,9 +120,18 @@
 					<li class=" tsd-kind-enum tsd-parent-kind-namespace">
 						<a href="Constants.WebSocketCloseCodes.html" class="tsd-kind-icon">Web<wbr>Socket<wbr>Close<wbr>Codes</a>
 					</li>
-					<li class=" tsd-kind-enum tsd-parent-kind-namespace">
+				</ul>
+				<ul class="current">
+					<li class="current tsd-kind-enum tsd-parent-kind-namespace">
 						<a href="Constants.WebSocketEvents.html" class="tsd-kind-icon">Web<wbr>Socket<wbr>Events</a>
+						<ul>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="Constants.WebSocketEvents.html#IDENTIFYACCEPTED" class="tsd-kind-icon">IDENTIFYACCEPTED</a>
+							</li>
+						</ul>
 					</li>
+				</ul>
+				<ul class="after-current">
 					<li class=" tsd-kind-class tsd-parent-kind-namespace">
 						<a href="../classes/Constants.Endpoints.html" class="tsd-kind-icon">Endpoints</a>
 					</li>
