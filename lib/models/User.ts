@@ -16,6 +16,8 @@ export class User extends Base {
      */
     public name: string;
 
+    public discriminator: number;
+
     /**
      * The guilds of the user
      * @type {StorageBox<SnowFlake, Guild>}
@@ -50,11 +52,15 @@ export class User extends Base {
      * Fetches the current user and updates it
      * @returns {Promise<User>} 
      */
-    fetch() {
+    fetch(): Promise<this> {
         return this.#_client.requestHandler.request("GET", Endpoints.USER(this.id)).then((user) => {
             this._patch(user)
             return this
         })
+    }
+
+    get tag(): string {
+        return this.name + "#" + this.discriminator
     }
 
     _patch(data: any) {
@@ -66,7 +72,7 @@ export class User extends Base {
             this.flags = data.flags
         }
 
-        if ("guilds" in data) {
+        if ("guilds" in data && data.guilds != null) {
             this.guilds = new StorageBox()
             for (const raw_guild of data.guilds) {
                 console.log(raw_guild, BigInt(raw_guild.id).toString())
@@ -74,6 +80,10 @@ export class User extends Base {
                 this.guilds.set(guild.id, guild)
             }
         } else this.guilds = null
+
+        if ("discriminator" in data) {
+            this.discriminator = data.discriminator
+        }
 
 
         return this

@@ -25,6 +25,8 @@ export class Client extends EventEmitter {
 
     public messages: StorageBox<SnowFlake, Message>;
 
+    public user: User;
+
     /**
      * A cache that holds all the Users that have been cached by the client
      * @type {StorageBox<SnowFlake, User>}

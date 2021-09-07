@@ -12,5 +12,5 @@ test().catch(console.warn)
 
 
 setInterval(() => {
-    //keep process up
+
 }, 1000 * 10)

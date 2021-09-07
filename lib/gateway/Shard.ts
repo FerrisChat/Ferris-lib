@@ -1,7 +1,10 @@
 import { WebsocketManager } from "./WebsocketManager";
 import Websocket from "ws"
-import { Events, ShardStatus, WebSocketCloseCodes, WebsocketPayloads } from "../Constants";
+import { Events, ShardStatus, WebSocketCloseCodes, WebSocketEvents, WebSocketPayload, WebsocketPayloads } from "../Constants";
 import EventEmitter from "events";
+import { User } from "..";
+
+const data = { start: null, end: null }
 
 export class Shard extends EventEmitter {
 
@@ -69,26 +72,40 @@ export class Shard extends EventEmitter {
             this.debug(`Tried to send data, but no open Connection`)
             return setTimeout(() => this._send(data), 1000 * 30)
         }
+
         console.log(JSON.stringify(data))
+
         this.connection.send(JSON.stringify(data), (err) => {
             if (err) this.debug(`Encoutered an error sending Data packet: ${err}`)
         })
     }
 
     _WsOnMsg(raw_payload) {
-        let payload
+        let payload: WebSocketPayload
         try {
             payload = JSON.parse(raw_payload)
         } catch (e) {
             console.log(e)
         }
 
-        console.log(payload)
+        switch (payload.c) {
+            case WebSocketEvents.IDENTIFYACCEPTED:
+                data.end = Date.now()
+                this.status = ShardStatus.CONNECTED
+                if (!this.manager.client.user) this.manager.client.user = new User(payload.d.user, this.manager.client)
+                this.debug(`Idenitfy Accepted, Shard is now Ready. (Identified in ${data.end - data.start}ms)`)
+                this.emit(Events.SHARDREADY)
+                break;
+            default:
+                this.debug(`Unhabdled Event: ${payload.c}:${payload}`)
+                break;
+        }
     }
 
     _WsOnOpen() {
         this.status = ShardStatus.IDENTIFYING
         this.debug("[Connected] Shard connected to the Gateway, Identifying...")
+        data.start = Date.now()
         this._send(WebsocketPayloads.Identify(this.manager.client._token))
     }
 

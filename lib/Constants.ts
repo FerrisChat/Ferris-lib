@@ -199,13 +199,22 @@ export enum WebSocketCloseCodes {
     ABNORMAL_CLOSURE = 1006
 }
 
+export enum WebSocketEvents {
+    IDENTIFYACCEPTED = "IdentifyAccepted"
+}
+
+export interface WebSocketPayload {
+    c: string;
+    d: any;
+}
+
 export class WebsocketPayloads {
     static Identify = (token: string) => {
         return {
             c: "Identify",
             d: {
                 token,
-                intents: null,
+                intents: 69,
             }
         }
     }
