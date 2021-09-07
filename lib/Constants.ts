@@ -192,10 +192,23 @@ export enum ShardStatus {
     RECONNECTING = 3,
     DISCONNECTING = 4,
     CONNECTED = 5,
+    IDENTIFYING = 6,
 }
 
 export enum WebSocketCloseCodes {
     ABNORMAL_CLOSURE = 1006
+}
+
+export class WebsocketPayloads {
+    static Identify = (token: string) => {
+        return {
+            c: "Identify",
+            d: {
+                token,
+                intents: null,
+            }
+        }
+    }
 }
 
 export const FERRIS_EPOCH = 1_577_836_800_000;

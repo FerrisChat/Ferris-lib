@@ -1,6 +1,6 @@
 import { WebsocketManager } from "./WebsocketManager";
 import Websocket from "ws"
-import { Events, ShardStatus, WebSocketCloseCodes } from "../Constants";
+import { Events, ShardStatus, WebSocketCloseCodes, WebsocketPayloads } from "../Constants";
 import EventEmitter from "events";
 
 export class Shard extends EventEmitter {
@@ -64,6 +64,17 @@ export class Shard extends EventEmitter {
         })
     }
 
+    _send(data: any) {
+        if (this.connection.readyState != Websocket.OPEN) {
+            this.debug(`Tried to send data, but no open Connection`)
+            return setTimeout(() => this._send(data), 1000 * 30)
+        }
+        console.log(JSON.stringify(data))
+        this.connection.send(JSON.stringify(data), (err) => {
+            if (err) this.debug(`Encoutered an error sending Data packet: ${err}`)
+        })
+    }
+
     _WsOnMsg(raw_payload) {
         let payload
         try {
@@ -76,8 +87,9 @@ export class Shard extends EventEmitter {
     }
 
     _WsOnOpen() {
-        this.status = ShardStatus.CONNECTED
-        this.debug("[Connected]")
+        this.status = ShardStatus.IDENTIFYING
+        this.debug("[Connected] Shard connected to the Gateway, Identifying...")
+        this._send(WebsocketPayloads.Identify(this.manager.client._token))
     }
 
     _WsOnClose(code) {
