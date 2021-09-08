@@ -36,7 +36,9 @@ export interface ChannelCacheOptions extends BaseCacheOptions {
 export enum Events {
     DEBUG = "debug",
     SHARDCLOSED = "shardClosed",
-    SHARDREADY = "shardReady"
+    SHARDREADY = "shardReady",
+    READY = "ready",
+    SHARDRECONNECTING = "shardReconnecting"
 }
 
 /**
@@ -72,7 +74,9 @@ export interface UserCacheOptions extends BaseCacheOptions {
 
 export interface ClientEvents<T> {
     (event: "debug" | "warn", listener: (message: string) => void): T;
-    (event: "shardClosed", listener: (code: number) => void): T;
+    (event: "shardDisconnected", listener: (id: number, code: number) => void): T;
+    (event: "ready", listener: () => void): T;
+    (event: "shardReconnecting" | "shardReady", listener: (id: number) => void): T;
 }
 
 /**
@@ -129,8 +133,8 @@ export interface ClientOptions {
  */
 export enum Urls {
     Client = "https://ferris.chat",
-    Api = "https://ferris.chat",
-    Base_Api = "/api/v"
+    Api = "https://api.ferris.chat",
+    Base_Api = "/v"
 }
 
 /**

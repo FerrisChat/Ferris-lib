@@ -6,11 +6,18 @@ const sys = new Ferrislib.Client(token, {
 /** */
 async function test() {
     sys.on("debug", console.log)
+    sys.on("ready", () => {
+        console.log(`Bot is Online!`)
+    })
+    sys.on("shardReconnecting", (id) => console.log(`Shard ${id} is reconnecting...`))
+    sys.on("shardReady", (id) => console.log(`Shard ${id} is ready`))
+    sys.on("shardDisconnected", (id, code) => console.log(`Shard ${id} disconnected with the Code: ${code}`))
     sys.connect()
 }
 test().catch(console.warn)
 
 
 setInterval(() => {
-
-}, 1000 * 10)
+    //console.log("Memory Usage (Rss)", Math.round((process.memoryUsage().rss / 1024 / 1024) * 100) / 100, "MB")
+    //console.log("Memory Usage (HeapUsed)", Math.round((process.memoryUsage().heapUsed / 1024 / 1024) * 100) / 100, "MB")
+}, 1000 * 60)

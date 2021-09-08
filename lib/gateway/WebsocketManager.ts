@@ -48,7 +48,8 @@ export class WebsocketManager extends EventEmitter {
             return this.createShards();
         }
 
-        return
+        this.debug("All Shards are Ready, Marking Client as ready.")
+        this.client.emit(Events.READY)
     }
 
     debug(msg: string, shard?: Shard) {

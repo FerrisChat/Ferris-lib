@@ -13,6 +13,7 @@ export class Shard extends EventEmitter {
     connection: Websocket;
     connecting: boolean;
     status: number;
+    heartbeatInterval: NodeJS.Timer
 
 
     constructor(manager: WebsocketManager, id: number) {
@@ -64,6 +65,8 @@ export class Shard extends EventEmitter {
             this.connection.on("message", this._WsOnMsg.bind(this))
             this.connection.on('close', this._WsOnClose.bind(this))
             this.connection.on('error', this._WsOnError.bind(this))
+            this.connection.on("pong", this._WsOnPong.bind(this))
+
         })
     }
 
@@ -73,7 +76,7 @@ export class Shard extends EventEmitter {
             return setTimeout(() => this._send(data), 1000 * 30)
         }
 
-        console.log(JSON.stringify(data))
+        //console.log(JSON.stringify(data))
 
         this.connection.send(JSON.stringify(data), (err) => {
             if (err) this.debug(`Encoutered an error sending Data packet: ${err}`)
@@ -94,12 +97,48 @@ export class Shard extends EventEmitter {
                 this.status = ShardStatus.CONNECTED
                 if (!this.manager.client.user) this.manager.client.user = new User(payload.d.user, this.manager.client)
                 this.debug(`Idenitfy Accepted, Shard is now Ready. (Identified in ${data.end - data.start}ms)`)
+                this.startHeartbeat()
                 this.emit(Events.SHARDREADY)
+                this.manager.client.emit(Events.SHARDREADY, this.id)
                 break;
             default:
                 this.debug(`Unhabdled Event: ${payload.c}:${payload}`)
                 break;
         }
+    }
+
+    reconnect() {
+        if (this.connection && this.connection.readyState === Websocket.OPEN) {
+            this.connection.terminate()
+        }
+
+        this.connection = null
+        this.status = ShardStatus.RECONNECTING
+        this.connect()
+    }
+
+    startHeartbeat() {
+        this.debug("Sending Heartbeat...")
+        this.connection.ping(null, false, (err) => {
+            if (err) this.debug("Error Sending Heartbeat")
+        })
+
+        if (this.heartbeatInterval) this.clearHeartbeatInterval()
+
+        this.heartbeatInterval = setInterval(() => {
+            this.debug("Sending Heartbeat...")
+            if (this.connection.readyState === Websocket.OPEN) this.connection.ping(null, false, (err) => {
+                if (err) this.debug("Error Sending Heartbeat")
+            })
+            else this.debug("Tried to send Heartbeat but no open connection.")
+        }, 1000 * 45)
+
+    }
+
+    clearHeartbeatInterval() {
+        this.debug("Clearing heartbeat interval")
+        if (this.heartbeatInterval) clearInterval(this.heartbeatInterval)
+        this.heartbeatInterval = null
     }
 
     _WsOnOpen() {
@@ -109,8 +148,19 @@ export class Shard extends EventEmitter {
         this._send(WebsocketPayloads.Identify(this.manager.client._token))
     }
 
+    _WsOnPong() {
+        this.debug("Pong, Recieved from the Gateway")
+    }
+
     _WsOnClose(code) {
+        this.emit(Events.SHARDCLOSED)
+        this.manager.client.emit(Events.SHARDCLOSED, this.id, code)
         switch (code) {
+            case WebSocketCloseCodes.ABNORMAL_CLOSURE:
+                this.debug("Recieved an Abnormal closure, Reconnecting...")
+                this.manager.client.emit(Events.SHARDRECONNECTING, this.id)
+                this.reconnect()
+                break;
             default:
                 this.debug(`Unhandled Connection Closed ${code}`)
         }
