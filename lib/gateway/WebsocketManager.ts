@@ -36,16 +36,14 @@ export class WebsocketManager extends EventEmitter {
         try {
             await shard.connect()
         } catch (error) {
-            this.debug(`Error Spawning Shard ${shard.id}...`)
-            console.log(error)
+            this.debug(`Error Spawning Shard ${shard.id}`)
             this.shards.delete(shard.id)
             this.shardQueue.add(shard)
         }
 
         if (this.shardQueue.size) {
             this.debug(`Shard Queue Size: ${this.shardQueue.size}; continuing in 5 seconds...`);
-            await new Promise((r) => setTimeout((e) => r(e), 5000));
-            return this.createShards();
+            return new Promise((r) => setTimeout((e) => r(this.createShards()), 5000));
         }
 
         this.debug("All Shards are Ready, Marking Client as ready.")

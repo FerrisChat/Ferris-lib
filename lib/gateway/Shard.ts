@@ -40,8 +40,8 @@ export class Shard extends EventEmitter {
 
         return new Promise((resolve, reject) => {
             const cleanup = () => {
-                this.removeListener(Events.SHARDCLOSED, onClose);
-                this.removeListener(Events.SHARDREADY, onReady);
+                this.manager.client.removeListener(Events.SHARDDISCONNECTED, onClose);
+                this.manager.client.removeListener(Events.SHARDREADY, onReady);
             };
 
             const onReady = () => {
@@ -49,13 +49,14 @@ export class Shard extends EventEmitter {
                 resolve(this.connection);
             };
 
-            const onClose = event => {
+            const onClose = (id, code, reason) => {
                 cleanup();
-                reject(event);
+                console.log(reason)
+                reject({ code, reason });
             };
 
-            this.once(Events.SHARDREADY, onReady);
-            this.once(Events.SHARDCLOSED, onClose);
+            this.manager.client.once(Events.SHARDREADY, onReady);
+            this.manager.client.once(Events.SHARDDISCONNECTED, onClose);
 
             this.connection = new Websocket(gatewayUrl)
             this.connecting = true
@@ -97,9 +98,8 @@ export class Shard extends EventEmitter {
                 this.status = ShardStatus.CONNECTED
                 if (!this.manager.client.user) this.manager.client.user = new User(payload.d.user, this.manager.client)
                 this.debug(`Idenitfy Accepted, Shard is now Ready. (Identified in ${data.end - data.start}ms)`)
-                this.startHeartbeat()
-                this.emit(Events.SHARDREADY)
                 this.manager.client.emit(Events.SHARDREADY, this.id)
+                //this.startHeartbeat()
                 break;
             default:
                 this.debug(`Unhabdled Event: ${payload.c}:${payload}`)
@@ -107,19 +107,20 @@ export class Shard extends EventEmitter {
         }
     }
 
-    reconnect() {
+    async reconnect() {
         if (this.connection && this.connection.readyState === Websocket.OPEN) {
             this.connection.terminate()
         }
 
         this.connection = null
         this.status = ShardStatus.RECONNECTING
+        await new Promise((r) => setTimeout((e) => r(e), 5000));
         this.connect()
     }
 
     startHeartbeat() {
         this.debug("Sending Heartbeat...")
-        this.connection.ping(null, false, (err) => {
+        this.connection.ping(null, true, (err) => {
             if (err) this.debug("Error Sending Heartbeat")
         })
 
@@ -127,7 +128,7 @@ export class Shard extends EventEmitter {
 
         this.heartbeatInterval = setInterval(() => {
             this.debug("Sending Heartbeat...")
-            if (this.connection.readyState === Websocket.OPEN) this.connection.ping(null, false, (err) => {
+            if (this.connection.readyState === Websocket.OPEN) this.connection.ping(null, true, (err) => {
                 if (err) this.debug("Error Sending Heartbeat")
             })
             else this.debug("Tried to send Heartbeat but no open connection.")
@@ -152,20 +153,16 @@ export class Shard extends EventEmitter {
         this.debug("Pong, Recieved from the Gateway")
     }
 
-    _WsOnClose(code) {
-        this.emit(Events.SHARDCLOSED)
-        this.manager.client.emit(Events.SHARDCLOSED, this.id, code)
+    _WsOnClose(code, reason = "Unknown") {
+        this.manager.client.emit(Events.SHARDDISCONNECTED, this.id, code, reason)
         switch (code) {
             case WebSocketCloseCodes.ABNORMAL_CLOSURE:
                 this.debug("Recieved an Abnormal closure, Reconnecting...")
-                this.manager.client.emit(Events.SHARDRECONNECTING, this.id)
                 this.reconnect()
                 break;
             default:
-                this.debug(`Unhandled Connection Closed ${code}`)
+                this.debug(`Unhandled Connection Closed ${code}:Reason: ${reason}`)
         }
-
-        this.emit(Events.SHARDCLOSED, code)
     }
 
     _WsOnError(err) {

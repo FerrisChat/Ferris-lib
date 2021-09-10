@@ -11,7 +11,7 @@ async function test() {
     })
     sys.on("shardReconnecting", (id) => console.log(`Shard ${id} is reconnecting...`))
     sys.on("shardReady", (id) => console.log(`Shard ${id} is ready`))
-    sys.on("shardDisconnected", (id, code) => console.log(`Shard ${id} disconnected with the Code: ${code}`))
+    sys.on("shardDisconnected", (id, code, reason) => console.log(`Shard ${id} disconnected with the Code: ${code} and reason: ${reason}`))
     sys.connect()
 }
 test().catch(console.warn)

@@ -35,7 +35,7 @@ export interface ChannelCacheOptions extends BaseCacheOptions {
 
 export enum Events {
     DEBUG = "debug",
-    SHARDCLOSED = "shardClosed",
+    SHARDDISCONNECTED = "shardDisconnected",
     SHARDREADY = "shardReady",
     READY = "ready",
     SHARDRECONNECTING = "shardReconnecting"
@@ -74,7 +74,7 @@ export interface UserCacheOptions extends BaseCacheOptions {
 
 export interface ClientEvents<T> {
     (event: "debug" | "warn", listener: (message: string) => void): T;
-    (event: "shardDisconnected", listener: (id: number, code: number) => void): T;
+    (event: "shardDisconnected", listener: (id: number, code: number, reason: string) => void): T;
     (event: "ready", listener: () => void): T;
     (event: "shardReconnecting" | "shardReady", listener: (id: number) => void): T;
 }
