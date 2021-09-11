@@ -3,6 +3,7 @@ const token = "OTc5OTc1Mjc1MzkwMTQ3MjUxODc3NTk4OTg2MjQw.oPv_AsjrLgMwF4QD2BTWkvYG
 const sys = new Ferrislib.Client(token, {
     shardCount: 1,
 })
+
 /** */
 async function test() {
     sys.on("debug", console.log)

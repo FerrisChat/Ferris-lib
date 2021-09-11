@@ -53,10 +53,6 @@ export class Client extends EventEmitter {
 
     public readonly _token: string;
 
-    on: ClientEvents<this>
-    once: ClientEvents<this>
-    off: ClientEvents<this>
-
     /**
      * @param {ClientOptions} clientOptions The options for the Client
      */
