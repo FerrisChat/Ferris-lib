@@ -99,7 +99,7 @@ export class Shard extends EventEmitter {
                 if (!this.manager.client.user) this.manager.client.user = new User(payload.d.user, this.manager.client)
                 this.debug(`Idenitfy Accepted, Shard is now Ready. (Identified in ${data.end - data.start}ms)`)
                 this.manager.client.emit(Events.SHARDREADY, this.id)
-                //this.startHeartbeat()
+                this.startHeartbeat()
                 break;
             default:
                 this.debug(`Unhabdled Event: ${payload.c}:${payload}`)
