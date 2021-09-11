@@ -1,5 +1,5 @@
 import { Channel } from "diagnostics_channel";
-import { EventEmitter } from "events"
+import EventEmitter from "events";
 import { ClientEvents, ClientOptions, createChannelOptions, createGuildOptions, Endpoints, MessageData, SnowFlake } from "./Constants";
 import { FerrisError } from "./errors/FerrislibError";
 import { WebsocketManager } from "./gateway/WebsocketManager";
