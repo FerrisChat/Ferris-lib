@@ -14,7 +14,7 @@ async function test() {
     sys.on("shardDisconnected", (id, code, reason) => console.log(`Shard ${id} disconnected with the Code: ${code} and reason: ${reason}`))
     sys.connect()
 }
-test().catch(console.warn)
+test()
 
 
 setInterval(() => {
