@@ -30,11 +30,6 @@ export class Channel extends Base {
         this.#_client = client
     }
 
-    // there are no text channels in FerrisChat yet
-    isText(): this is TextChannel {
-        return false
-    }
-
     _patch(data: any) {
         if ("name" in data) {
             this.name = data.name
