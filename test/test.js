@@ -1,5 +1,5 @@
 const Ferrislib = require('../build/index')
-const token = "OTc5OTc1Mjc1MzkwMTQ3MjUxODc3NTk4OTg2MjQw.oPv_AsjrLgMwF4QD2BTWkvYGfZMopTvILZM7NVSAkvqI_dWNYlofF9RRbD_9wn4PYskwDXHhgNkPmjUpS3GlsRYeqxS3plXmWwlSqPWsLwPyvSJjrT-UD03cf3BXE0oX4eSgE9PyrQOQrypdBIIzjJoziPLC2WpwnANuPVtqkPlmSRS7nmsAJBhkStUzqOOfX9pZIoCl4knt1ppOalhYgvpZ8EmfX4Nbu31Oc331lOeOQUGJEuIo-0YHyEmBTOFqw0CIJcjaoGXfP8lO0G-vLClR_EIRLLMNEcyKYb1pWMp0FrfrzKMBTklvVRxePwRFHl0mzg7I7HCUxmRQZcM8Zw=="
+const token = "MTA1NDc4Njk1NDUzODU2MjE4NzY3ODY5NDc2ODY0MA==.BVwW6vC4gw-B6MVJGqqaaGWIw1saNFvEOH7cSLbcmJb53lv-wv4mUHKlpy_c0PiJeXbR57dqMy77iv8a5VZd1g=="
 const sys = new Ferrislib.Client(token, {
     shardCount: 1,
 })
@@ -7,8 +7,9 @@ const sys = new Ferrislib.Client(token, {
 /** */
 async function test() {
     sys.on("debug", console.log)
-    sys.on("ready", () => {
-        console.log(`Bot is Online!`)
+    sys.on("ready", async () => {
+        console.log(`${sys.user.name} has logged in`)
+        console.log(sys.user)
     })
     sys.on("shardReconnecting", (id) => console.log(`Shard ${id} is reconnecting...`))
     sys.on("shardReady", (id) => console.log(`Shard ${id} is ready`))

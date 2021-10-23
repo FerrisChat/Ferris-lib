@@ -3,7 +3,6 @@ import { SnowFlake } from "../Constants";
 import { StorageBox } from "../util/StorageBox";
 import { Channel, Member } from "./"
 import { Base } from "./Base";
-import { GuildChannel } from "./GuildChannel";
 
 /**
  * The Guild Model
@@ -26,7 +25,7 @@ export class Guild extends Base {
      * A Cache with the Channels for the Guild
      * @type {StorageBox<SnowFlake, GuildChannel>}
      */
-    public channels: StorageBox<SnowFlake, GuildChannel>;
+    public channels: StorageBox<SnowFlake, Channel>;
 
     /**
      * A cache with the Members for the Guild
@@ -61,7 +60,7 @@ export class Guild extends Base {
         }
         if ("channels" in data && data.channels != null) {
             for (const raw_channel of data.channels) {
-                const channel = new GuildChannel(this, raw_channel, this.#_client)
+                const channel = new Channel(raw_channel, this.#_client)
                 this.channels.set(channel.id, channel)
             }
         }

@@ -50,6 +50,7 @@ export class Member extends Base {
             this.id = BigInt(data.user_id).toString()
         }
         if ("user" in data) {
+            console.log(data.user)
             this.user = new User(data.user, this.#_client)
         } else {
             this.user = this.#_client.users.get(this.id)

@@ -1,6 +1,5 @@
 import { Client } from "../Client";
 import { Base } from "./Base";
-import { TextChannel } from "./TextChannel";
 
 /**
  * The Channel Model

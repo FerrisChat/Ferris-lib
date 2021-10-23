@@ -5,7 +5,6 @@ import { FerrisError } from "./errors/FerrislibError";
 import { WebsocketManager } from "./gateway/WebsocketManager";
 import { Message } from "./models";
 import { Guild } from "./models/Guild";
-import { GuildChannel } from "./models/GuildChannel";
 import { User } from "./models/User";
 import { RequestHandler } from "./rest/RequestHandler";
 import { StorageBox } from "./util/StorageBox";
@@ -92,7 +91,7 @@ export class Client extends EventEmitter {
         this.ws.start()
     }
 
-    createChannel(guildId: SnowFlake, channelData: createChannelOptions): Promise<GuildChannel> {
+    createChannel(guildId: SnowFlake, channelData: createChannelOptions): Promise<Channel> {
         if (!channelData.name) throw new Error("A name must be provided for Guild Creation.")
         else if (typeof channelData.name != "string") throw new TypeError("Name of Guild must be a string")
 
@@ -129,7 +128,7 @@ export class Client extends EventEmitter {
         return this.requestHandler.request("DELETE", Endpoints.MESSAGE(messageId))
     }
 
-    fetchChannel(channelId: SnowFlake, options?: { cache?: boolean; force?: boolean }): Promise<GuildChannel> | GuildChannel {
+    fetchChannel(channelId: SnowFlake, options?: { cache?: boolean; force?: boolean }): Promise<Channel> | Channel {
         // no channel cache yet
         return this.requestHandler.request("GET", Endpoints.CHANNEL(channelId))
     }
