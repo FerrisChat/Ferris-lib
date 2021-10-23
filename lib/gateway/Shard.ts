@@ -91,7 +91,7 @@ export class Shard extends EventEmitter {
         } catch (e) {
             console.log(e)
         }
-
+        console.log(payload)
         switch (payload.c) {
             case WebSocketEvents.IDENTIFYACCEPTED:
                 data.end = Date.now()
