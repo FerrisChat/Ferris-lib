@@ -170,7 +170,7 @@ export class Endpoints {
     static USERS = () => `/users`
 
     //Auth
-    static AUTH_USER = (userId) => `/auth/${userId}`
+    static AUTH_USER = (userId) => `/auth`
 
     //websockets
     static WS_INFO = () => `/ws/info`
