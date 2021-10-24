@@ -42,7 +42,6 @@ export class User extends Base {
      */
     constructor(data: any, client: Client) {
         super(data?.id);
-        console.log(data)
 
         this.#_client = client
 

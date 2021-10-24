@@ -87,7 +87,14 @@ export class Shard extends EventEmitter {
     _WsOnMsg(raw_payload) {
         let payload: WebSocketPayload
         try {
-            payload = JSON.parse(raw_payload)
+            payload = JSON.parse(raw_payload, (key, value) => {
+                console.log(key, value, typeof value)
+                if (typeof value === 'number' && key === "id") {
+                    return BigInt(value).toString()
+                } else {
+                    return value;
+                }
+            })
         } catch (e) {
             console.log(e)
         }
