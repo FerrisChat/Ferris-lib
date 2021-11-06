@@ -16,7 +16,7 @@ export class Shard extends EventEmitter {
     heartbeatInterval: NodeJS.Timer;
     lastHeartbeatAck: boolean;
     lasthHeartbeatRecieved: number;
-    ping: number;
+    latency: number;
 
 
     constructor(manager: WebsocketManager, id: number) {
@@ -36,7 +36,7 @@ export class Shard extends EventEmitter {
 
         this.lasthHeartbeatRecieved = null
 
-        this.ping = Infinity
+        this.latency = Infinity
     }
 
     connect() {
@@ -159,8 +159,8 @@ export class Shard extends EventEmitter {
     }
 
     _WsOnPong() {
-        this.ping = this.lasthHeartbeatRecieved ? Date.now() - this.lasthHeartbeatRecieved : Infinity
-        this.debug(`Pong, Recieved from the Gateway (Gateway Ping: ${this.ping})`)
+        this.latency = this.lasthHeartbeatRecieved ? Date.now() - this.lasthHeartbeatRecieved : Infinity
+        this.debug(`Pong, Recieved from the Gateway (Gateway Ping: ${this.latency}ms)`)
         this.lasthHeartbeatRecieved = Date.now()
     }
 

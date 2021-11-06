@@ -21,4 +21,5 @@ test()
 setInterval(() => {
     //console.log("Memory Usage (Rss)", Math.round((process.memoryUsage().rss / 1024 / 1024) * 100) / 100, "MB")
     //console.log("Memory Usage (HeapUsed)", Math.round((process.memoryUsage().heapUsed / 1024 / 1024) * 100) / 100, "MB")
+    console.log(`Average Latency: ${sys.ws.avgerageLatency}`)
 }, 1000 * 60)

@@ -22,6 +22,11 @@ export class WebsocketManager extends EventEmitter {
         this.shards = new StorageBox()
     }
 
+    get avgerageLatency() {
+        const sum = [...this.shards.values()].reduce((a, b) => a + b.latency, 0);
+        return sum / this.shards.size;
+    }
+
     private async createShards() {
 
         if (!this.shardQueue.size) return
