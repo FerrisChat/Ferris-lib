@@ -38,7 +38,8 @@ export enum Events {
     SHARDDISCONNECTED = "shardDisconnected",
     SHARDREADY = "shardReady",
     READY = "ready",
-    SHARDRECONNECTING = "shardReconnecting"
+    SHARDRECONNECTING = "shardReconnecting",
+    RAW_WS = "rawWs",
 }
 
 /**
@@ -77,6 +78,7 @@ export interface ClientEvents<T> {
     (event: "shardDisconnected", listener: (id: number, code: number, reason: string) => void): T;
     (event: "ready", listener: () => void): T;
     (event: "shardReconnecting" | "shardReady", listener: (id: number) => void): T;
+    (event: "rawWs", listener: (data: any) => void): T;
 }
 
 /**

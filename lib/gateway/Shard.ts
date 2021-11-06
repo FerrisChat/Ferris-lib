@@ -13,7 +13,10 @@ export class Shard extends EventEmitter {
     connection: Websocket;
     connecting: boolean;
     status: number;
-    heartbeatInterval: NodeJS.Timer
+    heartbeatInterval: NodeJS.Timer;
+    lastHeartbeatAck: boolean;
+    lasthHeartbeatRecieved: number;
+    ping: number;
 
 
     constructor(manager: WebsocketManager, id: number) {
@@ -28,6 +31,12 @@ export class Shard extends EventEmitter {
         this.connecting = false
 
         this.status = ShardStatus.IDLE
+
+        this.lastHeartbeatAck = true
+
+        this.lasthHeartbeatRecieved = null
+
+        this.ping = Infinity
     }
 
     connect() {
@@ -87,18 +96,10 @@ export class Shard extends EventEmitter {
     _WsOnMsg(raw_payload) {
         let payload: WebSocketPayload
         try {
-            payload = JSON.parse(raw_payload, (key, value) => {
-                console.log(key, value, typeof value)
-                if (typeof value === 'number' && key === "id") {
-                    return BigInt(value).toString()
-                } else {
-                    return value;
-                }
-            })
+            payload = JSON.parse(raw_payload)
         } catch (e) {
             console.log(e)
         }
-        console.log(payload)
         switch (payload.c) {
             case WebSocketEvents.IDENTIFYACCEPTED:
                 data.end = Date.now()
@@ -109,6 +110,7 @@ export class Shard extends EventEmitter {
                 this.startHeartbeat()
                 break;
             default:
+                this.manager.client.emit(Events.RAW_WS, payload)
                 this.debug(`Unhabdled Event: ${payload.c}:${payload}`)
                 break;
         }
@@ -157,7 +159,9 @@ export class Shard extends EventEmitter {
     }
 
     _WsOnPong() {
-        this.debug("Pong, Recieved from the Gateway")
+        this.ping = this.lasthHeartbeatRecieved ? Date.now() - this.lasthHeartbeatRecieved : Infinity
+        this.debug(`Pong, Recieved from the Gateway (Gateway Ping: ${this.ping})`)
+        this.lasthHeartbeatRecieved = Date.now()
     }
 
     _WsOnClose(code, reason = "Unknown") {

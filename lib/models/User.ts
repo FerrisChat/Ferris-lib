@@ -41,9 +41,11 @@ export class User extends Base {
      * @param {Client} client 
      */
     constructor(data: any, client: Client) {
-        super(data?.id);
+        super(data.id_string);
 
         this.#_client = client
+
+        this.guilds = new StorageBox()
 
         this._patch(data)
     }
@@ -73,13 +75,11 @@ export class User extends Base {
         }
 
         if ("guilds" in data && data.guilds != null) {
-            this.guilds = new StorageBox()
             for (const raw_guild of data.guilds) {
-                console.log(raw_guild, BigInt(raw_guild.id).toString())
-                const guild = this.#_client.guilds.has(BigInt(raw_guild.id).toString()) ? this.#_client.guilds.get(BigInt(raw_guild.id).toString())._patch(raw_guild) : this.#_client.guilds.set(BigInt(raw_guild.id).toString(), new Guild(raw_guild, this.#_client)).get(BigInt(raw_guild.id).toString())
+                const guild = this.#_client.guilds.has(raw_guild.id_string) ? this.#_client.guilds.get(raw_guild.id_string)._patch(raw_guild) : this.#_client.guilds.set(raw_guild.id_string, new Guild(raw_guild, this.#_client)).get(raw_guild.id_string)
                 this.guilds.set(guild.id, guild)
             }
-        } else this.guilds = null
+        }
 
         if ("discriminator" in data) {
             this.discriminator = data.discriminator

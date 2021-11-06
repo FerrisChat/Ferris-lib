@@ -44,7 +44,7 @@ export class Guild extends Base {
      * @param {Client} client 
      */
     constructor(data: any, client: Client) {
-        super(data.id);
+        super(data.id_string);
 
         this.#_client = client
 
@@ -55,8 +55,8 @@ export class Guild extends Base {
         if ("name" in data) {
             this.name = data.name
         }
-        if ("owner_id" in data) {
-            this.ownerId = BigInt(data.owner_id).toString()
+        if ("owner_id_string" in data) {
+            this.ownerId = data.owner_id_string
         }
         if ("channels" in data && data.channels != null) {
             for (const raw_channel of data.channels) {
@@ -66,6 +66,7 @@ export class Guild extends Base {
         }
         if ("members" in data && data.members != null) {
             for (const raw_member of data.members) {
+                console.log(raw_member)
                 const member = new Member(raw_member, this.#_client)
                 this.members.set(member.id, member)
             }

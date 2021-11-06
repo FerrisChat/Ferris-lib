@@ -16,11 +16,15 @@ export class Base {
      */
     constructor(id: SnowFlake) {
 
-        this.id = BigInt(id).toString()
+        this.id = id;
     }
 
     get createdAt(): number {
         return Math.floor(((Number(this.id) >> 64) + FERRIS_EPOCH))
+    }
+
+    get createdTimestamp(): string {
+        return new Date(this.createdAt).toString()
     }
 
     get UTCcreatedAt(): string {

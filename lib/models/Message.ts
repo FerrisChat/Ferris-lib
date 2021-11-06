@@ -31,7 +31,7 @@ export class Message extends Base {
      * @param {Client} client 
      */
     constructor(data: any, client: Client) {
-        super(data.id);
+        super(data.id_string);
 
         this.#_client = client
     }
@@ -40,8 +40,8 @@ export class Message extends Base {
         if ("content" in data) {
             this.content = data.content
         }
-        if ("channel_id" in data) {
-            this.channelId = BigInt(data.channel_id).toString()
+        if ("channel_id_string" in data) {
+            this.channelId = data.channel_id_string
         }
 
         return this

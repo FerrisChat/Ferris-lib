@@ -23,7 +23,7 @@ export class Channel extends Base {
      * @param {Client} client The Client for this Channel
      */
     constructor(data: any, client: Client) {
-        super(data.id);
+        super(data.id_string);
 
         this._patch(data)
         this.#_client = client

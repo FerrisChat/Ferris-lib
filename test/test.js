@@ -9,8 +9,6 @@ async function test() {
     sys.on("debug", console.log)
     sys.on("ready", async () => {
         console.log(`${sys.user.name} has logged in`)
-        const sysuser = await sys.fetchUser(sys.user.id)
-        console.log(sysuser)
     })
     sys.on("shardReconnecting", (id) => console.log(`Shard ${id} is reconnecting...`))
     sys.on("shardReady", (id) => console.log(`Shard ${id} is ready`))
