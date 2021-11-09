@@ -17,6 +17,13 @@ export class FerrisError extends Error {
 }
 
 class Messages {
-    static TOKEN_MISSING = () => `Please provide a token for the Client.`;
-    static TOKEN_MUST_BE_STRING = () => `Provided Token is not a String.`
+    // xyz is Missing
+    static AUTH_MISSING = () => `Please provide a token or email and password for the Client to login with.`;
+    static MISSING_EMAIL = () => `Please provide an email for the Client to login with.`;
+    static MISSING_PASSWORD = () => `Please provide a password for the Client to login with.`
+
+    // xyz is invalid
+    static TOKEN_MUST_BE_STRING = () => `Provided Token is not a String.`;
+    static EMAIL_MUST_BE_A_STRING = () => `Provided Email is not a String.`;
+    static PASSWORD_MUST_BE_A_STRING = () => `Provided Password is not a String.`;
 }

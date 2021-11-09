@@ -14,6 +14,13 @@ export interface BaseCacheOptions {
     sweepInterval?: number;
 }
 
+export interface ConnectOptions {
+    email: string;
+    password: string;
+}
+
+export type ConnectType = string | ConnectOptions
+
 export interface createChannelOptions {
     name: string;
 }
@@ -172,7 +179,7 @@ export class Endpoints {
     static USERS = () => `/users`
 
     //Auth
-    static AUTH_USER = (userId) => `/auth`
+    static AUTH_USER = () => `/auth`
 
     //websockets
     static WS_INFO = () => `/ws/info`

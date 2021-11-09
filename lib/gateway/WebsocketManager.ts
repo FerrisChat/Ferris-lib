@@ -56,7 +56,7 @@ export class WebsocketManager extends EventEmitter {
     }
 
     debug(msg: string, shard?: Shard) {
-        this.client.emit(Events.DEBUG, `[Ws => ${shard ? `Shard ${shard.id}` : 'Manager'}] ${msg}`)
+        return this.client.emit(Events.DEBUG, `[Ws => ${shard ? `Shard ${shard.id}` : 'Manager'}] ${msg}`)
     }
 
     async start() {

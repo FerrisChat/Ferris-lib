@@ -1,11 +1,11 @@
-import { Channel } from "diagnostics_channel";
 import EventEmitter from "events";
-import { ClientEvents, ClientOptions, createChannelOptions, createGuildOptions, Endpoints, MessageData, SnowFlake } from "./Constants";
+import { ClientEvents, ClientOptions, ConnectOptions, ConnectType, createChannelOptions, createGuildOptions, Endpoints, MessageData, SnowFlake, Events } from "./Constants";
 import { FerrisError } from "./errors/FerrislibError";
 import { WebsocketManager } from "./gateway/WebsocketManager";
 import { Message } from "./models";
 import { Guild } from "./models/Guild";
 import { User } from "./models/User";
+import { Channel } from "./models/Channel"
 import { RequestHandler } from "./rest/RequestHandler";
 import { StorageBox } from "./util/StorageBox";
 
@@ -16,11 +16,6 @@ import { StorageBox } from "./util/StorageBox";
  */
 export class Client extends EventEmitter {
     public channels: StorageBox<SnowFlake, Channel>;
-    /**
-     * A cache that holds all the Guilds the client is apart of
-     * @type {StorageBox<SnowFlake, Guild>}
-     */
-    public guilds: StorageBox<SnowFlake, Guild>;
 
     public messages: StorageBox<SnowFlake, Message>;
 
@@ -50,17 +45,14 @@ export class Client extends EventEmitter {
      */
     public options: ClientOptions;
 
-    public readonly _token: string;
+    _token: string;
 
     /**
      * @param {ClientOptions} clientOptions The options for the Client
      */
-    constructor(token: string, clientOptions: ClientOptions = {}) {
+    constructor(clientOptions: ClientOptions = {}) {
         super();
 
-        if (!token) throw new FerrisError("TOKEN_MISSING")
-        else if (typeof token != "string") throw new FerrisError("TOKEN_MUST_BE_STRING")
-        else this._token = token
         this.options = Object.assign({
             rest: {
                 requestTimeout: 7,
@@ -82,30 +74,42 @@ export class Client extends EventEmitter {
 
         this.ws = new WebsocketManager(this)
 
-        this.guilds = new StorageBox()
+        this.users = new StorageBox()
+
+        this.channels = new StorageBox()
+
+        this.messages = new StorageBox()
 
         this.users = new StorageBox()
     }
 
-    public connect(): void {
-        this.ws.start()
+
+    public connect() {
+        return process.emitWarning("Method 'connect' is no longer usable", {
+            code: "Decaprecated Method",
+            detail: "The method 'connect' has been replaced with the new method called 'login'"
+        })
     }
 
     createChannel(guildId: SnowFlake, channelData: createChannelOptions): Promise<Channel> {
         if (!channelData.name) throw new Error("A name must be provided for Guild Creation.")
         else if (typeof channelData.name != "string") throw new TypeError("Name of Guild must be a string")
 
-        return this.requestHandler.request("POST", Endpoints.CHANNELS(guildId), channelData)
+        return this.requestHandler.request("POST", Endpoints.CHANNELS(guildId), channelData).then((raw_channel) => {
+            const channel = new Channel(raw_channel, this)
+            this.channels.set(channel.id, channel)
+            return channel
+        })
     }
 
     createGuild(guildData: createGuildOptions): Promise<Guild> {
         if (!guildData.name) throw new Error("A name must be provided for Guild Creation.")
         else if (typeof guildData.name != "string") throw new TypeError("Name of Guild must be a string")
 
-        return this.requestHandler.request("POST", Endpoints.GUILDS(), guildData).then((guild) => {
-            const newGuild = new Guild(guild, this)
-            this.guilds.set(BigInt(guild.id).toString(), newGuild)
-            return newGuild
+        return this.requestHandler.request("POST", Endpoints.GUILDS(), guildData).then((raw_guild) => {
+            const guild = new Guild(raw_guild, this)
+            this.guilds.set(guild.id, guild)
+            return guild
         })
     }
 
@@ -113,19 +117,33 @@ export class Client extends EventEmitter {
         if (!messageData.content) throw new Error("You must provide content for the message.")
         else if (typeof messageData.content != "string") throw new TypeError("Content for Message must be a string")
 
-        return this.requestHandler.request("POST", Endpoints.MESSAGES(guildId, channelId), messageData)
+        return this.requestHandler.request("POST", Endpoints.MESSAGES(guildId, channelId), messageData).then((raw_message) => {
+            const message = new Message(raw_message, this)
+            this.messages.set(message.id, message)
+            return message
+        })
     }
 
     deleteChannel(channelId: SnowFlake): Promise<any> {
-        return this.requestHandler.request("DELETE", Endpoints.CHANNEL(channelId))
+        return this.requestHandler.request("DELETE", Endpoints.CHANNEL(channelId)).then(() => {
+            if (this.channels.has(channelId)) this.channels.delete(channelId)
+        })
     }
 
     deleteGuild(guildId: SnowFlake): Promise<any> {
-        return this.requestHandler.request("DELETE", Endpoints.GUILD(guildId))
+        return this.requestHandler.request("DELETE", Endpoints.GUILD(guildId)).then(() => {
+            if (this.guilds.has(guildId)) this.guilds.delete(guildId)
+        })
     }
 
     deleteMessage(messageId: SnowFlake): Promise<any> {
-        return this.requestHandler.request("DELETE", Endpoints.MESSAGE(messageId))
+        return this.requestHandler.request("DELETE", Endpoints.MESSAGE(messageId)).then(() => {
+            if (this.messages.has(messageId)) this.messages.delete(messageId)
+        })
+    }
+
+    debug(msg: string, service: "RequestHandler" | "Client" = "Client") {
+        return this.emit(Events.DEBUG, `[Ferris-Lib => ${service}] ${msg}`)
     }
 
     fetchChannel(channelId: SnowFlake, options?: { cache?: boolean; force?: boolean }): Promise<Channel> | Channel {
@@ -143,11 +161,11 @@ export class Client extends EventEmitter {
      * @returns {Promise<Guild>} 
      */
     public fetchGuild(guildId: SnowFlake): Promise<Guild> {
-        return this.requestHandler.request("GET", Endpoints.GUILD(guildId) + "?members=true").then((guild) => {
-            if (this.guilds.has(BigInt(guild.id).toString())) return this.guilds.get(BigInt(guild.id).toString())
-            const newGuild = new Guild(guild, this)
-            this.guilds.set(BigInt(guild.id).toString(), newGuild)
-            return newGuild
+        return this.requestHandler.request("GET", Endpoints.GUILD(guildId) + "?members=true").then((raw_guild) => {
+            if (this.guilds.has(raw_guild.id_string)) return this.guilds.get(raw_guild.id_string)._patch(raw_guild)
+            const guild = new Guild(raw_guild, this)
+            this.guilds.set(guild.id, guild)
+            return guild
         })
     }
 
@@ -159,14 +177,17 @@ export class Client extends EventEmitter {
      */
     public fetchUser(id: SnowFlake, options: { cache?: boolean; force?: boolean } = { cache: false, force: false }): User | Promise<User> {
         if (!options.force && this.users.has(id)) return this.users.get(id)
-        return this.requestHandler.request("GET", Endpoints.USER(id)).then((user) => {
-            const fetchUser = new User(user, this)
+        return this.requestHandler.request("GET", Endpoints.USER(id)).then((raw_user) => {
+            if (options.cache && this.users.has(id)) return this.users.get(id)._update(raw_user)
+            const fetchUser = new User(raw_user, this)
             if (options.cache && !this.users.has(id)) this.users.set(id, fetchUser)
-            else if (options.cache && this.users.has(id)) {
-                this.users.delete(id)
-                this.users.set(id, fetchUser)
-            }
             return fetchUser
+        })
+    }
+
+    private getAccountToken(data: ConnectOptions) {
+        return this.requestHandler.request("GET", Endpoints.AUTH_USER(), null, data).then((data) => {
+            return data.token
         })
     }
 
@@ -174,6 +195,29 @@ export class Client extends EventEmitter {
         return this.requestHandler.request("GET", Endpoints.WS_INFO())
     }
 
+    get guilds(): StorageBox<SnowFlake, Guild> {
+        return this.user.guilds
+    }
+
+    public async login(data: ConnectType): Promise<void> {
+        if (!data) throw new FerrisError("AUTH_MISSING")
+        if (typeof data === "string") {
+            this._token = data
+        } else {
+            if (!data.email) throw new FerrisError("MISSING_EMAIL")
+            else if (typeof data.email != "string") throw new FerrisError("EMAIL_MUST_BE_A_STRING")
+            else if (!data.password) throw new FerrisError("MISSING_PASSWORD")
+            else if (typeof data.password != "string") throw new FerrisError("PASSWORD_MUST_BE_A_STRING")
+            process.emitWarning("Email and Password Login.", {
+                code: "Auth",
+                detail: "Using an Email and Password to login resets you Account Token everytime a request is made to the Login Route"
+            })
+            this._token = await this.getAccountToken(data)
+        }
+
+        if (typeof this._token != "string") throw new FerrisError("TOKEN_MUST_BE_STRING")
+        this.ws.start()
+    }
 
     /**
      * @private

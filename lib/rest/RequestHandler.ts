@@ -26,23 +26,27 @@ export class RequestHandler {
             }
     }
 
-    request(method: RequestMethods, url: string, body?: any): Promise<any> {
+    request(method: RequestMethods, url: string, body?: any, headers: any = {}): Promise<any> {
         return new Promise(async (resolve, reject) => {
-            const headers = {
+            const startTime = Date.now()
+            const reqHeaders = {
                 "User-Agent": this.userAgent,
                 "Authorization": this.client._token,
-                "Content-type": "application/json",
                 ...this.client.options.rest.headers,
+                ...headers,
             };
 
-            const finalURL = this.baseUrl + url
+            if (body) {
+                reqHeaders['Content-Type'] = 'application/json';
+                body = JSON.stringify(body)
+            }
 
+            const finalURL = this.baseUrl + url
             const controller = new AbortController()
             const timeout = setTimeout(() => controller.abort(), this.client.options.rest.requestTimeout * 1000).unref()
 
-            console.log(finalURL)
             const res = await fetch(finalURL, {
-                headers,
+                headers: reqHeaders,
                 body: body ? JSON.stringify(body) : null,
                 signal: controller.signal,
                 method,
@@ -51,37 +55,13 @@ export class RequestHandler {
             console.log(res.status, res.statusText)
 
             if (res.ok) {
-                return resolve(this.parseResponse(res))
-            }
-
-            if (res.status === 401 || res.status === 403) {
-                console.log("Invalid Something")
-            } else if (res.status >= 400 && res.status <= 500) {
-                if (res.status === 429) return console.warn("Ratelimit")
-
-                let data;
-                try {
-                    data = await this.parseResponse(res)
-                } catch (error) {
-                    reject(new HTTPError(error.message, error.constructor.name, res.status, method, finalURL))
+                this.client.debug(`${method} ${url} ${res.status} ${res.statusText} (${Date.now() - startTime}ms)`, "RequestHandler")
+                const result = await res.text();
+                if (res.headers.get('Content-Type') === 'application/json') {
+                    return resolve(JSON.parse(result))
                 }
-
-                reject(new FerrisAPIError(data, res.status, method, finalURL, body))
-            } else if (res.status >= 500 && res.status < 600) {
-                if (this.status.retires >= this.client.options.rest.retryLimit) {
-                    this.status.retires = 0
-                    reject(new HTTPError(`The RequestHandler has reached the RetryLimit.`, "Retry Limit Reached", res.status, method, finalURL))
-                    return
-                }
-                this.status.retires++
-                await new Promise((resolve) => setTimeout(resolve, this.client.options.rest.retryAfter * 1000))
-                resolve(this.request(method, url, body))
+                return resolve(result)
             }
         })
-    }
-    private parseResponse(res) {
-        const cloneres = res.clone()
-
-        return res.json().catch((e) => cloneres.text())
     }
 }
