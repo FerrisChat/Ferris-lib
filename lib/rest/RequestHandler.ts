@@ -26,15 +26,18 @@ export class RequestHandler {
             }
     }
 
-    request(method: RequestMethods, url: string, body?: any, headers: any = {}): Promise<any> {
+    request(method: RequestMethods, url: string, body?: any, headers: any = {}, extra_auth: boolean = false): Promise<any> {
         return new Promise(async (resolve, reject) => {
             const startTime = Date.now()
             const reqHeaders = {
                 "User-Agent": this.userAgent,
                 "Authorization": this.client._token,
                 ...this.client.options.rest.headers,
-                ...headers,
             };
+            if (extra_auth) {
+                reqHeaders["Email"] = headers["email"]
+                reqHeaders["Password"] = headers["password"]
+            }
 
             if (body) {
                 reqHeaders['Content-Type'] = 'application/json';
@@ -52,8 +55,6 @@ export class RequestHandler {
                 method,
             }).finally(() => clearTimeout(timeout))
 
-            console.log(res.status, res.statusText)
-
             if (res.ok) {
                 this.client.debug(`${method} ${url} ${res.status} ${res.statusText} (${Date.now() - startTime}ms)`, "RequestHandler")
                 const result = await res.text();
@@ -62,6 +63,9 @@ export class RequestHandler {
                 }
                 return resolve(result)
             }
+
+            this.client.debug(`${method} ${url} ${res.status} ${res.statusText} (${Date.now() - startTime}ms)`, "RequestHandler")
+            console.log((await res.json()))
         })
     }
 }

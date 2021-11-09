@@ -186,7 +186,7 @@ export class Client extends EventEmitter {
     }
 
     private getAccountToken(data: ConnectOptions) {
-        return this.requestHandler.request("GET", Endpoints.AUTH_USER(), null, data).then((data) => {
+        return this.requestHandler.request("POST", Endpoints.AUTH_USER(), null, data, true).then((data) => {
             return data.token
         })
     }
@@ -212,10 +212,12 @@ export class Client extends EventEmitter {
                 code: "Auth",
                 detail: "Using an Email and Password to login resets you Account Token everytime a request is made to the Login Route"
             })
+            this.debug("Fetching Account Token...")
             this._token = await this.getAccountToken(data)
         }
 
         if (typeof this._token != "string") throw new FerrisError("TOKEN_MUST_BE_STRING")
+        this.debug(`Provided token: ${this._token.split('.').map((val, i) => (i > 1 ? val.replace(/./g, '*') : val)).join('.')}`)
         this.ws.start()
     }
 
