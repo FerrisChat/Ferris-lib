@@ -41,7 +41,7 @@ export class User extends Base {
      * @param {Client} client 
      */
     constructor(data: any, client: Client) {
-        super(data.id_string);
+        super(data.id_string ? data.id_string : data.user_id_string);
 
         this.#_client = client
 

@@ -50,7 +50,7 @@ export class RequestHandler {
 
             const res = await fetch(finalURL, {
                 headers: reqHeaders,
-                body: body ? JSON.stringify(body) : null,
+                body: body ? body : null,
                 signal: controller.signal,
                 method,
             }).finally(() => clearTimeout(timeout))
@@ -65,7 +65,7 @@ export class RequestHandler {
             }
 
             this.client.debug(`${method} ${url} ${res.status} ${res.statusText} (${Date.now() - startTime}ms)`, "RequestHandler")
-            console.log((await res.json()))
+            console.log((await res.text()))
         })
     }
 }

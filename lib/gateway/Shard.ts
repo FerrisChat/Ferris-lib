@@ -100,6 +100,9 @@ export class Shard extends EventEmitter {
         } catch (e) {
             console.log(e)
         }
+
+        this.manager.client.emit(Events.RAW_WS, payload)
+
         switch (payload.c) {
             case WebSocketEvents.IDENTIFYACCEPTED:
                 data.end = Date.now()
@@ -110,7 +113,6 @@ export class Shard extends EventEmitter {
                 this.startHeartbeat()
                 break;
             default:
-                this.manager.client.emit(Events.RAW_WS, payload)
                 this.debug(`Unhabdled Event: ${payload.c}:${payload}`)
                 break;
         }

@@ -39,26 +39,22 @@ export class Member extends Base {
      * @param {Client} client 
      */
     constructor(data: any, client: Client) {
-        super(data.user_id);
+        super(data.user_id_string);
 
         this.#_client = client
         this._patch(data)
     }
 
     _patch(data: any) {
-        if ("user_id" in data) {
-            this.id = BigInt(data.user_id).toString()
-        }
-        if ("user" in data) {
-            console.log(data.user)
+        if ("user" in data && data.user != null) {
             this.user = new User(data.user, this.#_client)
         } else {
             this.user = this.#_client.users.get(this.id)
         }
-        if ("guild_id" in data) {
-            this.guildId = BigInt(data.guild_id).toString()
+        if ("guild_id_string" in data) {
+            this.guildId = data.guild_id_string
         }
-        if ("guild" in data) {
+        if ("guild" in data && data.guild != null) {
             this.guild = new Guild(data.guild, this.#_client)
         } else {
             this.guild = this.#_client.guilds.get(this.guildId)

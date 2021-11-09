@@ -48,6 +48,8 @@ export class Guild extends Base {
 
         this.#_client = client
 
+        this.members = new StorageBox()
+
         this._patch(data)
     }
 
