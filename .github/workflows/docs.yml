@@ -7,6 +7,7 @@ jobs:
         node: ["16"]
     name: Documentation Build
     runs-on: ubuntu-latest
+    if: "contains(github.event.head_commit.message, 'build docs')"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
