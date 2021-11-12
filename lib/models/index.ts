@@ -1,7 +1,7 @@
-export { Channel } from "./Channel"
-export { Guild } from "./Guild"
-export { Member } from "./Member"
-export { Message } from "./Message"
-export { User } from "./User"
-export { Base } from "./Base"
-export { Invite } from "./Invite"
+export { Channel } from './Channel'
+export { Guild } from './Guild'
+export { Member } from './Member'
+export { Message } from './Message'
+export { User } from './User'
+export { Base } from './Base'
+export { Invite } from './Invite'

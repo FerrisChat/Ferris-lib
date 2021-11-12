@@ -1,0 +1,5 @@
+build
+docs
+.github
+node_modules
+*.json

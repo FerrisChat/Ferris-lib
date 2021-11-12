@@ -1,48 +1,48 @@
 {
-  "name": "ferrislib",
-  "version": "0.0.3",
-  "description": "An Api wrapper to interact with FerrisChat Api",
-  "main": "build/index.js",
-  "directories": {
-    "lib": "lib"
-  },
-  "scripts": {
-    "test": "node test/test.js",
-    "docs": "typedoc --excludePrivate",
-    "build": "tsc",
-    "format": "npx prettier --write ."
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Drxckzyz/Ferris-lib.git"
-  },
-  "types": "build/typings/index.d.ts",
-  "keywords": [
-    "api-wrapper",
-    "FerrisChat",
-    "Ferris",
-    "Nodejs"
-  ],
-  "author": "Drxckzyz",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Drxckzyz/Ferris-lib/issues"
-  },
-  "homepage": "https://ferrischat.github.io/Ferris-lib/",
-  "devDependencies": {
-    "@types/node": "^16.4.13",
-    "@types/node-fetch": "^2.5.12",
-    "@types/ws": "^7.4.7",
-    "typedoc": "^0.21.6",
-    "typescript": "^4.3.5"
-  },
-  "dependencies": {
-    "node-fetch": "^2.6.1",
-    "prettier": "^2.4.1",
-    "ws": "^8.2.0"
-  },
-  "engines": {
-    "node": ">=16.6.0",
-    "npm": ">=7.0.0"
-  }
+	"name": "ferrislib",
+	"version": "0.0.3",
+	"description": "An Api wrapper to interact with FerrisChat Api",
+	"main": "build/index.js",
+	"directories": {
+		"lib": "lib"
+	},
+	"scripts": {
+		"test": "node test/test.js",
+		"docs": "typedoc --excludePrivate",
+		"build": "tsc",
+		"format": "npx prettier --write ."
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Drxckzyz/Ferris-lib.git"
+	},
+	"types": "build/typings/index.d.ts",
+	"keywords": [
+		"api-wrapper",
+		"FerrisChat",
+		"Ferris",
+		"Nodejs"
+	],
+	"author": "Drxckzyz",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/Drxckzyz/Ferris-lib/issues"
+	},
+	"homepage": "https://ferrischat.github.io/Ferris-lib/",
+	"devDependencies": {
+		"@types/node": "^16.4.13",
+		"@types/node-fetch": "^2.5.12",
+		"@types/ws": "^7.4.7",
+		"typedoc": "^0.21.6",
+		"typescript": "^4.3.5"
+	},
+	"dependencies": {
+		"node-fetch": "^2.6.1",
+		"prettier": "^2.4.1",
+		"ws": "^8.2.0"
+	},
+	"engines": {
+		"node": ">=16.6.0",
+		"npm": ">=7.0.0"
+	}
 }
