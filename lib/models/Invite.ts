@@ -61,5 +61,7 @@ export class Invite {
         if ("max_age" in data) {
             this.maxAge = data.max_age
         }
+
+        return this
     }
 }
