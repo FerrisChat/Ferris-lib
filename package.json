@@ -9,7 +9,8 @@
   "scripts": {
     "test": "node test/test.js",
     "docs": "typedoc --excludePrivate",
-    "build": "tsc"
+    "build": "tsc",
+    "format": "npx prettier --write ."
   },
   "repository": {
     "type": "git",
