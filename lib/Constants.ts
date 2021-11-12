@@ -178,6 +178,10 @@ export class Endpoints {
     static USER_GUILDS = (userId) => `/users/${userId}/guilds`
     static USERS = () => `/users`
 
+    //Invites
+    static INVITES = (guildId) => `/guilds/${guildId}/invites`
+    static INVITE = (code) => `/invites/${code}`
+
     //Auth
     static AUTH_USER = () => `/auth`
 

@@ -8,6 +8,7 @@ import { User } from "./models/User";
 import { Channel } from "./models/Channel"
 import { RequestHandler } from "./rest/RequestHandler";
 import { StorageBox } from "./util/StorageBox";
+import { Invite } from "./models/Invite";
 
 /**
  * Main class for interacting with Api and Gateway
@@ -83,7 +84,9 @@ export class Client extends EventEmitter {
         this.users = new StorageBox()
     }
 
-
+    /**
+     * @deprecated
+     */
     public connect() {
         return process.emitWarning("Method 'connect' is no longer usable", {
             code: "Decaprecated Method",
@@ -110,6 +113,12 @@ export class Client extends EventEmitter {
             const guild = new Guild(raw_guild, this)
             this.guilds.set(guild.id, guild)
             return guild
+        })
+    }
+
+    createInvite(guildId: SnowFlake, maxAge: number, maxUses: number): Promise<Invite> {
+        return this.requestHandler.request("POST", Endpoints.INVITES(guildId), { max_age: maxAge, max_uses: maxUses }).then((raw_inv) => {
+            return new Invite(raw_inv, this)
         })
     }
 
@@ -151,10 +160,6 @@ export class Client extends EventEmitter {
         return this.requestHandler.request("GET", Endpoints.CHANNEL(channelId))
     }
 
-    fetchMessage(messageId: SnowFlake): Promise<Message> {
-        return this.requestHandler.request("GET", Endpoints.MESSAGE(messageId))
-    }
-
     /**
      * Fetch a Guild from the Api
      * @param {SnowFlake} guildId The Id for the Guild to fetch
@@ -167,6 +172,22 @@ export class Client extends EventEmitter {
             this.guilds.set(guild.id, guild)
             return guild
         })
+    }
+
+    fetchGuildInvites(guildId): Promise<StorageBox<string, Invite>> {
+        return this.requestHandler.request("GET", Endpoints.INVITES(guildId)).then((raw_ins) => {
+            const invs: StorageBox<string, Invite> = new StorageBox()
+            raw_ins.forEach((inv) => invs.set(inv.code, new Invite(inv, this)))
+            return invs
+        })
+    }
+
+    fetchInvite(code: string): Promise<Invite> {
+        return this.requestHandler.request("GET", Endpoints.INVITE(code)).then(inv => new Invite(inv, this))
+    }
+
+    fetchMessage(messageId: SnowFlake): Promise<Message> {
+        return this.requestHandler.request("GET", Endpoints.MESSAGE(messageId))
     }
 
     /**
@@ -219,6 +240,15 @@ export class Client extends EventEmitter {
         if (typeof this._token != "string") throw new FerrisError("TOKEN_MUST_BE_STRING")
         this.debug(`Provided token: ${this._token.split('.').map((val, i) => (i > 1 ? val.replace(/./g, '*') : val)).join('.')}`)
         this.ws.start()
+    }
+
+    /**
+     * Use an Invite to Join a Guild
+     * @param code 
+     * @returns {Promise<unknown>}
+     */
+    useInvite(code: string): Promise<unknown> {
+        return this.requestHandler.request("POST", Endpoints.INVITE(code))
     }
 
     /**

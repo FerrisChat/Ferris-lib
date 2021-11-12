@@ -3,6 +3,7 @@ import { SnowFlake } from "../Constants";
 import { StorageBox } from "../util/StorageBox";
 import { Channel, Member } from "./"
 import { Base } from "./Base";
+import { Invite } from "./Invite";
 
 /**
  * The Guild Model
@@ -51,6 +52,10 @@ export class Guild extends Base {
         this.members = new StorageBox()
 
         this._patch(data)
+    }
+
+    fetchInvites(): Promise<StorageBox<string, Invite>> {
+        return this.#_client.fetchGuildInvites(this.id)
     }
 
     _patch(data: any) {
