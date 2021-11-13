@@ -31,7 +31,7 @@
 	"homepage": "https://ferrischat.github.io/Ferris-lib/",
 	"devDependencies": {
 		"@types/node": "^16.4.13",
-		"@types/node-fetch": "^2.5.12",
+		"@types/node-fetch": "^3.0.3",
 		"@types/ws": "^7.4.7",
 		"typedoc": "^0.22.8",
 		"typescript": "^4.3.5"
