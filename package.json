@@ -28,17 +28,17 @@
 	"bugs": {
 		"url": "https://github.com/Drxckzyz/Ferris-lib/issues"
 	},
-	"homepage": "https://ferrischat.github.io/Ferris-lib/",
+	"homepage": "https://node.docs.ferris.chat/",
 	"devDependencies": {
 		"@types/node": "^16.4.13",
 		"@types/node-fetch": "^3.0.3",
 		"@types/ws": "^8.2.0",
+		"prettier": "^2.4.1",
 		"typedoc": "^0.22.8",
 		"typescript": "^4.3.5"
 	},
 	"dependencies": {
 		"node-fetch": "^3.1.0",
-		"prettier": "^2.4.1",
 		"ws": "^8.2.0"
 	},
 	"engines": {
