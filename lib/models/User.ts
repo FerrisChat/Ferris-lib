@@ -78,14 +78,14 @@ export class User extends Base {
 			for (const raw_guild of data.guilds) {
 				const guild = this.#_client.guilds.has(raw_guild.id_string)
 					? this.#_client.guilds
-						.get(raw_guild.id_string)
-						._patch(raw_guild)
+							.get(raw_guild.id_string)
+							._patch(raw_guild)
 					: this.#_client.guilds
-						.set(
-							raw_guild.id_string,
-							new Guild(raw_guild, this.#_client)
-						)
-						.get(raw_guild.id_string)
+							.set(
+								raw_guild.id_string,
+								new Guild(raw_guild, this.#_client)
+							)
+							.get(raw_guild.id_string)
 				this.guilds.set(guild.id, guild)
 			}
 		}
