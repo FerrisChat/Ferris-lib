@@ -19,12 +19,11 @@ export class RequestHandler {
 	constructor(client: Client) {
 		this.baseUrl = Urls.Api + Urls.Base_Api + API_VERSION
 		this.client = client
-		;(this.userAgent = `FerrisLib (https://github.com/Drxckzyz/Ferris-lib, ${
-			require('../../package.json').version
-		})`),
-			(this.status = {
-				retires: 0,
-			})
+			; (this.userAgent = `FerrisLib (https://github.com/Drxckzyz/Ferris-lib, ${require('../../package.json').version
+				})`),
+				(this.status = {
+					retires: 0,
+				})
 	}
 
 	request(
@@ -66,11 +65,11 @@ export class RequestHandler {
 					signal: controller.signal,
 					headers: reqHeaders,
 					method,
+					data: body,
 				}).finally(() => clearTimeout(timeout))
 
 				this.client.debug(
-					`${method} ${url} ${response.status} ${
-						response.statusText
+					`${method} ${url} ${response.status} ${response.statusText
 					} (${Date.now() - startTime}ms)`,
 					'Request Handler'
 				)
@@ -78,20 +77,17 @@ export class RequestHandler {
 			} catch (error) {
 				if (error.response) {
 					console.log(error.response.data)
-					console.log(error.response.status)
-					console.log(error.response.headers)
 					this.client.debug(
-						`${method} ${url} ${error.status} ${
-							error.statusText
+						`${method} ${url} ${error.response.status} ${error.response.statusText
 						} (${Date.now() - startTime}ms)`
 					)
+					reject(new FerrisAPIError(error.response.data.reason, error.response.status, method, url, body))
 				} else if (error.request) {
 					console.log(error.request)
 				} else {
 					console.log('Error', error.message)
 				}
-				console.log(error)
-				reject(error)
+				reject(null)
 			}
 		})
 	}

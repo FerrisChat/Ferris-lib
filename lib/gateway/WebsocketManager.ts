@@ -11,6 +11,7 @@ import {
 } from '../Constants'
 import { FerrisError } from '../errors/FerrislibError'
 import { inspect } from 'util'
+import { User } from '..'
 
 /**
  * The class the Main client {@link Client} uses for interacting with the Gateway
@@ -148,7 +149,20 @@ export class WebsocketManager extends EventEmitter {
 			console.log(e)
 		}
 
-		return this.client.emit(Events.RAW_WS, payload)
+		this.client.emit(Events.RAW_WS, payload)
+
+		switch (payload.c) {
+			case WebSocketEvents.IDENTIFYACCEPTED:
+				this.status = WebSocketStatus.CONNECTED
+				this.debug("Identify Recieved")
+				this.client.user = new User(payload.d.user, this.client)
+				this.startHeartbeat()
+				this.client.emit(Events.READY)
+				break;
+
+			default:
+				return this.debug(`Unhandled Event Recieved "${payload.c}", Data: ${JSON.stringify(payload)}`)
+		}
 	}
 
 	private _WsOnOpen() {
