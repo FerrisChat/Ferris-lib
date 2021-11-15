@@ -42,10 +42,7 @@ export interface ChannelCacheOptions extends BaseCacheOptions {
 
 export enum Events {
 	DEBUG = 'debug',
-	SHARDDISCONNECTED = 'shardDisconnected',
-	SHARDREADY = 'shardReady',
 	READY = 'ready',
-	SHARDRECONNECTING = 'shardReconnecting',
 	RAW_WS = 'rawWs',
 }
 
@@ -82,15 +79,7 @@ export interface UserCacheOptions extends BaseCacheOptions {
 
 export interface ClientEvents<T> {
 	(event: 'debug' | 'warn', listener: (message: string) => void): T
-	(
-		event: 'shardDisconnected',
-		listener: (id: number, code: number, reason: string) => void
-	): T
 	(event: 'ready', listener: () => void): T
-	(
-		event: 'shardReconnecting' | 'shardReady',
-		listener: (id: number) => void
-	): T
 	(event: 'rawWs', listener: (data: any) => void): T
 }
 
@@ -139,8 +128,6 @@ export interface ClientOptions {
 		 */
 		users?: UserCacheOptions | boolean
 	}
-	shardCount?: 'auto' | number
-	shardList?: 'auto' | number[]
 }
 
 /**
@@ -209,16 +196,6 @@ export type RequestMethods = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
  */
 export type SnowFlake = string
 
-export enum ShardStatus {
-	READY = 0,
-	IDLE = 1,
-	CONNECTING = 2,
-	RECONNECTING = 3,
-	DISCONNECTING = 4,
-	CONNECTED = 5,
-	IDENTIFYING = 6,
-}
-
 export enum WebSocketCloseCodes {
 	ABNORMAL_CLOSURE = 1006,
 }
@@ -242,6 +219,15 @@ export class WebsocketPayloads {
 			},
 		}
 	}
+}
+
+export enum WebSocketStatus {
+	IDLE = 0,
+	CONNECTING = 1,
+	RECONNECTING = 2,
+	DISCONNECTED = 3,
+	CONNECTED = 4,
+	IDENTIFYING = 5,
 }
 
 export const FERRIS_EPOCH = 1_577_836_800_000

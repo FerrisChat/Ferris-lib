@@ -1,106 +1,164 @@
 import { EventEmitter } from 'events'
 import { Client } from '../Client'
-import { Events } from '../Constants'
-import { StorageBox } from '../util/StorageBox'
-import { Shard } from './Shard'
+import Websocket from 'ws'
+import {
+	Events,
+	WebSocketCloseCodes,
+	WebSocketEvents,
+	WebSocketPayload,
+	WebsocketPayloads,
+	WebSocketStatus,
+} from '../Constants'
+import { FerrisError } from '../errors/FerrislibError';
+import { inspect } from "util"
 
 /**
  * The class the Main client {@link Client} uses for interacting with the Gateway
  * @extends EventEmitter
  */
 export class WebsocketManager extends EventEmitter {
-	client: Client
-	gatewayUrl: string
-	shardQueue: Set<Shard>
-	shards: StorageBox<number, Shard>
+	client: Client;
+	gatewayUrl: string;
+	connection: Websocket;
+	status: number;
+	started: boolean;
+	heartbeatInterval: NodeJS.Timer;
+	lastHeartbeatAck: boolean;
+	lasthHeartbeatRecieved: number;
+	latency: number;
 
 	constructor(client: Client) {
 		super()
 
 		this.client = client
-		this.shardQueue = null
-		this.shards = new StorageBox()
+		this.gatewayUrl = null
+		this.connection = null
+		this.status = WebSocketStatus.IDLE
+		this.started = false
+		this.heartbeatInterval = null
+		this.lastHeartbeatAck = false
+		this.lasthHeartbeatRecieved = Infinity
+		this.latency = Infinity
 	}
 
-	get avgerageLatency() {
-		const sum = [...this.shards.values()].reduce((a, b) => a + b.latency, 0)
-		return sum / this.shards.size
+	debug(msg: string) {
+		return this.client.debug(msg, "Websocket Manager")
 	}
 
-	private async createShards() {
-		if (!this.shardQueue.size) return
-
-		const [shard] = this.shardQueue
-
-		this.shardQueue.delete(shard)
-
-		this.shards.set(shard.id, shard)
-		this.debug(`Shard ${shard.id} Spawned`)
-
-		try {
-			await shard.connect()
-		} catch (error) {
-			this.debug(`Error Spawning Shard ${shard.id}`)
-			this.shards.delete(shard.id)
-			this.shardQueue.add(shard)
+	private async connect() {
+		if (this.connection?.readyState === Websocket.OPEN) {
+			this.debug('Open Connection was Found, Continuing')
+			return Promise.resolve()
 		}
 
-		if (this.shardQueue.size) {
-			this.debug(
-				`Shard Queue Size: ${this.shardQueue.size}; continuing in 5 seconds...`
-			)
-			return new Promise((r) =>
-				setTimeout((e) => r(this.createShards()), 5000)
-			)
-		}
+		this.status = WebSocketStatus.CONNECTING
 
-		this.debug('All Shards are Ready, Marking Client as ready.')
-		this.client.emit(Events.READY)
+		return new Promise((resolve, reject) => {
+			this.debug(`Connecting to the Gateway with the Url: ${this.gatewayUrl}`)
+			this.connection = new Websocket(this.gatewayUrl)
+
+
+			this.connection.on('open', this._WsOnOpen.bind(this))
+			this.connection.on('message', this._WsOnMsg.bind(this))
+			this.connection.on('close', this._WsOnClose.bind(this))
+			this.connection.on('error', this._WsOnError.bind(this))
+			this.connection.on('pong', this._WsOnPong.bind(this))
+			resolve(null)
+		})
 	}
 
-	debug(msg: string, shard?: Shard) {
-		return this.client.emit(
-			Events.DEBUG,
-			`[Ws => ${shard ? `Shard ${shard.id}` : 'Manager'}] ${msg}`
-		)
+	send(data: any) {
+		if (this.connection.readyState != Websocket.OPEN) {
+			this.debug(`Tried to send data, but no open Connection, Retrying in 30 seconds`)
+			return setTimeout(() => this.send(data), 1000 * 30)
+		}
+
+		this.connection.send(JSON.stringify(data), (err) => {
+			if (err)
+				this.debug(`Encoutered an error sending Data packet: \n${inspect(err)}`)
+		})
+	}
+
+	async reconnect() {
+		if (this.connection && this.connection.readyState === Websocket.OPEN) {
+			this.connection.terminate()
+		}
+
+		this.connection = null
+		this.status = WebSocketStatus.RECONNECTING
+		await new Promise((r) => setTimeout((e) => r(e), 5000))
+		this.connect()
 	}
 
 	async start() {
+		if (this.started) {
+			throw new FerrisError("WS_ALREADY_STARTED")
+		}
 		this.debug('Fetching Gateway Url')
 		const data = await this.client.getWsInfo()
-
 		this.gatewayUrl = data.url
+		this.debug("Starting Gateway Connection")
+		this.started = true
+		this.connect()
+		return
+	}
 
-		this.debug(`Gateway Url: ${this.gatewayUrl}`)
+	startHeartbeat() {
+		this.debug('Sending Heartbeat...')
+		this.connection.ping(null, true, (err) => {
+			if (err) this.debug('Error Sending Heartbeat')
+		})
 
-		let shardlist = []
+		if (this.heartbeatInterval) this.clearHeartbeatInterval()
 
-		if (
-			this.client.options.shardCount === 'auto' &&
-			this.client.options.shardList != 'auto'
-		) {
-			shardlist = this.client.options.shardList
-		} else if (
-			this.client.options.shardCount != 'auto' &&
-			this.client.options.shardList === 'auto'
-		) {
-			this.client.options.shardList = shardlist = Array.from(
-				{ length: this.client.options.shardCount },
-				(_, i) => i
-			)
-		} else
-			shardlist = this.client.options.shardList = Array.from(
-				{ length: 1 },
-				(_, i) => i
-			)
+		this.heartbeatInterval = setInterval(() => {
+			this.debug('Sending Heartbeat...')
+			if (this.connection.readyState === Websocket.OPEN)
+				this.connection.ping(null, true, (err) => {
+					if (err) this.debug('Error Sending Heartbeat')
+				})
+			else this.debug('Tried to send Heartbeat but no open connection.')
+		}, 1000 * 45)
+	}
 
+	clearHeartbeatInterval() {
+		this.debug('Clearing heartbeat interval')
+		if (this.heartbeatInterval) clearInterval(this.heartbeatInterval)
+		this.heartbeatInterval = null
+	}
+
+	private _WsOnClose(code, reason = 'Unknown') {
+		console.log(code, reason)
+	}
+
+	private _WsOnError(err) {
+		console.error(inspect(err))
+	}
+
+	private _WsOnMsg(raw_payload) {
+		let payload: WebSocketPayload
+		try {
+			payload = JSON.parse(raw_payload)
+		} catch (e) {
+			console.log(e)
+		}
+
+		return this.client.emit(Events.RAW_WS, payload)
+	}
+
+	private _WsOnOpen() {
+		this.status = WebSocketStatus.IDENTIFYING
+		this.debug('[Connected] Connected to the Gateway, Identifying...')
+		this.send(WebsocketPayloads.Identify(this.client._token))
+	}
+
+	private _WsOnPong() {
+		this.latency = this.lasthHeartbeatRecieved
+			? Date.now() - this.lasthHeartbeatRecieved
+			: Infinity
 		this.debug(
-			`Spawning Shards:\n  Total: ${
-				shardlist.length
-			}\n  Shardlist: ${shardlist.join(', ')}`
+			`Pong, Recieved from the Gateway (Gateway Ping: ${this.latency}ms)`
 		)
-
-		this.shardQueue = new Set(shardlist.map((id) => new Shard(this, id)))
-		return this.createShards()
+		this.lasthHeartbeatRecieved = Date.now()
 	}
 }

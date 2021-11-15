@@ -32,4 +32,7 @@ class Messages {
 	static EMAIL_MUST_BE_A_STRING = () => `Provided Email is not a String.`
 	static PASSWORD_MUST_BE_A_STRING = () =>
 		`Provided Password is not a String.`
+
+	// websocket manager
+	static WS_ALREADY_STARTED = () => `Websocket Manager has already started.`
 }

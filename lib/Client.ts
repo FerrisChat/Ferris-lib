@@ -77,8 +77,6 @@ export class Client extends EventEmitter {
 					guilds: false,
 					users: false,
 				},
-				shardCount: 'auto',
-				shardList: 'auto',
 			},
 			clientOptions
 		)
@@ -205,7 +203,7 @@ export class Client extends EventEmitter {
 			})
 	}
 
-	debug(msg: string, service: 'RequestHandler' | 'Client' = 'Client') {
+	debug(msg: string, service: 'Request Handler' | 'Client' | "Websocket Manager" = 'Client') {
 		return this.emit(Events.DEBUG, `[Ferris-Lib => ${service}] ${msg}`)
 	}
 

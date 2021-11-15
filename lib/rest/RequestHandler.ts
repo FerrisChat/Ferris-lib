@@ -1,5 +1,5 @@
-import fetch from 'node-fetch'
 import { Client } from '../Client'
+import axios from "axios"
 import { API_VERSION, RequestMethods, Urls } from '../Constants'
 import { FerrisAPIError } from '../errors/FerrisApiError'
 import { HTTPError } from '../errors/HttpError'
@@ -13,17 +13,17 @@ export class RequestHandler {
 	client: Client
 	status: {
 		retires: number
-	}
+	};
+	headers: {};
 
 	constructor(client: Client) {
 		this.baseUrl = Urls.Api + Urls.Base_Api + API_VERSION
 		this.client = client
-		;(this.userAgent = `FerrisLib (https://github.com/Drxckzyz/Ferris-lib, ${
-			require('../../package.json').version
-		})`),
-			(this.status = {
-				retires: 0,
-			})
+			; (this.userAgent = `FerrisLib (https://github.com/Drxckzyz/Ferris-lib, ${require('../../package.json').version
+				})`),
+				(this.status = {
+					retires: 0,
+				})
 	}
 
 	request(
@@ -37,9 +37,9 @@ export class RequestHandler {
 			const startTime = Date.now()
 			const reqHeaders = {
 				'User-Agent': this.userAgent,
-				Authorization: this.client._token,
 				...this.client.options.rest.headers,
 			}
+			if (this.client._token != undefined) reqHeaders["Authorization"] = this.client._token
 			if (extra_auth) {
 				reqHeaders['Email'] = headers['email']
 				reqHeaders['Password'] = headers['password']
@@ -57,34 +57,36 @@ export class RequestHandler {
 				this.client.options.rest.requestTimeout * 1000
 			).unref()
 
-			const res = await fetch(finalURL, {
-				headers: reqHeaders,
-				body: body ? body : null,
-				signal: controller.signal,
-				method,
-			}).finally(() => clearTimeout(timeout))
+			try {
+				const response = await axios({
+					url: finalURL,
+					baseURL: this.baseUrl,
+					signal: controller.signal,
+					headers: reqHeaders,
+					method,
+				}).finally(() => clearTimeout(timeout))
 
-			if (res.ok) {
 				this.client.debug(
-					`${method} ${url} ${res.status} ${res.statusText} (${
-						Date.now() - startTime
+					`${method} ${url} ${response.status} ${response.statusText} (${Date.now() - startTime
 					}ms)`,
-					'RequestHandler'
+					'Request Handler'
 				)
-				const result = await res.text()
-				if (res.headers.get('Content-Type') === 'application/json') {
-					return resolve(JSON.parse(result))
+				return resolve(response.data)
+			} catch (error) {
+				if (error.response) {
+					console.log(error.response.data);
+					console.log(error.response.status);
+					console.log(error.response.headers);
+					this.client.debug(`${method} ${url} ${error.status} ${error.statusText} (${Date.now() - startTime
+						}ms)`)
+				} else if (error.request) {
+					console.log(error.request);
+				} else {
+					console.log('Error', error.message);
 				}
-				return resolve(result)
+				console.log(error)
+				reject(error)
 			}
-
-			this.client.debug(
-				`${method} ${url} ${res.status} ${res.statusText} (${
-					Date.now() - startTime
-				}ms)`,
-				'RequestHandler'
-			)
-			console.log(await res.text())
 		})
 	}
 }
