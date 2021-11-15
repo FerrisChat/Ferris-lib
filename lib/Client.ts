@@ -203,7 +203,10 @@ export class Client extends EventEmitter {
 			})
 	}
 
-	debug(msg: string, service: 'Request Handler' | 'Client' | "Websocket Manager" = 'Client') {
+	debug(
+		msg: string,
+		service: 'Request Handler' | 'Client' | 'Websocket Manager' = 'Client'
+	) {
 		return this.emit(Events.DEBUG, `[Ferris-Lib => ${service}] ${msg}`)
 	}
 

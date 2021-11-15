@@ -1,5 +1,5 @@
 import { Client } from '../Client'
-import axios from "axios"
+import axios from 'axios'
 import { API_VERSION, RequestMethods, Urls } from '../Constants'
 import { FerrisAPIError } from '../errors/FerrisApiError'
 import { HTTPError } from '../errors/HttpError'
@@ -13,17 +13,18 @@ export class RequestHandler {
 	client: Client
 	status: {
 		retires: number
-	};
-	headers: {};
+	}
+	headers: {}
 
 	constructor(client: Client) {
 		this.baseUrl = Urls.Api + Urls.Base_Api + API_VERSION
 		this.client = client
-			; (this.userAgent = `FerrisLib (https://github.com/Drxckzyz/Ferris-lib, ${require('../../package.json').version
-				})`),
-				(this.status = {
-					retires: 0,
-				})
+		;(this.userAgent = `FerrisLib (https://github.com/Drxckzyz/Ferris-lib, ${
+			require('../../package.json').version
+		})`),
+			(this.status = {
+				retires: 0,
+			})
 	}
 
 	request(
@@ -39,7 +40,8 @@ export class RequestHandler {
 				'User-Agent': this.userAgent,
 				...this.client.options.rest.headers,
 			}
-			if (this.client._token != undefined) reqHeaders["Authorization"] = this.client._token
+			if (this.client._token != undefined)
+				reqHeaders['Authorization'] = this.client._token
 			if (extra_auth) {
 				reqHeaders['Email'] = headers['email']
 				reqHeaders['Password'] = headers['password']
@@ -67,22 +69,26 @@ export class RequestHandler {
 				}).finally(() => clearTimeout(timeout))
 
 				this.client.debug(
-					`${method} ${url} ${response.status} ${response.statusText} (${Date.now() - startTime
-					}ms)`,
+					`${method} ${url} ${response.status} ${
+						response.statusText
+					} (${Date.now() - startTime}ms)`,
 					'Request Handler'
 				)
 				return resolve(response.data)
 			} catch (error) {
 				if (error.response) {
-					console.log(error.response.data);
-					console.log(error.response.status);
-					console.log(error.response.headers);
-					this.client.debug(`${method} ${url} ${error.status} ${error.statusText} (${Date.now() - startTime
-						}ms)`)
+					console.log(error.response.data)
+					console.log(error.response.status)
+					console.log(error.response.headers)
+					this.client.debug(
+						`${method} ${url} ${error.status} ${
+							error.statusText
+						} (${Date.now() - startTime}ms)`
+					)
 				} else if (error.request) {
-					console.log(error.request);
+					console.log(error.request)
 				} else {
-					console.log('Error', error.message);
+					console.log('Error', error.message)
 				}
 				console.log(error)
 				reject(error)

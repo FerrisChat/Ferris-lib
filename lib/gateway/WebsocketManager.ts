@@ -9,23 +9,23 @@ import {
 	WebsocketPayloads,
 	WebSocketStatus,
 } from '../Constants'
-import { FerrisError } from '../errors/FerrislibError';
-import { inspect } from "util"
+import { FerrisError } from '../errors/FerrislibError'
+import { inspect } from 'util'
 
 /**
  * The class the Main client {@link Client} uses for interacting with the Gateway
  * @extends EventEmitter
  */
 export class WebsocketManager extends EventEmitter {
-	client: Client;
-	gatewayUrl: string;
-	connection: Websocket;
-	status: number;
-	started: boolean;
-	heartbeatInterval: NodeJS.Timer;
-	lastHeartbeatAck: boolean;
-	lasthHeartbeatRecieved: number;
-	latency: number;
+	client: Client
+	gatewayUrl: string
+	connection: Websocket
+	status: number
+	started: boolean
+	heartbeatInterval: NodeJS.Timer
+	lastHeartbeatAck: boolean
+	lasthHeartbeatRecieved: number
+	latency: number
 
 	constructor(client: Client) {
 		super()
@@ -42,7 +42,7 @@ export class WebsocketManager extends EventEmitter {
 	}
 
 	debug(msg: string) {
-		return this.client.debug(msg, "Websocket Manager")
+		return this.client.debug(msg, 'Websocket Manager')
 	}
 
 	private async connect() {
@@ -54,9 +54,10 @@ export class WebsocketManager extends EventEmitter {
 		this.status = WebSocketStatus.CONNECTING
 
 		return new Promise((resolve, reject) => {
-			this.debug(`Connecting to the Gateway with the Url: ${this.gatewayUrl}`)
+			this.debug(
+				`Connecting to the Gateway with the Url: ${this.gatewayUrl}`
+			)
 			this.connection = new Websocket(this.gatewayUrl)
-
 
 			this.connection.on('open', this._WsOnOpen.bind(this))
 			this.connection.on('message', this._WsOnMsg.bind(this))
@@ -69,13 +70,17 @@ export class WebsocketManager extends EventEmitter {
 
 	send(data: any) {
 		if (this.connection.readyState != Websocket.OPEN) {
-			this.debug(`Tried to send data, but no open Connection, Retrying in 30 seconds`)
+			this.debug(
+				`Tried to send data, but no open Connection, Retrying in 30 seconds`
+			)
 			return setTimeout(() => this.send(data), 1000 * 30)
 		}
 
 		this.connection.send(JSON.stringify(data), (err) => {
 			if (err)
-				this.debug(`Encoutered an error sending Data packet: \n${inspect(err)}`)
+				this.debug(
+					`Encoutered an error sending Data packet: \n${inspect(err)}`
+				)
 		})
 	}
 
@@ -92,12 +97,12 @@ export class WebsocketManager extends EventEmitter {
 
 	async start() {
 		if (this.started) {
-			throw new FerrisError("WS_ALREADY_STARTED")
+			throw new FerrisError('WS_ALREADY_STARTED')
 		}
 		this.debug('Fetching Gateway Url')
 		const data = await this.client.getWsInfo()
 		this.gatewayUrl = data.url
-		this.debug("Starting Gateway Connection")
+		this.debug('Starting Gateway Connection')
 		this.started = true
 		this.connect()
 		return

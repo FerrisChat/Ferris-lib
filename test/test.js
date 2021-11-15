@@ -23,4 +23,4 @@ client.on('ready', async () => {
 	console.log(client.guilds)
 })
 
-client.login({ email: '=', password: '=' })
+client.login({ email: '==', password: '=' })
