@@ -41,9 +41,11 @@ export class User extends Base {
 	 */
 	constructor(data: any, client: Client) {
 		super(data.id_string ? data.id_string : data.user_id_string)
-		this.#_client = client
 
 		this.guilds = new StorageBox()
+
+		this.#_client = client
+
 
 		this._patch(data)
 	}
@@ -76,16 +78,16 @@ export class User extends Base {
 
 		if ('guilds' in data && data.guilds != null) {
 			for (const raw_guild of data.guilds) {
-				const guild = this.#_client.guilds.has(raw_guild.id_string)
-					? this.#_client.guilds
-							.get(raw_guild.id_string)
-							._patch(raw_guild)
-					: this.#_client.guilds
-							.set(
-								raw_guild.id_string,
-								new Guild(raw_guild, this.#_client)
-							)
-							.get(raw_guild.id_string)
+				const guild = this.guilds.has(raw_guild.id_string)
+					? this.guilds
+						.get(raw_guild.id_string)
+						._patch(raw_guild)
+					: this.guilds
+						.set(
+							raw_guild.id_string,
+							new Guild(raw_guild, this.#_client)
+						)
+						.get(raw_guild.id_string)
 				this.guilds.set(guild.id, guild)
 			}
 		}
@@ -94,6 +96,7 @@ export class User extends Base {
 			this.discriminator = data.discriminator
 		}
 
+		this.#_client.users.set(this.id, this)
 		return this
 	}
 }

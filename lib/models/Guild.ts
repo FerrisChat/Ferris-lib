@@ -51,6 +51,8 @@ export class Guild extends Base {
 
 		this.members = new StorageBox()
 
+		this.channels = new StorageBox()
+
 		this._patch(data)
 	}
 
@@ -73,7 +75,6 @@ export class Guild extends Base {
 		}
 		if ('members' in data && data.members != null) {
 			for (const raw_member of data.members) {
-				console.log(raw_member)
 				const member = new Member(raw_member, this.#_client)
 				this.members.set(member.id, member)
 			}

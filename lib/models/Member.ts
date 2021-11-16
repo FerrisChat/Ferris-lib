@@ -39,7 +39,7 @@ export class Member extends Base {
 	 */
 	constructor(data: any, client: Client) {
 		super(data.user_id_string)
-
+		console.log(client)
 		this.#_client = client
 		this._patch(data)
 	}
