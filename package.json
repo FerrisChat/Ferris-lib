@@ -31,7 +31,6 @@
 	"homepage": "https://node.docs.ferris.chat/",
 	"devDependencies": {
 		"@types/node": "^16.4.13",
-		"@types/node-fetch": "^3.0.3",
 		"@types/ws": "^8.2.0",
 		"prettier": "^2.4.1",
 		"typedoc": "^0.22.8",
@@ -39,6 +38,7 @@
 	},
 	"dependencies": {
 		"axios": "^0.24.0",
+		"ci": "^2.1.1",
 		"ws": "^8.2.0"
 	},
 	"engines": {

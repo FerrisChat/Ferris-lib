@@ -153,7 +153,8 @@ export class WebsocketManager extends EventEmitter {
 
 		switch (payload.c) {
 			case WebSocketEvents.IDENTIFYACCEPTED:
-				if (!this.client.user) this.client.user = new User(payload.d.user, this.client)
+				if (!this.client.user)
+					this.client.user = new User(payload.d.user, this.client)
 				this.status = WebSocketStatus.CONNECTED
 				this.debug('Identify Recieved')
 				this.startHeartbeat()
@@ -162,7 +163,8 @@ export class WebsocketManager extends EventEmitter {
 
 			default:
 				return this.debug(
-					`Unhandled Event Recieved "${payload.c
+					`Unhandled Event Recieved "${
+						payload.c
 					}", Data: ${JSON.stringify(payload)}`
 				)
 		}
