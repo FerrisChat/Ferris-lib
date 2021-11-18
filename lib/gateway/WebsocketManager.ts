@@ -154,7 +154,10 @@ export class WebsocketManager extends EventEmitter {
 		switch (payload.c) {
 			case WebSocketEvents.IDENTIFYACCEPTED:
 				if (!this.client.user)
-					this.client.user = new User(payload.d.user, this.client)
+					this.client.user = new User(payload.d.user, this.client, {
+						loggedInUser: true,
+						patch: true,
+					})
 				this.status = WebSocketStatus.CONNECTED
 				this.debug('Identify Recieved')
 				this.startHeartbeat()

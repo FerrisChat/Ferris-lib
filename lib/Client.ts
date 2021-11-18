@@ -300,7 +300,6 @@ export class Client extends EventEmitter {
 	}
 
 	get guilds(): StorageBox<SnowFlake, Guild> {
-		console.log(this.user)
 		return this.user.guilds
 	}
 

@@ -39,14 +39,21 @@ export class User extends Base {
 	 * @param {any} data The User data
 	 * @param {Client} client
 	 */
-	constructor(data: any, client: Client) {
+	constructor(
+		data: any,
+		client: Client,
+		options: { loggedInUser: boolean; patch: boolean } = {
+			loggedInUser: false,
+			patch: true,
+		}
+	) {
 		super(data.id_string ? data.id_string : data.user_id_string)
 
 		this.guilds = new StorageBox()
 
 		this.#_client = client
 
-		this._patch(data)
+		if (options.patch) this._patch(data, options)
 	}
 
 	/**
@@ -66,7 +73,13 @@ export class User extends Base {
 		return this.name + '#' + this.discriminator
 	}
 
-	_patch(data: any) {
+	_patch(
+		data: any,
+		options: { loggedInUser: boolean; patch: boolean } = {
+			loggedInUser: false,
+			patch: false,
+		}
+	) {
 		if ('name' in data) {
 			this.name = data.name
 		}
@@ -77,15 +90,18 @@ export class User extends Base {
 
 		if ('guilds' in data && data.guilds != null) {
 			for (const raw_guild of data.guilds) {
-				const guild = this.guilds.has(raw_guild.id_string)
+				this.guilds.has(raw_guild.id_string)
 					? this.guilds.get(raw_guild.id_string)._patch(raw_guild)
-					: this.guilds
-							.set(
-								raw_guild.id_string,
-								new Guild(raw_guild, this.#_client)
-							)
-							.get(raw_guild.id_string)
-				this.guilds.set(guild.id, guild)
+					: this.guilds.set(
+							raw_guild.id_string,
+							new Guild(raw_guild, this.#_client, {
+								patch: true,
+								patchChannels: true,
+								patchMembers: options.loggedInUser
+									? false
+									: true,
+							})
+					  )
 			}
 		}
 

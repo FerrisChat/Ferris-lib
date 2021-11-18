@@ -12,8 +12,8 @@ client.on('ready', async () => {
 	console.log(client.guilds.get(g.id))
 	await client.deleteChannel(c.id)
 	await client.deleteGuild(g.id)*/
+	console.log(client.user)
 	console.log('Test Complete')
-	client.ws.connection.terminate()
 })
 
-client.login({ email: 'dillonf559@gmail.com', password: 'ferrischat' })
+client.login({ email: '=', password: '=' })
