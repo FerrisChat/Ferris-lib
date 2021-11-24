@@ -17,6 +17,7 @@ export interface BaseCacheOptions {
 export interface ConnectOptions {
 	email: string
 	password: string
+	user: boolean
 }
 
 export type ConnectType = string | ConnectOptions
@@ -179,6 +180,13 @@ export class Endpoints {
 
 	//Auth
 	static AUTH_USER = () => `/auth`
+	static AUTH_BOT = (ownerId, botId) => `/users/${ownerId}/bots/${botId}/auth`
+
+	//Roles
+	static ROLES = (guildId) => `/guilds/${guildId}/roles`
+	static ROLE = (guildId, roleId) => `/guilds/${guildId}/roles/${roleId}`
+	static MEMBER_ROLES = (guildId, memberId, roleId) =>
+		`/guilds/${guildId}/members/${memberId}/role/${roleId}`
 
 	//websockets
 	static WS_INFO = () => `/ws/info`
