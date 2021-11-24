@@ -44,15 +44,7 @@ export class Guild extends Base {
 	 * @param {any} data The Guild data
 	 * @param {Client} client
 	 */
-	constructor(
-		data: any,
-		client: Client,
-		options: {
-			patch: boolean
-			patchMembers: boolean
-			patchChannels: boolean
-		} = { patch: true, patchChannels: true, patchMembers: true }
-	) {
+	constructor(data: any, client: Client) {
 		super(data.id_string)
 
 		this.#_client = client
@@ -61,21 +53,6 @@ export class Guild extends Base {
 
 		this.channels = new StorageBox()
 
-		if (options.patch) this._patch(data, options)
-	}
-
-	fetchInvites(): Promise<StorageBox<string, Invite>> {
-		return this.#_client.fetchGuildInvites(this.id)
-	}
-
-	_patch(
-		data: any,
-		options: {
-			patch: boolean
-			patchMembers: boolean
-			patchChannels: boolean
-		} = { patch: true, patchChannels: true, patchMembers: true }
-	) {
 		if ('name' in data) {
 			this.name = data.name
 		}
@@ -84,21 +61,40 @@ export class Guild extends Base {
 		}
 		if ('channels' in data && data.channels != null) {
 			for (const raw_channel of data.channels) {
-				const channel = new Channel(
-					raw_channel,
-					this.#_client,
-					options.patchChannels
-				)
+				const channel = new Channel(raw_channel, this.#_client)
 				this.channels.set(channel.id, channel)
 			}
 		}
 		if ('members' in data && data.members != null) {
 			for (const raw_member of data.members) {
-				const member = new Member(
-					raw_member,
-					this.#_client,
-					options.patchMembers
-				)
+				const member = new Member(raw_member, this.#_client)
+				this.members.set(member.id, member)
+			}
+		}
+
+		this._patch(data)
+	}
+
+	fetchInvites(): Promise<StorageBox<string, Invite>> {
+		return this.#_client.fetchGuildInvites(this.id)
+	}
+
+	_patch(data: any) {
+		if ('name' in data) {
+			this.name = data.name
+		}
+		if ('owner_id_string' in data) {
+			this.ownerId = data.owner_id_string
+		}
+		if ('channels' in data && data.channels != null) {
+			for (const raw_channel of data.channels) {
+				const channel = new Channel(raw_channel, this.#_client)
+				this.channels.set(channel.id, channel)
+			}
+		}
+		if ('members' in data && data.members != null) {
+			for (const raw_member of data.members) {
+				const member = new Member(raw_member, this.#_client)
 				this.members.set(member.id, member)
 			}
 		}

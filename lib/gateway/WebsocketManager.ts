@@ -12,6 +12,7 @@ import {
 import { FerrisError } from '../errors/FerrislibError'
 import { inspect } from 'util'
 import { User } from '..'
+import { ClientUser } from '../models/ClientUser'
 
 /**
  * The class the Main client {@link Client} uses for interacting with the Gateway
@@ -154,10 +155,10 @@ export class WebsocketManager extends EventEmitter {
 		switch (payload.c) {
 			case WebSocketEvents.IDENTIFYACCEPTED:
 				if (!this.client.user)
-					this.client.user = new User(payload.d.user, this.client, {
-						loggedInUser: true,
-						patch: true,
-					})
+					this.client.user = new ClientUser(
+						payload.d.user,
+						this.client
+					)
 				this.status = WebSocketStatus.CONNECTED
 				this.debug('Identify Recieved')
 				this.startHeartbeat()

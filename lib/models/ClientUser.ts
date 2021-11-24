@@ -1,7 +1,5 @@
 import { Client } from '../Client'
-import { Endpoints, SnowFlake } from '../Constants'
-import { StorageBox } from '../util/StorageBox'
-import { ApiGuild } from './ApiModels/ApiGuild'
+import { Endpoints } from '../Constants'
 import { Base } from './Base'
 import { Guild } from './Guild'
 
@@ -9,7 +7,7 @@ import { Guild } from './Guild'
  * The user model
  * @extends Base
  */
-export class User extends Base {
+export class ClientUser extends Base {
 	/**
 	 * The name of the user
 	 * @type {string}
@@ -19,33 +17,20 @@ export class User extends Base {
 	public discriminator: number
 
 	/**
-	 * The guilds of the user
-	 * @type {StorageBox<SnowFlake, ApiGuild}
-	 */
-	public guilds: Array<ApiGuild>
-
-	/**
 	 * The flags of the user
 	 * @type {number}
 	 */
 	public flags: number
 
-	/**
-	 * The client that this user belongs to
-	 * @type {Client}
-	 */
-	#_client: Client
-
+	#_me: Client
 	/**
 	 * @param {any} data The User data
 	 * @param {Client} client
 	 */
 	constructor(data: any, client: Client) {
-		super(data.id_string ? data.id_string : data.user_id_string)
+		super(data.id_string)
 
-		this.guilds = new Array()
-
-		this.#_client = client
+		this.#_me = client
 
 		this._patch(data)
 	}
@@ -55,7 +40,7 @@ export class User extends Base {
 	 * @returns {Promise<User>}
 	 */
 	fetch(): Promise<this> {
-		return this.#_client.requestHandler
+		return this.#_me.requestHandler
 			.request('GET', Endpoints.USER(this.id))
 			.then((user) => {
 				this._patch(user)
@@ -78,7 +63,14 @@ export class User extends Base {
 
 		if ('guilds' in data && data.guilds != null) {
 			for (const raw_guild of data.guilds) {
-				this.guilds.push(new ApiGuild(raw_guild, this.#_client))
+				this.#_me.guilds.has(raw_guild.id_string)
+					? this.#_me.guilds
+							.get(raw_guild.id_string)
+							?._patch(raw_guild)
+					: this.#_me.guilds.set(
+							raw_guild.id_string,
+							new Guild(raw_guild, this.#_me)
+					  )
 			}
 		}
 
@@ -86,7 +78,6 @@ export class User extends Base {
 			this.discriminator = data.discriminator
 		}
 
-		this.#_client.users.set(this.id, this)
 		return this
 	}
 }

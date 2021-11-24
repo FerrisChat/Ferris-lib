@@ -33,6 +33,15 @@ export class Message extends Base {
 		super(data.id_string)
 
 		this.#_client = client
+
+		if ('content' in data) {
+			this.content = data.content
+		}
+		if ('channel_id_string' in data) {
+			this.channelId = data.channel_id_string
+		}
+
+		this._patch(data)
 	}
 
 	_patch(data: any) {

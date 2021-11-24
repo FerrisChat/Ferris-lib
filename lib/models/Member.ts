@@ -37,25 +37,15 @@ export class Member extends Base {
 	 * @param {any} data The Member data
 	 * @param {Client} client
 	 */
-	constructor(data: any, client: Client, patch: boolean = true) {
+	constructor(data: any, client: Client) {
 		super(data.user_id_string)
 
 		this.#_client = client
 
-		if (patch) this._patch(data)
+		this._patch(data)
 	}
 
 	_patch(data: any) {
-		if (this.id === this.#_client.user.id) this.user = this.#_client.user
-		else if (this.#_client.users.has(this.id))
-			this.user = this.#_client.users.get(this.id)
-
-		if ('guild_id_string' in data) {
-			this.guildId = data.guild_id_string
-			if (this.#_client.guilds.has(this.guildId))
-				this.guild = this.#_client.guilds.get(this.guildId)
-		}
-
 		return this
 	}
 }

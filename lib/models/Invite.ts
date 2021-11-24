@@ -12,8 +12,33 @@ export class Invite {
 	#_client: Client
 
 	constructor(data: any, client: Client) {
-		this._patch(data)
 		this.#_client = client
+
+		if ('code' in data) {
+			this.code = data.code
+		}
+
+		if ('owner_id_string' in data) {
+			this.ownerId = data.owner_id_string
+		}
+
+		if ('guild_id_string' in data) {
+			this.guildId = data.guild_id_string
+		}
+
+		if ('uses' in data) {
+			this.uses = data.uses
+		}
+
+		if ('max_uses' in data) {
+			this.maxUses = data.max_uses
+		}
+
+		if ('max_age' in data) {
+			this.maxAge = data.max_age
+		}
+
+		this._patch(data)
 	}
 
 	fetch(): Promise<Invite> {

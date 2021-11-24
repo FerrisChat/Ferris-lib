@@ -20,6 +20,7 @@ import { Channel } from './models/Channel'
 import { RequestHandler } from './rest/RequestHandler'
 import { StorageBox } from './util/StorageBox'
 import { Invite } from './models/Invite'
+import { ClientUser } from './models/ClientUser'
 
 /**
  * Main class for interacting with Api and Gateway
@@ -31,13 +32,15 @@ export class Client extends EventEmitter {
 
 	public messages: StorageBox<SnowFlake, Message>
 
-	public user: User
+	public user: ClientUser
 
 	/**
 	 * A cache that holds all the Users that have been cached by the client
 	 * @type {StorageBox<SnowFlake, User>}
 	 */
 	public users: StorageBox<SnowFlake, User>
+
+	public guilds: StorageBox<SnowFlake, Guild>
 
 	/**
 	 * The Handler {@link RequestHandler} used for interacting with the api
@@ -96,6 +99,8 @@ export class Client extends EventEmitter {
 		this.messages = new StorageBox()
 
 		this.users = new StorageBox()
+
+		this.guilds = new StorageBox()
 	}
 
 	/**
@@ -297,10 +302,6 @@ export class Client extends EventEmitter {
 
 	getWsInfo(): Promise<any> {
 		return this.requestHandler.request('GET', Endpoints.WS_INFO())
-	}
-
-	get guilds(): StorageBox<SnowFlake, Guild> {
-		return this.user.guilds
 	}
 
 	public async login(data: ConnectType): Promise<void> {
