@@ -1,6 +1,8 @@
+import { Channel, User } from '.'
 import { Client } from '../Client'
 import { SnowFlake } from '../Constants'
 import { Base } from './Base'
+import { Embed } from './Embed'
 
 /**
  * The Message Model
@@ -18,6 +20,13 @@ export class Message extends Base {
 	 * @type {SnowFlake}
 	 */
 	public channelId: SnowFlake
+
+	channel: Channel
+	authorId: SnowFlake
+	author?: User
+	editedAt?: string
+	embeds: Array<Embed>
+	nonce?: string
 
 	/**
 	 * The client that this message belongs to

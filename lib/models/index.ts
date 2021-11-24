@@ -10,3 +10,10 @@ export { Base } from './Base'
 export { Invite } from './Invite'
 export { Role } from './Role'
 export { ClientUser } from './ClientUser'
+export {
+	Embed,
+	EmbedAuthor,
+	EmbedCreator,
+	EmbedFooter,
+	EmbedField,
+} from './Embed'

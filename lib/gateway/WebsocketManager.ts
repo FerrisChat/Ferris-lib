@@ -153,7 +153,7 @@ export class WebsocketManager extends EventEmitter {
 		this.client.emit(Events.RAW_WS, payload)
 
 		switch (payload.c) {
-			case WebSocketEvents.IDENTIFYACCEPTED:
+			case WebSocketEvents.IDENTIFY_ACCEPTED:
 				if (!this.client.user)
 					this.client.user = new ClientUser(
 						payload.d.user,

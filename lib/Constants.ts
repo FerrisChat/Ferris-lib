@@ -209,7 +209,26 @@ export enum WebSocketCloseCodes {
 }
 
 export enum WebSocketEvents {
-	IDENTIFYACCEPTED = 'IdentifyAccepted',
+	IDENTIFY_ACCEPTED = 'IdentifyAccepted',
+	MESSAGE_CREATE = 'MessageCreate',
+	MESSAGE_UPDATE = 'MessageUpdate',
+	MESSAGE_DELETE = 'MessageDelete',
+	CHANNEL_CREATE = 'ChannelCreate',
+	CHANNEL_UPDATE = 'ChannelUpdate',
+	CHANNEL_DELETE = 'ChannelDelete',
+	GUILD_CREATE = 'GuildCreate',
+	GUILD_UPDATE = 'GuildUpdate',
+	GUILD_DELETE = 'GuildDelete',
+	MEMBER_CREATE = 'MemberCreate',
+	MEMBER_UPDATE = 'MemberUpdate',
+	MEMBER_DELETE = 'MemberDelete',
+	INVITE_CREATE = 'InviteCreate',
+	INVITE_DELETE = 'InviteDelete',
+	ROLE_CREATE = 'RoleCreate',
+	ROLE_UPDATE = 'RoleUpdate',
+	ROLE_DELETE = 'RoleDelete',
+	MEMBER_ROLE_ADD = 'MemberRoleAdd',
+	MEMBER_ROLE_DELETE = 'MemberRoleDelete',
 }
 
 export interface WebSocketPayload {
