@@ -123,7 +123,7 @@ export class Client extends EventEmitter {
 			throw new TypeError('Name of Guild must be a string')
 
 		return this.requestHandler
-			.request('POST', Endpoints.CHANNELS(guildId), channelData)
+			.request('POST', Endpoints.CHANNELS(guildId), { body: channelData })
 			.then((raw_channel) => {
 				const channel = new Channel(raw_channel, this)
 				this.channels.set(channel.id, channel)
@@ -138,7 +138,7 @@ export class Client extends EventEmitter {
 			throw new TypeError('Name of Guild must be a string')
 
 		return this.requestHandler
-			.request('POST', Endpoints.GUILDS(), guildData)
+			.request('POST', Endpoints.GUILDS(), { body: guildData })
 			.then((raw_guild) => {
 				const guild = new Guild(raw_guild, this)
 				this.guilds.set(guild.id, guild)
@@ -153,8 +153,10 @@ export class Client extends EventEmitter {
 	): Promise<Invite> {
 		return this.requestHandler
 			.request('POST', Endpoints.INVITES(guildId), {
-				max_age: maxAge,
-				max_uses: maxUses,
+				body: {
+					max_age: maxAge,
+					max_uses: maxUses,
+				}
 			})
 			.then((raw_inv) => {
 				return new Invite(raw_inv, this)
@@ -175,7 +177,7 @@ export class Client extends EventEmitter {
 			.request(
 				'POST',
 				Endpoints.MESSAGES(guildId, channelId),
-				messageData
+				{ body: messageData }
 			)
 			.then((raw_message) => {
 				const message = new Message(raw_message, this)
@@ -294,7 +296,7 @@ export class Client extends EventEmitter {
 
 	private getAccountToken(data: ConnectOptions) {
 		return this.requestHandler
-			.request('POST', Endpoints.AUTH_USER(), null, data, true)
+			.request('POST', Endpoints.AUTH_USER(), { headers: data, email_auth: true })
 			.then((data) => {
 				return data.token
 			})

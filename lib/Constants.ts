@@ -45,6 +45,7 @@ export enum Events {
 	DEBUG = 'debug',
 	READY = 'ready',
 	RAW_WS = 'rawWs',
+	RAW_REST = "rawRest",
 }
 
 /**
@@ -79,9 +80,10 @@ export interface UserCacheOptions extends BaseCacheOptions {
 }
 
 export interface ClientEvents<T> {
-	(event: 'debug' | 'warn', listener: (message: string) => void): T
-	(event: 'ready', listener: () => void): T
-	(event: 'rawWs', listener: (data: any) => void): T
+	(event: 'debug' | 'warn', listener: (message: string) => void): T;
+	(event: 'ready', listener: () => void): T;
+	(event: 'rawWs', listener: (data: any) => void): T;
+	(event: "rawRest", listener: (data: any) => void): T;
 }
 
 /**
@@ -107,7 +109,7 @@ export interface ClientOptions {
 		/**
 		 * Additional Headers you would like passed to the client
 		 */
-		headers?: object
+		headers?: Record<string, string>;
 	}
 	/**
 	 * Options for each cache

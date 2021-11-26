@@ -2,6 +2,7 @@ const Ferrislib = require('../build/index')
 const client = new Ferrislib.Client()
 
 client.on('rawWs', console.log)
+client.on("rawRest", console.log)
 client.on('debug', console.log)
 client.on('ready', async () => {
 	/*await client.user.fetch()
