@@ -45,6 +45,14 @@ export class Member extends Base {
 		this._patch(data)
 	}
 
+	addRole(roleId: SnowFlake): Promise<any> {
+		return this.#_client.addRole(this.guildId, this.id, roleId)
+	}
+
+	removeRole(roleId: SnowFlake): Promise<any> {
+		return this.#_client.removeRole(this.guildId, this.id, roleId)
+	}
+
 	_patch(data: any) {
 		return this
 	}

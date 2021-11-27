@@ -1,5 +1,6 @@
+import { Role } from '..'
 import { Client } from '../Client'
-import { SnowFlake } from '../Constants'
+import { CreateRoleOptions, SnowFlake } from '../Constants'
 import { StorageBox } from '../util/StorageBox'
 import { Channel, Member } from './'
 import { Base } from './Base'
@@ -32,7 +33,9 @@ export class Guild extends Base {
 	 * A cache with the Members for the Guild
 	 * @type {StorageBox<SnowFlake, Member>}
 	 */
-	public members: StorageBox<SnowFlake, Member>
+	public members: StorageBox<SnowFlake, Member>;
+
+	public roles: StorageBox<SnowFlake, Role>;
 
 	/**
 	 * The client for the Guild
@@ -52,6 +55,8 @@ export class Guild extends Base {
 		this.members = new StorageBox()
 
 		this.channels = new StorageBox()
+
+		this.roles = new StorageBox()
 
 		if ('name' in data) {
 			this.name = data.name
@@ -75,12 +80,24 @@ export class Guild extends Base {
 		this._patch(data)
 	}
 
+	createRole(roleData: CreateRoleOptions): Promise<Role> {
+		return this.#_client.createRole(this.id, roleData)
+	}
+
+	deleteRole(roleId: SnowFlake): Promise<any> {
+		return this.#_client.deleteRole(this.id, roleId)
+	}
+
 	fetch({ fetchMembers = false, fetchChannels = true }: { fetchMembers?: boolean, fetchChannels?: boolean } = {}): Promise<Guild> {
 		return this.#_client.fetchGuild(this.id, { fetchChannels, fetchMembers })
 	}
 
 	fetchInvites(): Promise<StorageBox<string, Invite>> {
 		return this.#_client.fetchGuildInvites(this.id)
+	}
+
+	fetchRole(roleId: SnowFlake): Promise<Role> {
+		return this.#_client.fetchRole(this.id, roleId)
 	}
 
 	_patch(data: any) {

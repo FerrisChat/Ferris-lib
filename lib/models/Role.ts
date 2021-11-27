@@ -24,6 +24,18 @@ export class Role extends Base {
 		this._patch(data)
 	}
 
+	addToMember(memberId): Promise<any> {
+		return this.#_client.addRole(this.guildId, memberId, this.id)
+	}
+
+	fetch(): Promise<Role> {
+		return this.#_client.fetchRole(this.guildId, this.id)
+	}
+
+	removeFromMember(memberId): Promise<any> {
+		return this.#_client.removeRole(this.guildId, memberId, this.id)
+	}
+
 	_patch(data) {
 		if ('guild_id_string' in data) this.guildId = data.guild_id_string
 		if (this.#_client.guilds.has(this.guildId))

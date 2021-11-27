@@ -11,6 +11,8 @@ import {
 	SnowFlake,
 	Events,
 	EditGuildOptions,
+	CreateRoleOptions,
+	EditRoleOptions,
 } from './Constants'
 import { FerrisError } from './errors/FerrislibError'
 import { WebsocketManager } from './gateway/WebsocketManager'
@@ -21,6 +23,7 @@ import { Channel } from './models/Channel'
 import { RequestHandler } from './rest/RequestHandler'
 import { StorageBox } from './util/StorageBox'
 import { Invite } from './models/Invite'
+import { Role } from "./models/Role"
 import { ClientUser } from './models/ClientUser'
 
 /**
@@ -104,14 +107,8 @@ export class Client extends EventEmitter {
 		this.guilds = new StorageBox()
 	}
 
-	/**
-	 * @deprecated
-	 */
-	public connect() {
-		return process.emitWarning("Method 'connect' is no longer usable", {
-			code: 'Decaprecated Method',
-			detail: "The method 'connect' has been replaced with the new method called 'login'",
-		})
+	addRole(guildId: SnowFlake, memberId: SnowFlake, roleId: SnowFlake) {
+		return this.requestHandler.request("POST", Endpoints.MEMBER_ROLES(guildId, memberId, roleId))
 	}
 
 	createChannel(
@@ -125,11 +122,7 @@ export class Client extends EventEmitter {
 
 		return this.requestHandler
 			.request('POST', Endpoints.CHANNELS(guildId), { body: channelData })
-			.then((raw_channel) => {
-				const channel = new Channel(raw_channel, this)
-				this.channels.set(channel.id, channel)
-				return channel
-			})
+			.then((raw_channel) => new Channel(raw_channel, this))
 	}
 
 	createGuild(guildData: CreateGuildOptions): Promise<Guild> {
@@ -140,11 +133,7 @@ export class Client extends EventEmitter {
 
 		return this.requestHandler
 			.request('POST', Endpoints.GUILDS(), { body: guildData })
-			.then((raw_guild) => {
-				const guild = new Guild(raw_guild, this)
-				this.guilds.set(guild.id, guild)
-				return guild
-			})
+			.then((raw_guild) => new Guild(raw_guild, this))
 	}
 
 	createInvite(
@@ -159,9 +148,7 @@ export class Client extends EventEmitter {
 					max_uses: maxUses,
 				}
 			})
-			.then((raw_inv) => {
-				return new Invite(raw_inv, this)
-			})
+			.then((raw_inv) => new Invite(raw_inv, this))
 	}
 
 	createMessage(
@@ -180,37 +167,16 @@ export class Client extends EventEmitter {
 				Endpoints.MESSAGES(guildId, channelId),
 				{ body: messageData }
 			)
-			.then((raw_message) => {
-				const message = new Message(raw_message, this)
-				this.messages.set(message.id, message)
-				return message
-			})
+			.then((raw_message) => new Message(raw_message, this))
 	}
 
-	deleteChannel(channelId: SnowFlake): Promise<any> {
-		return this.requestHandler
-			.request('DELETE', Endpoints.CHANNEL(channelId))
-			.then(() => {
-				if (this.channels.has(channelId))
-					this.channels.delete(channelId)
-			})
-	}
+	createRole(guildId: SnowFlake, roleData: CreateRoleOptions): Promise<Role> {
+		if (roleData.name && typeof roleData.name != "string") throw new TypeError("Name of Role must be a string.")
+		else if (roleData.color && typeof roleData.color != "number") throw new TypeError("Color of Role must be a number.")
+		else if (roleData.position && typeof roleData.position != "number") throw new TypeError("Position of Role must be a string.")
+		//oermissions
 
-	deleteGuild(guildId: SnowFlake): Promise<any> {
-		return this.requestHandler
-			.request('DELETE', Endpoints.GUILD(guildId))
-			.then(() => {
-				if (this.guilds.has(guildId)) this.guilds.delete(guildId)
-			})
-	}
-
-	deleteMessage(messageId: SnowFlake): Promise<any> {
-		return this.requestHandler
-			.request('DELETE', Endpoints.MESSAGE(messageId))
-			.then(() => {
-				if (this.messages.has(messageId))
-					this.messages.delete(messageId)
-			})
+		return this.requestHandler.request("POST", Endpoints.ROLES(guildId), { body: roleData }).then((raw) => new Role(raw, this))
 	}
 
 	debug(
@@ -220,10 +186,37 @@ export class Client extends EventEmitter {
 		return this.emit(Events.DEBUG, `[Ferris-Lib => ${service}] ${msg}`)
 	}
 
+	deleteChannel(channelId: SnowFlake): Promise<any> {
+		return this.requestHandler
+			.request('DELETE', Endpoints.CHANNEL(channelId))
+	}
+
+	deleteGuild(guildId: SnowFlake): Promise<any> {
+		return this.requestHandler
+			.request('DELETE', Endpoints.GUILD(guildId))
+	}
+
+	deleteMessage(messageId: SnowFlake): Promise<any> {
+		return this.requestHandler
+			.request('DELETE', Endpoints.MESSAGE(messageId))
+	}
+
+	deleteRole(guildId: SnowFlake, roleId: SnowFlake): Promise<any> {
+		return this.requestHandler.request("DELETE", Endpoints.ROLE(guildId, roleId))
+	}
+
 	editGuild(guildId: SnowFlake, data: EditGuildOptions): Promise<Guild> {
 		if (!data) throw new Error("Missing Edit data")
 		else if (data.name && typeof data.name != "string") throw new TypeError("Guild name must be a string.")
 		return this.requestHandler.request("PATCH", Endpoints.GUILD(guildId), { body: data })
+	}
+
+	editRole(guildId: SnowFlake, roleId: SnowFlake, roleData: EditRoleOptions): Promise<Role> {
+		if (roleData.name && typeof roleData.name != "string") throw new TypeError("Name of Role must be a string.")
+		else if (roleData.color && typeof roleData.color != "number") throw new TypeError("Color of Role must be a number.")
+		else if (roleData.position && typeof roleData.position != "number") throw new TypeError("Position of Role must be a string.")
+		//oermissions
+		return this.requestHandler.request("PATCH", Endpoints.ROLE(guildId, roleId), { body: roleData }).then((raw) => new Role(raw, this))
 	}
 
 	fetchChannel(
@@ -276,7 +269,21 @@ export class Client extends EventEmitter {
 	}
 
 	fetchMessage(messageId: SnowFlake): Promise<Message> {
-		return this.requestHandler.request('GET', Endpoints.MESSAGE(messageId))
+		return this.requestHandler.request('GET', Endpoints.MESSAGE(messageId)).then((raw) => {
+			if (this.messages.has(raw.id_string)) return this.messages.get(raw.id_string)._patch(raw)
+			const m = new Message(raw, this)
+			this.messages.set(m.id, m)
+			return m
+		})
+	}
+
+	fetchRole(guildId: SnowFlake, roleId: SnowFlake): Promise<Role> {
+		return this.requestHandler.request("GET", Endpoints.ROLE(guildId, roleId)).then((raw) => {
+			if (this.guilds.has(guildId) && this.guilds.get(guildId).roles.has(roleId)) return this.guilds.get(guildId).roles.get(roleId)._patch(raw)
+			const r = new Role(raw, this)
+			if (this.guilds.has(guildId)) this.guilds.get(guildId).roles.set(r.id, r)
+			return r
+		})
 	}
 
 	/**
@@ -304,9 +311,7 @@ export class Client extends EventEmitter {
 	private getAccountToken(data: ConnectOptions) {
 		return this.requestHandler
 			.request('POST', Endpoints.AUTH_USER(), { headers: data, email_auth: true })
-			.then((data) => {
-				return data.token
-			})
+			.then((data) => data.token)
 	}
 
 	getWsInfo(): Promise<any> {
@@ -341,6 +346,10 @@ export class Client extends EventEmitter {
 				.join('.')}`
 		)
 		this.ws.start()
+	}
+
+	removeRole(guildId: SnowFlake, memberId: SnowFlake, roleId: SnowFlake): Promise<any> {
+		return this.requestHandler.request("DELETE", Endpoints.MEMBER_ROLES(guildId, memberId, roleId))
 	}
 
 	/**

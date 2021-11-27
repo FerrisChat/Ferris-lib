@@ -22,6 +22,7 @@ export class Message extends Base {
 	public channelId: SnowFlake
 
 	channel: Channel
+	deleted: boolean;
 	authorId: SnowFlake
 	author?: User
 	editedAt?: string
@@ -42,6 +43,7 @@ export class Message extends Base {
 		super(data.id_string)
 
 		this.#_client = client
+		this.deleted = false
 
 		if ('content' in data) {
 			this.content = data.content

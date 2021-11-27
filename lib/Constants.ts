@@ -30,6 +30,13 @@ export interface CreateGuildOptions {
 	name: string
 }
 
+export interface CreateRoleOptions {
+	name?: string;
+	color?: number;
+	position?: number;
+	permissions?: unknown;
+}
+
 export interface MessageData {
 	content: string
 }
@@ -196,6 +203,13 @@ export class Endpoints {
 
 export interface EditGuildOptions {
 	name: string;
+}
+
+export interface EditRoleOptions {
+	name?: string;
+	color?: number;
+	position?: number;
+	permissions?: unknown;
 }
 
 /**
