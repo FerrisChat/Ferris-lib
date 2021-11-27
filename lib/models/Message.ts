@@ -22,7 +22,7 @@ export class Message extends Base {
 	public channelId: SnowFlake
 
 	channel: Channel
-	deleted: boolean;
+	deleted: boolean
 	authorId: SnowFlake
 	author?: User
 	editedAt?: string

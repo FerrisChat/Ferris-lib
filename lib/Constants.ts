@@ -31,10 +31,10 @@ export interface CreateGuildOptions {
 }
 
 export interface CreateRoleOptions {
-	name?: string;
-	color?: number;
-	position?: number;
-	permissions?: unknown;
+	name?: string
+	color?: number
+	position?: number
+	permissions?: unknown
 }
 
 export interface MessageData {
@@ -52,7 +52,7 @@ export enum Events {
 	DEBUG = 'debug',
 	READY = 'ready',
 	RAW_WS = 'rawWs',
-	RAW_REST = "rawRest",
+	RAW_REST = 'rawRest',
 }
 
 /**
@@ -87,10 +87,10 @@ export interface UserCacheOptions extends BaseCacheOptions {
 }
 
 export interface ClientEvents<T> {
-	(event: 'debug' | 'warn', listener: (message: string) => void): T;
-	(event: 'ready', listener: () => void): T;
-	(event: 'rawWs', listener: (data: any) => void): T;
-	(event: "rawRest", listener: (data: any) => void): T;
+	(event: 'debug' | 'warn', listener: (message: string) => void): T
+	(event: 'ready', listener: () => void): T
+	(event: 'rawWs', listener: (data: any) => void): T
+	(event: 'rawRest', listener: (data: any) => void): T
 }
 
 /**
@@ -116,7 +116,7 @@ export interface ClientOptions {
 		/**
 		 * Additional Headers you would like passed to the client
 		 */
-		headers?: Record<string, string>;
+		headers?: Record<string, string>
 	}
 	/**
 	 * Options for each cache
@@ -206,14 +206,14 @@ export interface EditChannelOptions {
 }
 
 export interface EditGuildOptions {
-	name: string;
+	name: string
 }
 
 export interface EditRoleOptions {
-	name?: string;
-	color?: number;
-	position?: number;
-	permissions?: unknown;
+	name?: string
+	color?: number
+	position?: number
+	permissions?: unknown
 }
 
 /**

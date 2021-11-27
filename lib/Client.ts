@@ -24,7 +24,7 @@ import { Channel } from './models/Channel'
 import { RequestHandler } from './rest/RequestHandler'
 import { StorageBox } from './util/StorageBox'
 import { Invite } from './models/Invite'
-import { Role } from "./models/Role"
+import { Role } from './models/Role'
 import { ClientUser } from './models/ClientUser'
 
 /**
@@ -109,7 +109,10 @@ export class Client extends EventEmitter {
 	}
 
 	addRole(guildId: SnowFlake, memberId: SnowFlake, roleId: SnowFlake) {
-		return this.requestHandler.request("POST", Endpoints.MEMBER_ROLES(guildId, memberId, roleId))
+		return this.requestHandler.request(
+			'POST',
+			Endpoints.MEMBER_ROLES(guildId, memberId, roleId)
+		)
 	}
 
 	createChannel(
@@ -147,7 +150,7 @@ export class Client extends EventEmitter {
 				body: {
 					max_age: maxAge,
 					max_uses: maxUses,
-				}
+				},
 			})
 			.then((raw_inv) => new Invite(raw_inv, this))
 	}
@@ -163,21 +166,24 @@ export class Client extends EventEmitter {
 			throw new TypeError('Content for Message must be a string')
 
 		return this.requestHandler
-			.request(
-				'POST',
-				Endpoints.MESSAGES(guildId, channelId),
-				{ body: messageData }
-			)
+			.request('POST', Endpoints.MESSAGES(guildId, channelId), {
+				body: messageData,
+			})
 			.then((raw_message) => new Message(raw_message, this))
 	}
 
 	createRole(guildId: SnowFlake, roleData: CreateRoleOptions): Promise<Role> {
-		if (roleData.name && typeof roleData.name != "string") throw new TypeError("Name of Role must be a string.")
-		else if (roleData.color && typeof roleData.color != "number") throw new TypeError("Color of Role must be a number.")
-		else if (roleData.position && typeof roleData.position != "number") throw new TypeError("Position of Role must be a string.")
+		if (roleData.name && typeof roleData.name != 'string')
+			throw new TypeError('Name of Role must be a string.')
+		else if (roleData.color && typeof roleData.color != 'number')
+			throw new TypeError('Color of Role must be a number.')
+		else if (roleData.position && typeof roleData.position != 'number')
+			throw new TypeError('Position of Role must be a string.')
 		//oermissions
 
-		return this.requestHandler.request("POST", Endpoints.ROLES(guildId), { body: roleData }).then((raw) => new Role(raw, this))
+		return this.requestHandler
+			.request('POST', Endpoints.ROLES(guildId), { body: roleData })
+			.then((raw) => new Role(raw, this))
 	}
 
 	debug(
@@ -188,54 +194,85 @@ export class Client extends EventEmitter {
 	}
 
 	deleteChannel(channelId: SnowFlake): Promise<any> {
-		return this.requestHandler
-			.request('DELETE', Endpoints.CHANNEL(channelId))
+		return this.requestHandler.request(
+			'DELETE',
+			Endpoints.CHANNEL(channelId)
+		)
 	}
 
 	deleteGuild(guildId: SnowFlake): Promise<any> {
-		return this.requestHandler
-			.request('DELETE', Endpoints.GUILD(guildId))
+		return this.requestHandler.request('DELETE', Endpoints.GUILD(guildId))
 	}
 
 	deleteMessage(messageId: SnowFlake): Promise<any> {
-		return this.requestHandler
-			.request('DELETE', Endpoints.MESSAGE(messageId))
+		return this.requestHandler.request(
+			'DELETE',
+			Endpoints.MESSAGE(messageId)
+		)
 	}
 
 	deleteRole(guildId: SnowFlake, roleId: SnowFlake): Promise<any> {
-		return this.requestHandler.request("DELETE", Endpoints.ROLE(guildId, roleId))
+		return this.requestHandler.request(
+			'DELETE',
+			Endpoints.ROLE(guildId, roleId)
+		)
 	}
 
-	editChannel(channelId: SnowFlake, channelData: EditChannelOptions): Promise<Channel> {
-		if (!channelData) throw new Error("Missing Edit data")
-		else if (channelData.name && typeof channelData.name != "string") throw new TypeError("Channel name must be a string.")
-		return this.requestHandler.request("PATCH", Endpoints.CHANNEL(channelId), { body: channelData }).then((raw) => new Channel(raw, this))
+	editChannel(
+		channelId: SnowFlake,
+		channelData: EditChannelOptions
+	): Promise<Channel> {
+		if (!channelData) throw new Error('Missing Edit data')
+		else if (channelData.name && typeof channelData.name != 'string')
+			throw new TypeError('Channel name must be a string.')
+		return this.requestHandler
+			.request('PATCH', Endpoints.CHANNEL(channelId), {
+				body: channelData,
+			})
+			.then((raw) => new Channel(raw, this))
 	}
 
 	editGuild(guildId: SnowFlake, guildData: EditGuildOptions): Promise<Guild> {
-		if (!guildData) throw new Error("Missing Edit data")
-		else if (guildData.name && typeof guildData.name != "string") throw new TypeError("Guild name must be a string.")
-		return this.requestHandler.request("PATCH", Endpoints.GUILD(guildId), { body: guildData }).then((raw) => new Guild(raw, this))
+		if (!guildData) throw new Error('Missing Edit data')
+		else if (guildData.name && typeof guildData.name != 'string')
+			throw new TypeError('Guild name must be a string.')
+		return this.requestHandler
+			.request('PATCH', Endpoints.GUILD(guildId), { body: guildData })
+			.then((raw) => new Guild(raw, this))
 	}
 
-	editRole(guildId: SnowFlake, roleId: SnowFlake, roleData: EditRoleOptions): Promise<Role> {
-		if (roleData.name && typeof roleData.name != "string") throw new TypeError("Name of Role must be a string.")
-		else if (roleData.color && typeof roleData.color != "number") throw new TypeError("Color of Role must be a number.")
-		else if (roleData.position && typeof roleData.position != "number") throw new TypeError("Position of Role must be a string.")
+	editRole(
+		guildId: SnowFlake,
+		roleId: SnowFlake,
+		roleData: EditRoleOptions
+	): Promise<Role> {
+		if (roleData.name && typeof roleData.name != 'string')
+			throw new TypeError('Name of Role must be a string.')
+		else if (roleData.color && typeof roleData.color != 'number')
+			throw new TypeError('Color of Role must be a number.')
+		else if (roleData.position && typeof roleData.position != 'number')
+			throw new TypeError('Position of Role must be a string.')
 		//oermissions
-		return this.requestHandler.request("PATCH", Endpoints.ROLE(guildId, roleId), { body: roleData }).then((raw) => new Role(raw, this))
+		return this.requestHandler
+			.request('PATCH', Endpoints.ROLE(guildId, roleId), {
+				body: roleData,
+			})
+			.then((raw) => new Role(raw, this))
 	}
 
 	fetchChannel(
 		channelId: SnowFlake,
-		cache: boolean = true,
+		cache: boolean = true
 	): Promise<Channel> {
-		return this.requestHandler.request('GET', Endpoints.CHANNEL(channelId)).then((raw) => {
-			if (this.channels.has(channelId)) return this.channels.get(channelId)._patch(raw)
-			const ch = new Channel(raw, this)
-			if (cache) this.channels.set(ch.id, ch)
-			return ch
-		})
+		return this.requestHandler
+			.request('GET', Endpoints.CHANNEL(channelId))
+			.then((raw) => {
+				if (this.channels.has(channelId))
+					return this.channels.get(channelId)._patch(raw)
+				const ch = new Channel(raw, this)
+				if (cache) this.channels.set(ch.id, ch)
+				return ch
+			})
 	}
 
 	/**
@@ -243,7 +280,13 @@ export class Client extends EventEmitter {
 	 * @param {SnowFlake} guildId The Id for the Guild to fetch
 	 * @returns {Promise<Guild>}
 	 */
-	public fetchGuild(guildId: SnowFlake, { fetchMembers = false, fetchChannels = true }: { fetchMembers?: boolean, fetchChannels?: boolean } = {}): Promise<Guild> {
+	public fetchGuild(
+		guildId: SnowFlake,
+		{
+			fetchMembers = false,
+			fetchChannels = true,
+		}: { fetchMembers?: boolean; fetchChannels?: boolean } = {}
+	): Promise<Guild> {
 		const params = { members: fetchMembers, channels: fetchChannels }
 		return this.requestHandler
 			.request('GET', Endpoints.GUILD(guildId), { params })
@@ -277,21 +320,34 @@ export class Client extends EventEmitter {
 	}
 
 	fetchMessage(messageId: SnowFlake): Promise<Message> {
-		return this.requestHandler.request('GET', Endpoints.MESSAGE(messageId)).then((raw) => {
-			if (this.messages.has(raw.id_string)) return this.messages.get(raw.id_string)._patch(raw)
-			const m = new Message(raw, this)
-			this.messages.set(m.id, m)
-			return m
-		})
+		return this.requestHandler
+			.request('GET', Endpoints.MESSAGE(messageId))
+			.then((raw) => {
+				if (this.messages.has(raw.id_string))
+					return this.messages.get(raw.id_string)._patch(raw)
+				const m = new Message(raw, this)
+				this.messages.set(m.id, m)
+				return m
+			})
 	}
 
 	fetchRole(guildId: SnowFlake, roleId: SnowFlake): Promise<Role> {
-		return this.requestHandler.request("GET", Endpoints.ROLE(guildId, roleId)).then((raw) => {
-			if (this.guilds.has(guildId) && this.guilds.get(guildId).roles.has(roleId)) return this.guilds.get(guildId).roles.get(roleId)._patch(raw)
-			const r = new Role(raw, this)
-			if (this.guilds.has(guildId)) this.guilds.get(guildId).roles.set(r.id, r)
-			return r
-		})
+		return this.requestHandler
+			.request('GET', Endpoints.ROLE(guildId, roleId))
+			.then((raw) => {
+				if (
+					this.guilds.has(guildId) &&
+					this.guilds.get(guildId).roles.has(roleId)
+				)
+					return this.guilds
+						.get(guildId)
+						.roles.get(roleId)
+						._patch(raw)
+				const r = new Role(raw, this)
+				if (this.guilds.has(guildId))
+					this.guilds.get(guildId).roles.set(r.id, r)
+				return r
+			})
 	}
 
 	/**
@@ -302,7 +358,7 @@ export class Client extends EventEmitter {
 	 */
 	public fetchUser(
 		id: SnowFlake,
-		cache: boolean = true,
+		cache: boolean = true
 	): User | Promise<User> {
 		return this.requestHandler
 			.request('GET', Endpoints.USER(id))
@@ -310,15 +366,17 @@ export class Client extends EventEmitter {
 				if (cache && this.users.has(id))
 					return this.users.get(id)._update(raw_user)
 				const fetchUser = new User(raw_user, this)
-				if (cache && !this.users.has(id))
-					this.users.set(id, fetchUser)
+				if (cache && !this.users.has(id)) this.users.set(id, fetchUser)
 				return fetchUser
 			})
 	}
 
 	private getAccountToken(data: ConnectOptions) {
 		return this.requestHandler
-			.request('POST', Endpoints.AUTH_USER(), { headers: data, email_auth: true })
+			.request('POST', Endpoints.AUTH_USER(), {
+				headers: data,
+				email_auth: true,
+			})
 			.then((data) => data.token)
 	}
 
@@ -356,8 +414,15 @@ export class Client extends EventEmitter {
 		this.ws.start()
 	}
 
-	removeRole(guildId: SnowFlake, memberId: SnowFlake, roleId: SnowFlake): Promise<any> {
-		return this.requestHandler.request("DELETE", Endpoints.MEMBER_ROLES(guildId, memberId, roleId))
+	removeRole(
+		guildId: SnowFlake,
+		memberId: SnowFlake,
+		roleId: SnowFlake
+	): Promise<any> {
+		return this.requestHandler.request(
+			'DELETE',
+			Endpoints.MEMBER_ROLES(guildId, memberId, roleId)
+		)
 	}
 
 	/**

@@ -1,4 +1,4 @@
-import { Guild, Message } from '..';
+import { Guild, Message } from '..'
 import { Client } from '../Client'
 import { EditChannelOptions, MessageData, SnowFlake } from '../Constants'
 import { Base } from './Base'
@@ -12,9 +12,9 @@ export class Channel extends Base {
 	 * The name of the channel
 	 * @type {string}
 	 */
-	public name: string;
-	public guild?: Guild;
-	public guildId: SnowFlake;
+	public name: string
+	public guild?: Guild
+	public guildId: SnowFlake
 
 	/**
 	 * The client for this channel
@@ -34,9 +34,10 @@ export class Channel extends Base {
 		if ('name' in data) {
 			this.name = data.name
 		}
-		if ("guild_id_string" in data) {
+		if ('guild_id_string' in data) {
 			this.guildId = data.guild_id_string
-			if (this.#_client.guilds.has(data.guild_id_string)) this.guild = this.#_client.guilds.get(data.guild_id_string)
+			if (this.#_client.guilds.has(data.guild_id_string))
+				this.guild = this.#_client.guilds.get(data.guild_id_string)
 		}
 
 		this._patch(data)

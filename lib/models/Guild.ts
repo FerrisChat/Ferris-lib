@@ -1,6 +1,11 @@
 import { Role } from '..'
 import { Client } from '../Client'
-import { CreateChannelOptions, CreateRoleOptions, EditGuildOptions, SnowFlake } from '../Constants'
+import {
+	CreateChannelOptions,
+	CreateRoleOptions,
+	EditGuildOptions,
+	SnowFlake,
+} from '../Constants'
 import { StorageBox } from '../util/StorageBox'
 import { Channel, Member } from './'
 import { Base } from './Base'
@@ -33,9 +38,9 @@ export class Guild extends Base {
 	 * A cache with the Members for the Guild
 	 * @type {StorageBox<SnowFlake, Member>}
 	 */
-	public members: StorageBox<SnowFlake, Member>;
+	public members: StorageBox<SnowFlake, Member>
 
-	public roles: StorageBox<SnowFlake, Role>;
+	public roles: StorageBox<SnowFlake, Role>
 
 	/**
 	 * The client for the Guild
@@ -68,7 +73,8 @@ export class Guild extends Base {
 			for (const raw_channel of data.channels) {
 				const channel = new Channel(raw_channel, this.#_client)
 				this.channels.set(channel.id, channel)
-				if (this.#_client.channels.has(channel.id)) this.#_client.channels.get(channel.id)._patch(raw_channel)
+				if (this.#_client.channels.has(channel.id))
+					this.#_client.channels.get(channel.id)._patch(raw_channel)
 				else this.#_client.channels.set(channel.id, channel)
 			}
 		}
@@ -106,11 +112,23 @@ export class Guild extends Base {
 		return this.#_client.editGuild(this.id, guildData)
 	}
 
-	fetch({ fetchMembers = false, fetchChannels = true }: { fetchMembers?: boolean, fetchChannels?: boolean } = {}): Promise<Guild> {
-		return this.#_client.fetchGuild(this.id, { fetchChannels, fetchMembers })
+	fetch({
+		fetchMembers = false,
+		fetchChannels = true,
+	}: {
+		fetchMembers?: boolean
+		fetchChannels?: boolean
+	} = {}): Promise<Guild> {
+		return this.#_client.fetchGuild(this.id, {
+			fetchChannels,
+			fetchMembers,
+		})
 	}
 
-	fetchChannel(channelId: SnowFlake, cache: boolean = true): Promise<Channel> {
+	fetchChannel(
+		channelId: SnowFlake,
+		cache: boolean = true
+	): Promise<Channel> {
 		return this.#_client.fetchChannel(channelId, cache)
 	}
 
