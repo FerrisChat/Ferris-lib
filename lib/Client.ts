@@ -13,6 +13,7 @@ import {
 	EditGuildOptions,
 	CreateRoleOptions,
 	EditRoleOptions,
+	EditChannelOptions,
 } from './Constants'
 import { FerrisError } from './errors/FerrislibError'
 import { WebsocketManager } from './gateway/WebsocketManager'
@@ -205,10 +206,16 @@ export class Client extends EventEmitter {
 		return this.requestHandler.request("DELETE", Endpoints.ROLE(guildId, roleId))
 	}
 
-	editGuild(guildId: SnowFlake, data: EditGuildOptions): Promise<Guild> {
-		if (!data) throw new Error("Missing Edit data")
-		else if (data.name && typeof data.name != "string") throw new TypeError("Guild name must be a string.")
-		return this.requestHandler.request("PATCH", Endpoints.GUILD(guildId), { body: data })
+	editChannel(channelId: SnowFlake, channelData: EditChannelOptions): Promise<Channel> {
+		if (!channelData) throw new Error("Missing Edit data")
+		else if (channelData.name && typeof channelData.name != "string") throw new TypeError("Channel name must be a string.")
+		return this.requestHandler.request("PATCH", Endpoints.CHANNEL(channelId), { body: channelData }).then((raw) => new Channel(raw, this))
+	}
+
+	editGuild(guildId: SnowFlake, guildData: EditGuildOptions): Promise<Guild> {
+		if (!guildData) throw new Error("Missing Edit data")
+		else if (guildData.name && typeof guildData.name != "string") throw new TypeError("Guild name must be a string.")
+		return this.requestHandler.request("PATCH", Endpoints.GUILD(guildId), { body: guildData }).then((raw) => new Guild(raw, this))
 	}
 
 	editRole(guildId: SnowFlake, roleId: SnowFlake, roleData: EditRoleOptions): Promise<Role> {
@@ -222,8 +229,9 @@ export class Client extends EventEmitter {
 	fetchChannel(
 		channelId: SnowFlake,
 		cache: boolean = true,
-	): Promise<Channel> | Channel {
+	): Promise<Channel> {
 		return this.requestHandler.request('GET', Endpoints.CHANNEL(channelId)).then((raw) => {
+			if (this.channels.has(channelId)) return this.channels.get(channelId)._patch(raw)
 			const ch = new Channel(raw, this)
 			if (cache) this.channels.set(ch.id, ch)
 			return ch

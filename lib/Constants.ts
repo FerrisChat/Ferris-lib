@@ -201,6 +201,10 @@ export class Endpoints {
 	static WS_INFO = () => `/ws/info`
 }
 
+export interface EditChannelOptions {
+	name: string
+}
+
 export interface EditGuildOptions {
 	name: string;
 }

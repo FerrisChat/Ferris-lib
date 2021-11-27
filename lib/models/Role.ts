@@ -1,4 +1,5 @@
 import { Base, Client, Guild } from '..'
+import { EditRoleOptions } from '../Constants'
 
 export class Role extends Base {
 	guild?: Guild
@@ -26,6 +27,14 @@ export class Role extends Base {
 
 	addToMember(memberId): Promise<any> {
 		return this.#_client.addRole(this.guildId, memberId, this.id)
+	}
+
+	delete(): Promise<any> {
+		return this.#_client.deleteRole(this.guildId, this.id)
+	}
+
+	edit(roleData: EditRoleOptions): Promise<Role> {
+		return this.#_client.editRole(this.guildId, this.id, roleData)
 	}
 
 	fetch(): Promise<Role> {
