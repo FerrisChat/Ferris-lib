@@ -75,6 +75,10 @@ export class Guild extends Base {
 		this._patch(data)
 	}
 
+	fetch({ fetchMembers = false, fetchChannels = true }: { fetchMembers?: boolean, fetchChannels?: boolean } = {}): Promise<Guild> {
+		return this.#_client.fetchGuild(this.id, { fetchChannels, fetchMembers })
+	}
+
 	fetchInvites(): Promise<StorageBox<string, Invite>> {
 		return this.#_client.fetchGuildInvites(this.id)
 	}

@@ -22,11 +22,11 @@ export interface ConnectOptions {
 
 export type ConnectType = string | ConnectOptions
 
-export interface createChannelOptions {
+export interface CreateChannelOptions {
 	name: string
 }
 
-export interface createGuildOptions {
+export interface CreateGuildOptions {
 	name: string
 }
 
@@ -192,6 +192,10 @@ export class Endpoints {
 
 	//websockets
 	static WS_INFO = () => `/ws/info`
+}
+
+export interface EditGuildOptions {
+	name: string;
 }
 
 /**

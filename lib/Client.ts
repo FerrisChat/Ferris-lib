@@ -4,12 +4,13 @@ import {
 	ClientOptions,
 	ConnectOptions,
 	ConnectType,
-	createChannelOptions,
-	createGuildOptions,
+	CreateChannelOptions,
+	CreateGuildOptions,
 	Endpoints,
 	MessageData,
 	SnowFlake,
 	Events,
+	EditGuildOptions,
 } from './Constants'
 import { FerrisError } from './errors/FerrislibError'
 import { WebsocketManager } from './gateway/WebsocketManager'
@@ -115,7 +116,7 @@ export class Client extends EventEmitter {
 
 	createChannel(
 		guildId: SnowFlake,
-		channelData: createChannelOptions
+		channelData: CreateChannelOptions
 	): Promise<Channel> {
 		if (!channelData.name)
 			throw new Error('A name must be provided for Guild Creation.')
@@ -131,7 +132,7 @@ export class Client extends EventEmitter {
 			})
 	}
 
-	createGuild(guildData: createGuildOptions): Promise<Guild> {
+	createGuild(guildData: CreateGuildOptions): Promise<Guild> {
 		if (!guildData.name)
 			throw new Error('A name must be provided for Guild Creation.')
 		else if (typeof guildData.name != 'string')
@@ -219,12 +220,21 @@ export class Client extends EventEmitter {
 		return this.emit(Events.DEBUG, `[Ferris-Lib => ${service}] ${msg}`)
 	}
 
+	editGuild(guildId: SnowFlake, data: EditGuildOptions): Promise<Guild> {
+		if (!data) throw new Error("Missing Edit data")
+		else if (data.name && typeof data.name != "string") throw new TypeError("Guild name must be a string.")
+		return this.requestHandler.request("PATCH", Endpoints.GUILD(guildId), { body: data })
+	}
+
 	fetchChannel(
 		channelId: SnowFlake,
-		options?: { cache?: boolean; force?: boolean }
+		cache: boolean = true,
 	): Promise<Channel> | Channel {
-		// no channel cache yet
-		return this.requestHandler.request('GET', Endpoints.CHANNEL(channelId))
+		return this.requestHandler.request('GET', Endpoints.CHANNEL(channelId)).then((raw) => {
+			const ch = new Channel(raw, this)
+			if (cache) this.channels.set(ch.id, ch)
+			return ch
+		})
 	}
 
 	/**
@@ -232,9 +242,10 @@ export class Client extends EventEmitter {
 	 * @param {SnowFlake} guildId The Id for the Guild to fetch
 	 * @returns {Promise<Guild>}
 	 */
-	public fetchGuild(guildId: SnowFlake): Promise<Guild> {
+	public fetchGuild(guildId: SnowFlake, { fetchMembers = false, fetchChannels = true }: { fetchMembers?: boolean, fetchChannels?: boolean } = {}): Promise<Guild> {
+		const params = { members: fetchMembers, channels: fetchChannels }
 		return this.requestHandler
-			.request('GET', Endpoints.GUILD(guildId) + '?members=true')
+			.request('GET', Endpoints.GUILD(guildId), { params })
 			.then((raw_guild) => {
 				if (this.guilds.has(raw_guild.id_string))
 					return this.guilds
@@ -276,19 +287,15 @@ export class Client extends EventEmitter {
 	 */
 	public fetchUser(
 		id: SnowFlake,
-		options: { cache?: boolean; force?: boolean } = {
-			cache: false,
-			force: false,
-		}
+		cache: boolean = true,
 	): User | Promise<User> {
-		if (!options.force && this.users.has(id)) return this.users.get(id)
 		return this.requestHandler
 			.request('GET', Endpoints.USER(id))
 			.then((raw_user) => {
-				if (options.cache && this.users.has(id))
+				if (cache && this.users.has(id))
 					return this.users.get(id)._update(raw_user)
 				const fetchUser = new User(raw_user, this)
-				if (options.cache && !this.users.has(id))
+				if (cache && !this.users.has(id))
 					this.users.set(id, fetchUser)
 				return fetchUser
 			})

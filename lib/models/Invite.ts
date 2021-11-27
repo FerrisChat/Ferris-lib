@@ -46,7 +46,7 @@ export class Invite {
 	}
 
 	fetchOwner(): Promise<User> | User {
-		return this.#_client.fetchUser(this.ownerId, { cache: true })
+		return this.#_client.fetchUser(this.ownerId, true)
 	}
 
 	get guild(): Guild {
