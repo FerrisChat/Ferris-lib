@@ -68,6 +68,8 @@ export class Guild extends Base {
 			for (const raw_channel of data.channels) {
 				const channel = new Channel(raw_channel, this.#_client)
 				this.channels.set(channel.id, channel)
+				if (this.#_client.channels.has(channel.id)) this.#_client.channels.get(channel.id)._patch(raw_channel)
+				else this.#_client.channels.set(channel.id, channel)
 			}
 		}
 		if ('members' in data && data.members != null) {

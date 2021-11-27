@@ -1,6 +1,6 @@
-import { Guild } from '..';
+import { Guild, Message } from '..';
 import { Client } from '../Client'
-import { EditChannelOptions, SnowFlake } from '../Constants'
+import { EditChannelOptions, MessageData, SnowFlake } from '../Constants'
 import { Base } from './Base'
 
 /**
@@ -40,6 +40,10 @@ export class Channel extends Base {
 		}
 
 		this._patch(data)
+	}
+
+	createMessage(messageData: MessageData): Promise<Message> {
+		return this.#_client.createMessage(this.guildId, this.id, messageData)
 	}
 
 	delete(): Promise<any> {
