@@ -1,6 +1,6 @@
 import { Guild, Message } from '..'
 import { Client } from '../Client'
-import { EditChannelOptions, MessageData, SnowFlake } from '../Constants'
+import { ChannelEditOptions, MessageData, SnowFlake } from '../util/Constants'
 import { Base } from './Base'
 
 /**
@@ -51,7 +51,7 @@ export class Channel extends Base {
 		return this.#_client.deleteChannel(this.id)
 	}
 
-	edit(channelData: EditChannelOptions) {
+	edit(channelData: ChannelEditOptions) {
 		return this.#_client.editChannel(this.id, channelData)
 	}
 

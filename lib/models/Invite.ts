@@ -1,6 +1,6 @@
 import { Guild, User } from '.'
 import { Client } from '..'
-import { SnowFlake } from '../Constants'
+import { SnowFlake } from '../util/Constants'
 
 export class Invite {
 	public code: string

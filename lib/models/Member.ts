@@ -1,5 +1,5 @@
 import { Client } from '../Client'
-import { SnowFlake } from '../Constants'
+import { SnowFlake } from '../util/Constants'
 import { Base } from './Base'
 import { Guild } from './Guild'
 import { User } from './User'

@@ -4,17 +4,17 @@ import {
 	ClientOptions,
 	ConnectOptions,
 	ConnectType,
-	CreateChannelOptions,
-	CreateGuildOptions,
 	Endpoints,
 	MessageData,
 	SnowFlake,
 	Events,
-	EditGuildOptions,
-	CreateRoleOptions,
-	EditRoleOptions,
-	EditChannelOptions,
-} from './Constants'
+	ChannelCreateOptions,
+	GuildCreateOptions,
+	RoleCreateOptions,
+	ChannelEditOptions,
+	GuildEditOptions,
+	RoleEditOptions,
+} from './util/Constants'
 import { FerrisError } from './errors/FerrislibError'
 import { WebsocketManager } from './gateway/WebsocketManager'
 import { Message } from './models'
@@ -82,8 +82,12 @@ export class Client extends EventEmitter {
 					headers: {},
 				},
 				cache: {
-					guilds: false,
-					users: false,
+					guilds: true,
+					users: true,
+					messages: true,
+					members: true,
+					channels: true,
+					roles: true,
 				},
 			},
 			clientOptions
@@ -97,15 +101,15 @@ export class Client extends EventEmitter {
 
 		this.user = null
 
-		this.users = new StorageBox()
+		this.users = new StorageBox(this.options.cache.users)
 
-		this.channels = new StorageBox()
+		this.channels = new StorageBox(this.options.cache.channels)
 
-		this.messages = new StorageBox()
+		this.messages = new StorageBox(this.options.cache.messages)
 
-		this.users = new StorageBox()
+		this.users = new StorageBox(this.options.cache.users)
 
-		this.guilds = new StorageBox()
+		this.guilds = new StorageBox(this.options.cache.guilds)
 	}
 
 	addRole(guildId: SnowFlake, memberId: SnowFlake, roleId: SnowFlake) {
@@ -117,7 +121,7 @@ export class Client extends EventEmitter {
 
 	createChannel(
 		guildId: SnowFlake,
-		channelData: CreateChannelOptions
+		channelData: ChannelCreateOptions
 	): Promise<Channel> {
 		if (!channelData.name)
 			throw new Error('A name must be provided for Guild Creation.')
@@ -129,7 +133,7 @@ export class Client extends EventEmitter {
 			.then((raw_channel) => new Channel(raw_channel, this))
 	}
 
-	createGuild(guildData: CreateGuildOptions): Promise<Guild> {
+	createGuild(guildData: GuildCreateOptions): Promise<Guild> {
 		if (!guildData.name)
 			throw new Error('A name must be provided for Guild Creation.')
 		else if (typeof guildData.name != 'string')
@@ -172,7 +176,7 @@ export class Client extends EventEmitter {
 			.then((raw_message) => new Message(raw_message, this))
 	}
 
-	createRole(guildId: SnowFlake, roleData: CreateRoleOptions): Promise<Role> {
+	createRole(guildId: SnowFlake, roleData: RoleCreateOptions): Promise<Role> {
 		if (roleData.name && typeof roleData.name != 'string')
 			throw new TypeError('Name of Role must be a string.')
 		else if (roleData.color && typeof roleData.color != 'number')
@@ -220,7 +224,7 @@ export class Client extends EventEmitter {
 
 	editChannel(
 		channelId: SnowFlake,
-		channelData: EditChannelOptions
+		channelData: ChannelEditOptions
 	): Promise<Channel> {
 		if (!channelData) throw new Error('Missing Edit data')
 		else if (channelData.name && typeof channelData.name != 'string')
@@ -232,7 +236,7 @@ export class Client extends EventEmitter {
 			.then((raw) => new Channel(raw, this))
 	}
 
-	editGuild(guildId: SnowFlake, guildData: EditGuildOptions): Promise<Guild> {
+	editGuild(guildId: SnowFlake, guildData: GuildEditOptions): Promise<Guild> {
 		if (!guildData) throw new Error('Missing Edit data')
 		else if (guildData.name && typeof guildData.name != 'string')
 			throw new TypeError('Guild name must be a string.')
@@ -244,7 +248,7 @@ export class Client extends EventEmitter {
 	editRole(
 		guildId: SnowFlake,
 		roleId: SnowFlake,
-		roleData: EditRoleOptions
+		roleData: RoleEditOptions
 	): Promise<Role> {
 		if (roleData.name && typeof roleData.name != 'string')
 			throw new TypeError('Name of Role must be a string.')

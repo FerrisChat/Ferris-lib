@@ -1,11 +1,11 @@
 import { Role } from '..'
 import { Client } from '../Client'
 import {
-	CreateChannelOptions,
-	CreateRoleOptions,
-	EditGuildOptions,
+	ChannelEditOptions,
+	GuildEditOptions,
+	RoleCreateOptions,
 	SnowFlake,
-} from '../Constants'
+} from '../util/Constants'
 import { StorageBox } from '../util/StorageBox'
 import { Channel, Member } from './'
 import { Base } from './Base'
@@ -57,11 +57,11 @@ export class Guild extends Base {
 
 		this.#_client = client
 
-		this.members = new StorageBox()
+		this.members = new StorageBox(this.#_client.options.cache.members)
 
-		this.channels = new StorageBox()
+		this.channels = new StorageBox(this.#_client.options.cache.channels)
 
-		this.roles = new StorageBox()
+		this.roles = new StorageBox(this.#_client.options.cache.roles)
 
 		if ('name' in data) {
 			this.name = data.name
@@ -88,11 +88,11 @@ export class Guild extends Base {
 		this._patch(data)
 	}
 
-	createChannel(channelData: CreateChannelOptions): Promise<Channel> {
+	createChannel(channelData: ChannelEditOptions): Promise<Channel> {
 		return this.#_client.createChannel(this.id, channelData)
 	}
 
-	createRole(roleData: CreateRoleOptions): Promise<Role> {
+	createRole(roleData: RoleCreateOptions): Promise<Role> {
 		return this.#_client.createRole(this.id, roleData)
 	}
 
@@ -108,7 +108,7 @@ export class Guild extends Base {
 		return this.#_client.deleteRole(this.id, roleId)
 	}
 
-	edit(guildData: EditGuildOptions): Promise<Guild> {
+	edit(guildData: GuildEditOptions): Promise<Guild> {
 		return this.#_client.editGuild(this.id, guildData)
 	}
 

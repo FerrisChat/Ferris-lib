@@ -1,5 +1,5 @@
 import { Client } from '../Client'
-import { Endpoints } from '../Constants'
+import { Endpoints } from '../util/Constants'
 import { Base } from './Base'
 import { Guild } from './Guild'
 

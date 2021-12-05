@@ -1,6 +1,6 @@
 import { Base } from '../Base'
 import { Client } from '../..'
-import { Endpoints } from '../../Constants'
+import { Endpoints } from '../../util/Constants'
 import { ApiGuild } from './ApiGuild'
 
 export class ApiChannel extends Base {

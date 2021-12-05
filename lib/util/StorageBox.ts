@@ -1,3 +1,5 @@
+import { ModelCacheOptions } from './Constants'
+
 /**
  * A cache that holds data
  * @param Limit
@@ -10,17 +12,20 @@ export class StorageBox<K, V> extends Map<K, V> {
 	sweepInterval: number
 	sweepFilter: (v: V) => boolean
 
-	constructor(
-		limit: number = 1000,
-		sweepInterval?: number,
-		sweepFilter?: (v: V) => boolean
-	) {
+	constructor(options?: ModelCacheOptions<V> | boolean) {
 		super()
 
-		this.limit = limit
-		this.sweepInterval = sweepInterval || null
-		this.sweepFilter = sweepFilter || null
-		if (this.sweepInterval) this.sweep()
+		if (options && typeof options === 'object') {
+			this.limit = options.limit
+			this.sweepInterval = options.sweepInterval || null
+			this.sweepFilter = options.sweepFilter || null
+			if (this.sweepInterval) this.sweep()
+		} else if (options && typeof options === 'boolean') {
+			if (options) this.limit = Infinity
+			else this.limit = 0
+		} else {
+			this.limit = 0
+		}
 	}
 
 	/**
@@ -108,7 +113,7 @@ export class StorageBox<K, V> extends Map<K, V> {
 	private sweep() {
 		setInterval(() => {
 			this.forEach((value, key) => {
-				if (this.sweepFilter && !this.sweepFilter(value))
+				if (this.sweepFilter && this.sweepFilter(value))
 					this.delete(key)
 				else this.clear()
 			})

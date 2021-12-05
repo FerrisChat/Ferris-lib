@@ -1,6 +1,6 @@
 import { Client } from '../Client'
 import axios from 'axios'
-import { API_VERSION, Events, RequestMethods, Urls } from '../Constants'
+import { API_VERSION, Events, RequestMethods, Urls } from '../util/Constants'
 import { FerrisAPIError } from '../errors/FerrisApiError'
 import { HTTPError } from '../errors/HttpError'
 

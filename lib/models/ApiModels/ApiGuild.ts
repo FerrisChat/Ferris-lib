@@ -1,14 +1,14 @@
 import { Base } from '../Base'
 import { Client } from '../..'
-import { Endpoints } from '../../Constants'
+import { Endpoints } from '../../util/Constants'
 import { ApiChannel } from './ApiChannel'
 import { ApiMember } from './ApiMember'
 
 export class ApiGuild extends Base {
 	ownerId: string
 	name: string
-	channels: Array<any>
-	members: Array<any>
+	channels: Array<ApiChannel>
+	members: Array<ApiMember>
 	#_client: Client
 
 	constructor(data, client) {

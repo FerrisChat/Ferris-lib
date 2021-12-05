@@ -1,6 +1,6 @@
 import { Channel, User } from '.'
 import { Client } from '../Client'
-import { SnowFlake } from '../Constants'
+import { SnowFlake } from '../util/Constants'
 import { Base } from './Base'
 import { Embed } from './Embed'
 

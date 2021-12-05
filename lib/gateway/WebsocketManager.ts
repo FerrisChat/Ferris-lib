@@ -8,7 +8,7 @@ import {
 	WebSocketPayload,
 	WebsocketPayloads,
 	WebSocketStatus,
-} from '../Constants'
+} from '../util/Constants'
 import { FerrisError } from '../errors/FerrislibError'
 import { inspect } from 'util'
 import { User } from '..'

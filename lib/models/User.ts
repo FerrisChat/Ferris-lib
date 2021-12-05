@@ -1,5 +1,5 @@
 import { Client } from '../Client'
-import { Endpoints, SnowFlake } from '../Constants'
+import { Endpoints, SnowFlake } from '../util/Constants'
 import { StorageBox } from '../util/StorageBox'
 import { ApiGuild } from './ApiModels/ApiGuild'
 import { Base } from './Base'

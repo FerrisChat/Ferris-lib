@@ -1,9 +1,9 @@
-import { Guild, User, Channel, Message, Member } from './models'
+import { Guild, User, Channel, Message, Member, Role } from '../models'
 
 /**
- * Base Options for the Client Caches
+ * Model cache Options for the Client Model Caches
  */
-export interface BaseCacheOptions {
+export interface ModelCacheOptions<T> {
 	/**
 	 * What is the max amount of items this cache will hold
 	 */
@@ -12,25 +12,29 @@ export interface BaseCacheOptions {
 	 * A number in milliseconds that you would like the cache to be cleared.
 	 */
 	sweepInterval?: number
+	/**
+	 * A function that allows you to choose what should be filtered
+	 * If not specified the collection will be cleared
+	 */
+	sweepFilter?: (model: T) => boolean
 }
 
 export interface ConnectOptions {
 	email: string
 	password: string
-	user: boolean
 }
 
 export type ConnectType = string | ConnectOptions
 
-export interface CreateChannelOptions {
+export interface ChannelCreateOptions {
 	name: string
 }
 
-export interface CreateGuildOptions {
+export interface GuildCreateOptions {
 	name: string
 }
 
-export interface CreateRoleOptions {
+export interface RoleCreateOptions {
 	name?: string
 	color?: number
 	position?: number
@@ -41,13 +45,6 @@ export interface MessageData {
 	content: string
 }
 
-export interface ChannelCacheOptions extends BaseCacheOptions {
-	/**
-	 * The filter that will remove items if they dont meet the condition
-	 */
-	sweepFilter?: (guild: Guild) => boolean
-}
-
 export enum Events {
 	DEBUG = 'debug',
 	READY = 'ready',
@@ -55,42 +52,11 @@ export enum Events {
 	RAW_REST = 'rawRest',
 }
 
-/**
- * The cache options for the Guild cache
- */
-export interface GuildCacheOpiions extends BaseCacheOptions {
-	/**
-	 * The filter that will remove items if they dont meet the condition
-	 */
-	sweepFilter?: (guild: Guild) => boolean
-}
-
-export interface MemberCacheOptions extends BaseCacheOptions {
-	/**
-	 * The filter that will remove items if they dont meet the condition
-	 */
-	sweepFilter?: (guild: Guild) => boolean
-}
-
-export interface MessageCacheOptions extends BaseCacheOptions {
-	/**
-	 * The filter that will remove items if they dont meet the condition
-	 */
-	sweepFilter?: (guild: Guild) => boolean
-}
-
-export interface UserCacheOptions extends BaseCacheOptions {
-	/**
-	 * The filter that will remove items if they dont meet the condition
-	 */
-	sweepFilter?: (user: User) => boolean
-}
-
-export interface ClientEvents<T> {
-	(event: 'debug' | 'warn', listener: (message: string) => void): T
-	(event: 'ready', listener: () => void): T
-	(event: 'rawWs', listener: (data: any) => void): T
-	(event: 'rawRest', listener: (data: any) => void): T
+export interface ClientEvents {
+	debug: [message: string]
+	warn: [message: string]
+	rawWs: [data: any]
+	rawRest: [data: any]
 }
 
 /**
@@ -125,18 +91,20 @@ export interface ClientOptions {
 		/**
 		 * Wether you want guilds cached or Select specific Options for the Cache
 		 */
-		guilds?: GuildCacheOpiions | boolean
+		guilds?: ModelCacheOptions<Guild> | boolean
 
-		channels?: ChannelCacheOptions | boolean
+		channels?: ModelCacheOptions<Channel> | boolean
 
-		members?: MemberCacheOptions | boolean
+		members?: ModelCacheOptions<Member> | boolean
 
-		messages?: MessageCacheOptions | boolean
+		messages?: ModelCacheOptions<Message> | boolean
 
 		/**
 		 * Wether you want Users cached or Select specific Options for the Cache
 		 */
-		users?: UserCacheOptions | boolean
+		users?: ModelCacheOptions<User> | boolean
+
+		roles?: ModelCacheOptions<Role> | boolean
 	}
 }
 
@@ -201,15 +169,15 @@ export class Endpoints {
 	static WS_INFO = () => `/ws/info`
 }
 
-export interface EditChannelOptions {
+export interface ChannelEditOptions {
 	name: string
 }
 
-export interface EditGuildOptions {
+export interface GuildEditOptions {
 	name: string
 }
 
-export interface EditRoleOptions {
+export interface RoleEditOptions {
 	name?: string
 	color?: number
 	position?: number
