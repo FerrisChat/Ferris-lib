@@ -12,7 +12,12 @@ export class RestManager {
 	userAgent: string
 	baseUrl: string
 	client: Client
-	headers: {}
+	headers: Record<string, string>
+	status: {
+		lastRequestRecieved: number
+		latency: number
+		retries: number
+	}
 
 	constructor(client: Client) {
 		this.baseUrl = Urls.Api + Urls.Base_Api + API_VERSION
@@ -20,6 +25,15 @@ export class RestManager {
 		this.userAgent = `FerrisLib (https://github.com/Drxckzyz/Ferris-lib, ${
 			require('../../package.json').version
 		})`
+		this.status = {
+			lastRequestRecieved: 0,
+			latency: Infinity,
+			retries: 0,
+		}
+	}
+
+	get latency(): number {
+		return this.status.latency
 	}
 
 	request(
@@ -76,6 +90,10 @@ export class RestManager {
 					} (${Date.now() - startTime}ms)`,
 					'Rest Manager'
 				)
+				this.status.latency = this.status.lastRequestRecieved
+					? Date.now() - this.status.lastRequestRecieved
+					: Infinity
+				this.status.lastRequestRecieved = Date.now()
 				this.client.emit(Events.RAW_REST, response.data)
 				return resolve(response.data)
 			} catch (error) {
@@ -88,7 +106,7 @@ export class RestManager {
 					)
 					reject(
 						new FerrisAPIError(
-							error.response.data.reason,
+							error.response.data,
 							error.response.status,
 							method,
 							url,

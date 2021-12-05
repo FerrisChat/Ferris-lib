@@ -11,7 +11,7 @@ import {
 } from '../util/Constants'
 import { FerrisError } from '../errors/FerrislibError'
 import { inspect } from 'util'
-import { User } from '..'
+import { Message, User } from '..'
 import { ClientUser } from '../models/ClientUser'
 
 /**
@@ -163,6 +163,20 @@ export class WebsocketManager extends EventEmitter {
 				this.debug('Identify Recieved')
 				this.startHeartbeat()
 				this.client.emit(Events.READY)
+				break
+
+			case WebSocketEvents.MESSAGE_CREATE:
+				const message = new Message(payload.d.message, this.client)
+				if (
+					this.client.channels.has(message.channelId) &&
+					!this.client.channels
+						.get(message.channelId)
+						.messages.has(message.id)
+				)
+					this.client.channels
+						.get(message.channelId)
+						.messages.set(message.id, message)
+				this.client.emit(Events.MESSAGE_CREATE, message)
 				break
 
 			default:

@@ -1,4 +1,4 @@
-import { Guild, Message } from '..'
+import { Guild, Message, StorageBox } from '..'
 import { Client } from '../Client'
 import { ChannelEditOptions, MessageData, SnowFlake } from '../util/Constants'
 import { Base } from './Base'
@@ -15,6 +15,7 @@ export class Channel extends Base {
 	public name: string
 	public guild?: Guild
 	public guildId: SnowFlake
+	public messages: StorageBox<string, Message>
 
 	/**
 	 * The client for this channel
@@ -31,6 +32,8 @@ export class Channel extends Base {
 
 		this.#_client = client
 
+		this.messages = new StorageBox(client.options.cache.messages)
+
 		if ('name' in data) {
 			this.name = data.name
 		}
@@ -44,7 +47,7 @@ export class Channel extends Base {
 	}
 
 	createMessage(messageData: MessageData): Promise<Message> {
-		return this.#_client.createMessage(this.guildId, this.id, messageData)
+		return this.#_client.createMessage(this.id, messageData)
 	}
 
 	delete(): Promise<any> {

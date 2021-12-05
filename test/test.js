@@ -16,5 +16,13 @@ client.on('ready', async () => {
 	console.log(client.user, client.guilds)
 	console.log('Test Complete')
 })
+client.on('messageCreate', (message) => {
+	console.log(message)
+	if (message.content.toLowerCase() === '+ping') {
+		return message.channel.createMessage({
+			content: `Pong, Gateway Ping: \`${client.ws.latency}ms\` and Rest Ping: \`${client.rest.latency}ms\``,
+		})
+	}
+})
 
 client.login({ email: 'drxbot@notgay.com', password: 'ferrischat' })

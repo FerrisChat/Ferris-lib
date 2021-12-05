@@ -50,13 +50,14 @@ export enum Events {
 	READY = 'ready',
 	RAW_WS = 'rawWs',
 	RAW_REST = 'rawRest',
+	MESSAGE_CREATE = 'messageCreate',
 }
 
-export interface ClientEvents {
-	debug: [message: string]
-	warn: [message: string]
-	rawWs: [data: any]
-	rawRest: [data: any]
+export interface ClientEvents<T> {
+	(event: 'debug' | 'warn', listener: (message: string) => void): T
+	(event: 'ready', listener: () => void): T
+	(event: 'rawWs' | 'rawRest', listener: (data: any) => void): T
+	(event: 'messageCreate', listener: (message: Message) => void): T
 }
 
 /**
@@ -138,8 +139,7 @@ export class Endpoints {
 
 	//Messages
 	static MESSAGE = (messageId) => `/messages/${messageId}`
-	static MESSAGES = (guildId, channelId) =>
-		`/guilds/${guildId}/channels/${channelId}/messages`
+	static MESSAGES = (channelId) => `/channels/${channelId}/messages`
 
 	//Members
 	static MEMBER = (guildId, memberId) =>

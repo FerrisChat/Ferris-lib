@@ -6,6 +6,7 @@ export class FerrisAPIError extends Error {
 	body: any
 
 	constructor(error, status, method, path, body) {
+		console.log(error)
 		super(error ?? error)
 		this.name = 'FerrisAPIError'
 

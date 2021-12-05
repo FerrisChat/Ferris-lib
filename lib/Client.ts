@@ -160,7 +160,6 @@ export class Client extends EventEmitter {
 	}
 
 	createMessage(
-		guildId: SnowFlake,
 		channelId: SnowFlake,
 		messageData: MessageData
 	): Promise<Message> {
@@ -170,7 +169,7 @@ export class Client extends EventEmitter {
 			throw new TypeError('Content for Message must be a string')
 
 		return this.rest
-			.request('POST', Endpoints.MESSAGES(guildId, channelId), {
+			.request('POST', Endpoints.MESSAGES(channelId), {
 				body: messageData,
 			})
 			.then((raw_message) => new Message(raw_message, this))
