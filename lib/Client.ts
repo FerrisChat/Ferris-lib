@@ -21,7 +21,7 @@ import { Message } from './models'
 import { Guild } from './models/Guild'
 import { User } from './models/User'
 import { Channel } from './models/Channel'
-import { RequestHandler } from './rest/RequestHandler'
+import { RestManager } from './rest/RestManager'
 import { StorageBox } from './util/StorageBox'
 import { Invite } from './models/Invite'
 import { Role } from './models/Role'
@@ -48,10 +48,10 @@ export class Client extends EventEmitter {
 	public guilds: StorageBox<SnowFlake, Guild>
 
 	/**
-	 * The Handler {@link RequestHandler} used for interacting with the api
-	 * @type {RequestHandler}
+	 * The Handler {@link RestManager} used for interacting with the api
+	 * @type {RestManager}
 	 */
-	public requestHandler: RequestHandler
+	public rest: RestManager
 
 	/**
 	 * The Manager {@link WebsocketManager} used to interacting with the Gateway
@@ -95,7 +95,7 @@ export class Client extends EventEmitter {
 
 		this.validateOptions()
 
-		this.requestHandler = new RequestHandler(this)
+		this.rest = new RestManager(this)
 
 		this.ws = new WebsocketManager(this)
 
@@ -113,7 +113,7 @@ export class Client extends EventEmitter {
 	}
 
 	addRole(guildId: SnowFlake, memberId: SnowFlake, roleId: SnowFlake) {
-		return this.requestHandler.request(
+		return this.rest.request(
 			'POST',
 			Endpoints.MEMBER_ROLES(guildId, memberId, roleId)
 		)
@@ -128,7 +128,7 @@ export class Client extends EventEmitter {
 		else if (typeof channelData.name != 'string')
 			throw new TypeError('Name of Guild must be a string')
 
-		return this.requestHandler
+		return this.rest
 			.request('POST', Endpoints.CHANNELS(guildId), { body: channelData })
 			.then((raw_channel) => new Channel(raw_channel, this))
 	}
@@ -139,7 +139,7 @@ export class Client extends EventEmitter {
 		else if (typeof guildData.name != 'string')
 			throw new TypeError('Name of Guild must be a string')
 
-		return this.requestHandler
+		return this.rest
 			.request('POST', Endpoints.GUILDS(), { body: guildData })
 			.then((raw_guild) => new Guild(raw_guild, this))
 	}
@@ -149,7 +149,7 @@ export class Client extends EventEmitter {
 		maxAge: number,
 		maxUses: number
 	): Promise<Invite> {
-		return this.requestHandler
+		return this.rest
 			.request('POST', Endpoints.INVITES(guildId), {
 				body: {
 					max_age: maxAge,
@@ -169,7 +169,7 @@ export class Client extends EventEmitter {
 		else if (typeof messageData.content != 'string')
 			throw new TypeError('Content for Message must be a string')
 
-		return this.requestHandler
+		return this.rest
 			.request('POST', Endpoints.MESSAGES(guildId, channelId), {
 				body: messageData,
 			})
@@ -185,41 +185,32 @@ export class Client extends EventEmitter {
 			throw new TypeError('Position of Role must be a string.')
 		//oermissions
 
-		return this.requestHandler
+		return this.rest
 			.request('POST', Endpoints.ROLES(guildId), { body: roleData })
 			.then((raw) => new Role(raw, this))
 	}
 
 	debug(
 		msg: string,
-		service: 'Request Handler' | 'Client' | 'Websocket Manager' = 'Client'
+		service: 'Rest Manager' | 'Client' | 'Websocket Manager' = 'Client'
 	) {
 		return this.emit(Events.DEBUG, `[Ferris-Lib => ${service}] ${msg}`)
 	}
 
 	deleteChannel(channelId: SnowFlake): Promise<any> {
-		return this.requestHandler.request(
-			'DELETE',
-			Endpoints.CHANNEL(channelId)
-		)
+		return this.rest.request('DELETE', Endpoints.CHANNEL(channelId))
 	}
 
 	deleteGuild(guildId: SnowFlake): Promise<any> {
-		return this.requestHandler.request('DELETE', Endpoints.GUILD(guildId))
+		return this.rest.request('DELETE', Endpoints.GUILD(guildId))
 	}
 
 	deleteMessage(messageId: SnowFlake): Promise<any> {
-		return this.requestHandler.request(
-			'DELETE',
-			Endpoints.MESSAGE(messageId)
-		)
+		return this.rest.request('DELETE', Endpoints.MESSAGE(messageId))
 	}
 
 	deleteRole(guildId: SnowFlake, roleId: SnowFlake): Promise<any> {
-		return this.requestHandler.request(
-			'DELETE',
-			Endpoints.ROLE(guildId, roleId)
-		)
+		return this.rest.request('DELETE', Endpoints.ROLE(guildId, roleId))
 	}
 
 	editChannel(
@@ -229,7 +220,7 @@ export class Client extends EventEmitter {
 		if (!channelData) throw new Error('Missing Edit data')
 		else if (channelData.name && typeof channelData.name != 'string')
 			throw new TypeError('Channel name must be a string.')
-		return this.requestHandler
+		return this.rest
 			.request('PATCH', Endpoints.CHANNEL(channelId), {
 				body: channelData,
 			})
@@ -240,7 +231,7 @@ export class Client extends EventEmitter {
 		if (!guildData) throw new Error('Missing Edit data')
 		else if (guildData.name && typeof guildData.name != 'string')
 			throw new TypeError('Guild name must be a string.')
-		return this.requestHandler
+		return this.rest
 			.request('PATCH', Endpoints.GUILD(guildId), { body: guildData })
 			.then((raw) => new Guild(raw, this))
 	}
@@ -257,7 +248,7 @@ export class Client extends EventEmitter {
 		else if (roleData.position && typeof roleData.position != 'number')
 			throw new TypeError('Position of Role must be a string.')
 		//oermissions
-		return this.requestHandler
+		return this.rest
 			.request('PATCH', Endpoints.ROLE(guildId, roleId), {
 				body: roleData,
 			})
@@ -268,7 +259,7 @@ export class Client extends EventEmitter {
 		channelId: SnowFlake,
 		cache: boolean = true
 	): Promise<Channel> {
-		return this.requestHandler
+		return this.rest
 			.request('GET', Endpoints.CHANNEL(channelId))
 			.then((raw) => {
 				if (this.channels.has(channelId))
@@ -292,7 +283,7 @@ export class Client extends EventEmitter {
 		}: { fetchMembers?: boolean; fetchChannels?: boolean } = {}
 	): Promise<Guild> {
 		const params = { members: fetchMembers, channels: fetchChannels }
-		return this.requestHandler
+		return this.rest
 			.request('GET', Endpoints.GUILD(guildId), { params })
 			.then((raw_guild) => {
 				if (this.guilds.has(raw_guild.id_string))
@@ -306,7 +297,7 @@ export class Client extends EventEmitter {
 	}
 
 	fetchGuildInvites(guildId): Promise<StorageBox<string, Invite>> {
-		return this.requestHandler
+		return this.rest
 			.request('GET', Endpoints.INVITES(guildId))
 			.then((raw_ins) => {
 				const invs: StorageBox<string, Invite> = new StorageBox()
@@ -318,13 +309,13 @@ export class Client extends EventEmitter {
 	}
 
 	fetchInvite(code: string): Promise<Invite> {
-		return this.requestHandler
+		return this.rest
 			.request('GET', Endpoints.INVITE(code))
 			.then((inv) => new Invite(inv, this))
 	}
 
 	fetchMessage(messageId: SnowFlake): Promise<Message> {
-		return this.requestHandler
+		return this.rest
 			.request('GET', Endpoints.MESSAGE(messageId))
 			.then((raw) => {
 				if (this.messages.has(raw.id_string))
@@ -336,7 +327,7 @@ export class Client extends EventEmitter {
 	}
 
 	fetchRole(guildId: SnowFlake, roleId: SnowFlake): Promise<Role> {
-		return this.requestHandler
+		return this.rest
 			.request('GET', Endpoints.ROLE(guildId, roleId))
 			.then((raw) => {
 				if (
@@ -364,28 +355,25 @@ export class Client extends EventEmitter {
 		id: SnowFlake,
 		cache: boolean = true
 	): User | Promise<User> {
-		return this.requestHandler
-			.request('GET', Endpoints.USER(id))
-			.then((raw_user) => {
-				if (cache && this.users.has(id))
-					return this.users.get(id)._update(raw_user)
-				const fetchUser = new User(raw_user, this)
-				if (cache && !this.users.has(id)) this.users.set(id, fetchUser)
-				return fetchUser
-			})
+		return this.rest.request('GET', Endpoints.USER(id)).then((raw_user) => {
+			if (cache && this.users.has(id))
+				return this.users.get(id)._update(raw_user)
+			const fetchUser = new User(raw_user, this)
+			if (cache && !this.users.has(id)) this.users.set(id, fetchUser)
+			return fetchUser
+		})
 	}
 
 	private getAccountToken(data: ConnectOptions) {
-		return this.requestHandler
+		return this.rest
 			.request('POST', Endpoints.AUTH_USER(), {
-				headers: data,
-				email_auth: true,
+				headers: { Email: data.email, Password: data.password },
 			})
 			.then((data) => data.token)
 	}
 
 	getWsInfo(): Promise<any> {
-		return this.requestHandler.request('GET', Endpoints.WS_INFO())
+		return this.rest.request('GET', Endpoints.WS_INFO())
 	}
 
 	public async login(data: ConnectType): Promise<void> {
@@ -423,7 +411,7 @@ export class Client extends EventEmitter {
 		memberId: SnowFlake,
 		roleId: SnowFlake
 	): Promise<any> {
-		return this.requestHandler.request(
+		return this.rest.request(
 			'DELETE',
 			Endpoints.MEMBER_ROLES(guildId, memberId, roleId)
 		)
@@ -435,7 +423,7 @@ export class Client extends EventEmitter {
 	 * @returns {Promise<unknown>}
 	 */
 	useInvite(code: string): Promise<unknown> {
-		return this.requestHandler.request('POST', Endpoints.INVITE(code))
+		return this.rest.request('POST', Endpoints.INVITE(code))
 	}
 
 	/**

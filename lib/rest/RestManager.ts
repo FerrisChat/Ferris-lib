@@ -3,28 +3,23 @@ import axios from 'axios'
 import { API_VERSION, Events, RequestMethods, Urls } from '../util/Constants'
 import { FerrisAPIError } from '../errors/FerrisApiError'
 import { HTTPError } from '../errors/HttpError'
+import { URLSearchParams } from 'url'
 
 /**
  * The class the Client uses for Interacting with the APi.
  */
-export class RequestHandler {
+export class RestManager {
 	userAgent: string
 	baseUrl: string
 	client: Client
-	status: {
-		retires: number
-	}
 	headers: {}
 
 	constructor(client: Client) {
 		this.baseUrl = Urls.Api + Urls.Base_Api + API_VERSION
 		this.client = client
-		;(this.userAgent = `FerrisLib (https://github.com/Drxckzyz/Ferris-lib, ${
+		this.userAgent = `FerrisLib (https://github.com/Drxckzyz/Ferris-lib, ${
 			require('../../package.json').version
-		})`),
-			(this.status = {
-				retires: 0,
-			})
+		})`
 	}
 
 	request(
@@ -34,12 +29,10 @@ export class RequestHandler {
 			body,
 			headers = {},
 			params,
-			email_auth = false,
 		}: {
 			body?: any
-			headers?: any
+			headers?: Record<string, string>
 			params?: any
-			email_auth?: boolean
 		} = {}
 	): Promise<any> {
 		return new Promise(async (resolve, reject) => {
@@ -47,13 +40,10 @@ export class RequestHandler {
 			const reqHeaders = {
 				'User-Agent': this.userAgent,
 				...this.client.options.rest.headers,
+				...headers,
 			}
 			if (this.client._token != undefined)
 				reqHeaders['Authorization'] = this.client._token
-			if (email_auth) {
-				reqHeaders['Email'] = headers['email']
-				reqHeaders['Password'] = headers['password']
-			}
 
 			if (body) {
 				reqHeaders['Content-Type'] = 'application/json'
@@ -84,7 +74,7 @@ export class RequestHandler {
 					`${method} ${url} ${response.status} ${
 						response.statusText
 					} (${Date.now() - startTime}ms)`,
-					'Request Handler'
+					'Rest Manager'
 				)
 				this.client.emit(Events.RAW_REST, response.data)
 				return resolve(response.data)

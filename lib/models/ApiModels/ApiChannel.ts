@@ -24,7 +24,7 @@ export class ApiChannel extends Base {
 	}
 
 	fetch(): Promise<this> {
-		return this.#_client.requestHandler
+		return this.#_client.rest
 			.request('GET', Endpoints.CHANNEL(this.id))
 			.then((raw) => this._patch(raw))
 	}

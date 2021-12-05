@@ -55,7 +55,7 @@ export class User extends Base {
 	 * @returns {Promise<User>}
 	 */
 	fetch(): Promise<this> {
-		return this.#_client.requestHandler
+		return this.#_client.rest
 			.request('GET', Endpoints.USER(this.id))
 			.then((user) => {
 				this._patch(user)

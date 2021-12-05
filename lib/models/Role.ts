@@ -1,4 +1,5 @@
-import { Base, Client, Guild } from '..'
+import { Client, Guild } from '..'
+import { Base } from '../models/Base'
 import { RoleEditOptions } from '../util/Constants'
 
 export class Role extends Base {

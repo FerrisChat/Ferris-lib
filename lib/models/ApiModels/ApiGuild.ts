@@ -34,7 +34,7 @@ export class ApiGuild extends Base {
 	}
 
 	fetch(): Promise<this> {
-		return this.#_client.requestHandler
+		return this.#_client.rest
 			.request('GET', Endpoints.GUILD(this.id))
 			.then((raw) => this._patch(raw))
 	}
