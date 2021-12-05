@@ -24,6 +24,8 @@ export class User extends Base {
 	 */
 	public guilds: Array<ApiGuild>
 
+	public bot: boolean
+
 	/**
 	 * The flags of the user
 	 * @type {number}
@@ -40,10 +42,12 @@ export class User extends Base {
 	 * @param {any} data The User data
 	 * @param {Client} client
 	 */
-	constructor(data: any, client: Client) {
+	constructor(data: any, client: Client, bot: boolean = false) {
 		super(data.id_string ? data.id_string : data.user_id_string)
 
 		this.guilds = new Array()
+
+		this.bot = bot
 
 		this.#_client = client
 
@@ -61,6 +65,12 @@ export class User extends Base {
 				this._patch(user)
 				return this
 			})
+	}
+
+	getBotToken(botId: SnowFlake) {
+		return this.#_client.rest
+			.request('POST', Endpoints.AUTH_BOT(this.id, botId))
+			.then((data) => data.token)
 	}
 
 	get tag(): string {
