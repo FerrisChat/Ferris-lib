@@ -1,6 +1,11 @@
 import { Guild, Message, StorageBox } from '..'
 import { Client } from '../Client'
-import { ChannelEditOptions, MessageData, SnowFlake } from '../util/Constants'
+import {
+	ChannelEditOptions,
+	FetchChannelMessagesOptions,
+	MessageData,
+	SnowFlake,
+} from '../util/Constants'
 import { Base } from './Base'
 
 /**
@@ -60,6 +65,12 @@ export class Channel extends Base {
 
 	fetch(cache: boolean = true): Promise<Channel> {
 		return this.#_client.fetchChannel(this.id, cache)
+	}
+
+	fetchMessages(
+		options: FetchChannelMessagesOptions
+	): Promise<StorageBox<SnowFlake, Message>> {
+		return this.#_client.fetchMessages(this.id, options)
 	}
 
 	_patch(data: any) {

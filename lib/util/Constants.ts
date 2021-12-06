@@ -138,7 +138,8 @@ export class Endpoints {
 	static CHANNELS = (guildId) => `/guilds/${guildId}/channels`
 
 	//Messages
-	static MESSAGE = (messageId) => `/messages/${messageId}`
+	static MESSAGE = (channelId, messageId) =>
+		`/channels/${channelId}/messages/${messageId}`
 	static MESSAGES = (channelId) => `/channels/${channelId}/messages`
 
 	//Members
@@ -177,11 +178,22 @@ export interface GuildEditOptions {
 	name: string
 }
 
+export interface MessageEditOptions {
+	content: string
+	nonce?: string
+}
+
 export interface RoleEditOptions {
 	name?: string
 	color?: number
 	position?: number
 	permissions?: unknown
+}
+
+export interface FetchChannelMessagesOptions {
+	limit?: number
+	oldestFirst?: boolean
+	offset?: number
 }
 
 /**

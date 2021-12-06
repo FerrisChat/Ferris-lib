@@ -1,6 +1,6 @@
 import { Channel, User } from '.'
 import { Client } from '../Client'
-import { SnowFlake } from '../util/Constants'
+import { MessageEditOptions, SnowFlake } from '../util/Constants'
 import { Base } from './Base'
 import { Embed } from './Embed'
 
@@ -66,6 +66,18 @@ export class Message extends Base {
 		if ('nonce' in data && data.nonce != null) this.nonce = data.nonce
 
 		this._patch(data)
+	}
+
+	delete(): Promise<null> {
+		return this.#_client.deleteMessage(this.channelId, this.id)
+	}
+
+	edit(messageData: string | MessageEditOptions): Promise<Message> {
+		return this.#_client.editMessage(this.channelId, this.id, messageData)
+	}
+
+	fetch(): Promise<Message> {
+		return this.#_client.fetchMessage(this.channelId, this.id)
 	}
 
 	_patch(data: any) {

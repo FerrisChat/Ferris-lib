@@ -14,6 +14,8 @@ import {
 	ChannelEditOptions,
 	GuildEditOptions,
 	RoleEditOptions,
+	MessageEditOptions,
+	FetchChannelMessagesOptions,
 } from './util/Constants'
 import { FerrisError } from './errors/FerrislibError'
 import { WebsocketManager } from './gateway/WebsocketManager'
@@ -204,8 +206,11 @@ export class Client extends EventEmitter {
 		return this.rest.request('DELETE', Endpoints.GUILD(guildId))
 	}
 
-	deleteMessage(messageId: SnowFlake): Promise<any> {
-		return this.rest.request('DELETE', Endpoints.MESSAGE(messageId))
+	deleteMessage(channelId: SnowFlake, messageId: SnowFlake): Promise<any> {
+		return this.rest.request(
+			'DELETE',
+			Endpoints.MESSAGE(channelId, messageId)
+		)
 	}
 
 	deleteRole(guildId: SnowFlake, roleId: SnowFlake): Promise<any> {
@@ -233,6 +238,34 @@ export class Client extends EventEmitter {
 		return this.rest
 			.request('PATCH', Endpoints.GUILD(guildId), { body: guildData })
 			.then((raw) => new Guild(raw, this))
+	}
+
+	editMessage(
+		channelId: SnowFlake,
+		messageId: SnowFlake,
+		messageData: string | MessageEditOptions
+	): Promise<Message> {
+		if (typeof messageData === 'string') {
+			messageData = { content: messageData }
+		} else if (typeof messageData === 'object') {
+			if (typeof messageData.content != 'string')
+				throw new TypeError('Message Content must be a string.')
+			else if (messageData.content.length > 10240)
+				throw new RangeError(
+					'Message content is more than the character limit of 10,240 characters.'
+				)
+			if (messageData.nonce && typeof messageData.nonce != 'string')
+				throw new TypeError('Message nonce must be a string.')
+		} else
+			throw new TypeError(
+				'Invalid Type provided for Message Edit options'
+			)
+
+		return this.rest
+			.request('PATCH', Endpoints.MESSAGE(channelId, messageId), {
+				body: messageData,
+			})
+			.then((data) => new Message(data, this))
 	}
 
 	editRole(
@@ -313,15 +346,44 @@ export class Client extends EventEmitter {
 			.then((inv) => new Invite(inv, this))
 	}
 
-	fetchMessage(messageId: SnowFlake): Promise<Message> {
+	fetchMessage(channelId: SnowFlake, messageId: SnowFlake): Promise<Message> {
 		return this.rest
-			.request('GET', Endpoints.MESSAGE(messageId))
+			.request('GET', Endpoints.MESSAGE(channelId, messageId))
 			.then((raw) => {
 				if (this.messages.has(raw.id_string))
 					return this.messages.get(raw.id_string)._patch(raw)
 				const m = new Message(raw, this)
 				this.messages.set(m.id, m)
 				return m
+			})
+	}
+
+	fetchMessages(
+		channelId: SnowFlake,
+		options?: FetchChannelMessagesOptions
+	): Promise<StorageBox<SnowFlake, Message>> {
+		const params = {}
+		if (options.limit && typeof options.limit != 'number')
+			throw new TypeError('The option limit must be a number')
+		else if (options.offset && typeof options.offset != 'number')
+			throw new TypeError('The option offset must be a number')
+		else if (options.oldestFirst && typeof options.oldestFirst != 'boolean')
+			throw new TypeError('The option oldestFirst must be a boolean')
+		if (options.limit) params['limit'] = options.limit
+		if (options.offset) params['offset'] = options.offset
+		if (options.oldestFirst) params['oldest_first'] = options.oldestFirst
+
+		return this.rest
+			.request('GET', Endpoints.MESSAGES(channelId), {
+				params,
+			})
+			.then((data) => {
+				const messages: StorageBox<SnowFlake, Message> =
+					new StorageBox()
+				for (const message of data) {
+					messages.set(message.id_string, new Message(message, this))
+				}
+				return messages
 			})
 	}
 
