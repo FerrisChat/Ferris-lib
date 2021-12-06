@@ -161,6 +161,7 @@ export class Endpoints {
 	static AUTH_BOT = (ownerId, botId) => `/users/${ownerId}/bots/${botId}/auth`
 	static USER_BOT = (ownerId, botId) => `/users/${ownerId}/bots/${botId}`
 	static USER_BOTS = (ownerId) => `/users/${ownerId}/bots`
+	static BOT = (botId) => `/bots/${botId}/add`
 
 	//Roles
 	static ROLES = (guildId) => `/guilds/${guildId}/roles`
@@ -209,6 +210,59 @@ export type RequestMethods = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
  * @type {string}
  */
 export type SnowFlake = string
+
+export enum UserFlags {
+	/**
+	 * The account is a bot
+	 */
+	BOT_ACCOUNT =     0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0001,
+	/**
+	 * This account is a verified scam.
+	 * Verified is both verified by staff, and reported by a large amount of people.
+	 */
+	VERIFIED_SCAM =   0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0010,
+	/**
+	 * This account could possibly be a scam, as many users have reported it as such.
+	 */
+	POSSIBLE_SCAM =   0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0100,
+	/**
+	 * This account has had either its email address or token changed within the past 24 hours.
+	 * It may not be controlled by its real owner, so take precautions when using mod actions against them.
+	 */
+	COMPROMISED =     0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_1000,
+	/**
+	 * This account is a system account.
+	 */
+	SYSTEM =          0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0001_0000,
+	/**
+	 * This bot was one of the first 100 bots created on the platform.
+	 */
+	EARLY_BOT =       0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0010_0000,
+	/**
+	 *  This account is the owner of one of the first 100 bots created on the platform.
+	 */
+	EARLY_BOT_DEV =   0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0100_0000,
+	/**
+	 * This account was one of the first 1,000 created on the platform.
+	 */
+	EARLY_SUPPORTER = 0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_1000_0000,
+	/**
+	 * This account is owned by someone who has donated to help keep the platform running, and support development.
+	 */
+	DONATOR =         0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0001_0000_0000,
+	/**
+	 * This account is owned by a maintainer of a API wrapper for the FerrisChat API in a language.
+	 */
+	LIBRARY_DEV =     0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0010_0000_0000,
+	/**
+	 *  This account is owned by someone who has contributed to FerrisChat's codebase in some way.
+	 */
+	CONTRIBUTOR =     0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0100_0000_0000,
+	/**
+	 * This account is owned by a core developer/maintainer of FerrisChat itself.
+	 */
+	MAINTAINER =      0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_1000_0000_0000,
+}
 
 export enum WebSocketCloseCodes {
 	ABNORMAL_CLOSURE = 1006,
