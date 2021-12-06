@@ -208,7 +208,7 @@ export class Client extends EventEmitter {
 	}
 
 	deleteMe(): Promise<any> {
-		return this.rest.request("DELETE", Endpoints.USER_ME())
+		return this.rest.request('DELETE', Endpoints.USER_ME())
 	}
 
 	deleteMessage(channelId: SnowFlake, messageId: SnowFlake): Promise<any> {
@@ -237,13 +237,19 @@ export class Client extends EventEmitter {
 	}
 
 	editMe(options: UserEditOptions): Promise<ClientUser> {
-		if(options.avatar && typeof options.avatar != "string") throw new TypeError("The option avatar must be a string")
-		else if(options.email && typeof options.email != "string") throw new TypeError("The option email must be a string")
-		else if(options.password && typeof options.password != "string") throw new TypeError("The option password must be a string")
-		else if(options.username && typeof options.username != "string") throw new TypeError("The option username must be a string")
-		return this.rest.request("PATCH", Endpoints.USER_ME(), {
-			body: options,
-		}).then((data) => this.user._patch(data))
+		if (options.avatar && typeof options.avatar != 'string')
+			throw new TypeError('The option avatar must be a string')
+		else if (options.email && typeof options.email != 'string')
+			throw new TypeError('The option email must be a string')
+		else if (options.password && typeof options.password != 'string')
+			throw new TypeError('The option password must be a string')
+		else if (options.username && typeof options.username != 'string')
+			throw new TypeError('The option username must be a string')
+		return this.rest
+			.request('PATCH', Endpoints.USER_ME(), {
+				body: options,
+			})
+			.then((data) => this.user._patch(data))
 	}
 
 	editGuild(guildId: SnowFlake, guildData: GuildEditOptions): Promise<Guild> {
