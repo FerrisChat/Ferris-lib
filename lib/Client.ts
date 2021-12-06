@@ -366,7 +366,7 @@ export class Client extends EventEmitter {
 	private getAccountToken(data: ConnectOptions) {
 		return this.rest
 			.request('POST', Endpoints.AUTH_USER(), {
-				headers: { Email: data.email, Password: data.password },
+				body: data,
 			})
 			.then((data) => data.token)
 	}

@@ -14,7 +14,6 @@ export class RestManager {
 	client: Client
 	headers: Record<string, string>
 	status: {
-		lastRequestRecieved: number
 		latency: number
 		retries: number
 	}
@@ -26,7 +25,6 @@ export class RestManager {
 			require('../../package.json').version
 		})`
 		this.status = {
-			lastRequestRecieved: 0,
 			latency: Infinity,
 			retries: 0,
 		}
@@ -90,15 +88,12 @@ export class RestManager {
 					} (${Date.now() - startTime}ms)`,
 					'Rest Manager'
 				)
-				this.status.latency = this.status.lastRequestRecieved
-					? Date.now() - this.status.lastRequestRecieved
-					: Infinity
-				this.status.lastRequestRecieved = Date.now()
+				this.status.latency = Date.now() - startTime
 				this.client.emit(Events.RAW_REST, response.data)
 				return resolve(response.data)
 			} catch (error) {
 				if (error.response) {
-					console.log(error.response.data)
+					console.log(error.response)
 					this.client.debug(
 						`${method} ${url} ${error.response.status} ${
 							error.response.statusText
