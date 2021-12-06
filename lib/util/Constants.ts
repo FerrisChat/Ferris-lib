@@ -30,6 +30,13 @@ export interface ChannelCreateOptions {
 	name: string
 }
 
+export interface UserEditOptions {
+	username?: string;
+	email?: string;
+	password?: string;
+	avatar?: string;
+}
+
 export interface GuildCreateOptions {
 	name: string
 }
@@ -149,6 +156,7 @@ export class Endpoints {
 
 	//Users
 	static USER = (userId) => `/users/${userId}`
+	static USER_ME = () => `/users/me`
 	static USER_GUILDS = (userId) => `/users/${userId}/guilds`
 	static USERS = () => `/users`
 

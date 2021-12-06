@@ -16,6 +16,7 @@ import {
 	RoleEditOptions,
 	MessageEditOptions,
 	FetchChannelMessagesOptions,
+	UserEditOptions,
 } from './util/Constants'
 import { FerrisError } from './errors/FerrislibError'
 import { WebsocketManager } from './gateway/WebsocketManager'
@@ -206,6 +207,10 @@ export class Client extends EventEmitter {
 		return this.rest.request('DELETE', Endpoints.GUILD(guildId))
 	}
 
+	deleteMe(): Promise<any> {
+		return this.rest.request("DELETE", Endpoints.USER_ME())
+	}
+
 	deleteMessage(channelId: SnowFlake, messageId: SnowFlake): Promise<any> {
 		return this.rest.request(
 			'DELETE',
@@ -229,6 +234,16 @@ export class Client extends EventEmitter {
 				body: channelData,
 			})
 			.then((raw) => new Channel(raw, this))
+	}
+
+	editMe(options: UserEditOptions): Promise<ClientUser> {
+		if(options.avatar && typeof options.avatar != "string") throw new TypeError("The option avatar must be a string")
+		else if(options.email && typeof options.email != "string") throw new TypeError("The option email must be a string")
+		else if(options.password && typeof options.password != "string") throw new TypeError("The option password must be a string")
+		else if(options.username && typeof options.username != "string") throw new TypeError("The option username must be a string")
+		return this.rest.request("PATCH", Endpoints.USER_ME(), {
+			body: options,
+		}).then((data) => this.user._patch(data))
 	}
 
 	editGuild(guildId: SnowFlake, guildData: GuildEditOptions): Promise<Guild> {

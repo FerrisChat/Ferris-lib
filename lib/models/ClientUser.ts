@@ -1,5 +1,5 @@
 import { Client } from '../Client'
-import { Endpoints } from '../util/Constants'
+import { Endpoints, UserEditOptions } from '../util/Constants'
 import { Base } from './Base'
 import { Guild } from './Guild'
 
@@ -35,17 +35,22 @@ export class ClientUser extends Base {
 		this._patch(data)
 	}
 
+	delete(): Promise<any> {
+		return this.#_me.deleteMe()
+	}
+
+	edit(options: UserEditOptions): Promise<ClientUser> {
+		return this.#_me.editMe(options)
+	}
+
 	/**
 	 * Fetches the current user and updates it
 	 * @returns {Promise<User>}
 	 */
 	fetch(): Promise<this> {
 		return this.#_me.rest
-			.request('GET', Endpoints.USER(this.id))
-			.then((user) => {
-				this._patch(user)
-				return this
-			})
+			.request('GET', Endpoints.USER_ME())
+			.then((user) => this._patch(user))
 	}
 
 	get tag(): string {
