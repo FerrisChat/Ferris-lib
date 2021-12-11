@@ -104,9 +104,10 @@ export class BitField {
 	 */
 	serialize(...hasParams: any) {
 		const serialized = {}
-		// @ts-expect-error
-		for (const [flag, bit] of Object.entries(this.#FLAGS))
+		for (const [flag, bit] of Object.entries(this.#FLAGS)) {
+			// @ts-expect-error
 			serialized[flag] = this.has(bit, ...hasParams)
+		}
 		return serialized
 	}
 
@@ -116,10 +117,10 @@ export class BitField {
 	 * @returns {string[]}
 	 */
 	toArray(...hasParams) {
-		// @ts-expect-error
-		return Object.keys(this.#FLAGS).filter((bit) =>
+		return Object.keys(this.#FLAGS).filter((bit) => {
+			// @ts-expect-error
 			this.has(bit, ...hasParams)
-		)
+		})
 	}
 
 	toJSON() {
