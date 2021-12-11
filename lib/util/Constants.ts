@@ -166,7 +166,7 @@ export class Endpoints {
 
 	//Auth
 	static AUTH_USER = () => `/auth`
-	static AUTH_BOT = (ownerId, botId) => `/users/${ownerId}/bots/${botId}/auth`
+	static AUTH_BOT = (botId) => `/users/me/bots/${botId}/auth`
 	static USER_BOT = (ownerId, botId) => `/users/${ownerId}/bots/${botId}`
 	static USER_BOTS = (ownerId) => `/users/${ownerId}/bots`
 	static BOT = (botId) => `/bots/${botId}/add`
@@ -223,53 +223,53 @@ export enum UserFlags {
 	/**
 	 * The account is a bot
 	 */
-	BOT_ACCOUNT = 0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0001,
+	BOT_ACCOUNT = 1 << 0,
 	/**
 	 * This account is a verified scam.
 	 * Verified is both verified by staff, and reported by a large amount of people.
 	 */
-	VERIFIED_SCAM = 0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0010,
+	VERIFIED_SCAM = 1 << 2,
 	/**
 	 * This account could possibly be a scam, as many users have reported it as such.
 	 */
-	POSSIBLE_SCAM = 0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0100,
+	POSSIBLE_SCAM = 1 << 2,
 	/**
 	 * This account has had either its email address or token changed within the past 24 hours.
 	 * It may not be controlled by its real owner, so take precautions when using mod actions against them.
 	 */
-	COMPROMISED = 0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_1000,
+	COMPROMISED = 1 << 3,
 	/**
 	 * This account is a system account.
 	 */
-	SYSTEM = 0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0001_0000,
+	SYSTEM = 1 << 4,
 	/**
 	 * This bot was one of the first 100 bots created on the platform.
 	 */
-	EARLY_BOT = 0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0010_0000,
+	EARLY_BOT = 1 << 5,
 	/**
 	 *  This account is the owner of one of the first 100 bots created on the platform.
 	 */
-	EARLY_BOT_DEV = 0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0100_0000,
+	EARLY_BOT_DEV = 1 << 6,
 	/**
 	 * This account was one of the first 1,000 created on the platform.
 	 */
-	EARLY_SUPPORTER = 0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_1000_0000,
+	EARLY_SUPPORTER = 1 << 7,
 	/**
 	 * This account is owned by someone who has donated to help keep the platform running, and support development.
 	 */
-	DONATOR = 0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0001_0000_0000,
+	DONATOR = 1 << 8,
 	/**
 	 * This account is owned by a maintainer of a API wrapper for the FerrisChat API in a language.
 	 */
-	LIBRARY_DEV = 0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0010_0000_0000,
+	LIBRARY_DEV = 1 << 9,
 	/**
 	 *  This account is owned by someone who has contributed to FerrisChat's codebase in some way.
 	 */
-	CONTRIBUTOR = 0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0100_0000_0000,
+	CONTRIBUTOR = 1 << 10,
 	/**
 	 * This account is owned by a core developer/maintainer of FerrisChat itself.
 	 */
-	MAINTAINER = 0b0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_1000_0000_0000,
+	MAINTAINER = 1 << 11,
 }
 
 export enum WebSocketCloseCodes {

@@ -149,8 +149,8 @@ export class Client extends EventEmitter {
 
 	createInvite(
 		guildId: SnowFlake,
-		maxAge: number,
-		maxUses: number
+		maxAge?: number,
+		maxUses?: number
 	): Promise<Invite> {
 		return this.rest
 			.request('POST', Endpoints.INVITES(guildId), {

@@ -1,5 +1,6 @@
 import { Client } from '../Client'
 import { Endpoints, UserEditOptions } from '../util/Constants'
+import { UserFlags } from '../util/UserFlags'
 import { Base } from './Base'
 import { Guild } from './Guild'
 
@@ -18,9 +19,9 @@ export class ClientUser extends Base {
 
 	/**
 	 * The flags of the user
-	 * @type {number}
+	 * @type {UserFlags}
 	 */
-	public flags: number
+	public flags: UserFlags
 
 	#_me: Client
 	/**
@@ -63,7 +64,7 @@ export class ClientUser extends Base {
 		}
 
 		if ('flags' in data) {
-			this.flags = data.flags
+			this.flags = new UserFlags(data.flags)
 		}
 
 		if ('guilds' in data && data.guilds != null) {

@@ -46,7 +46,7 @@ export class StorageBox<K, V> extends Map<K, V> {
 	/**
 	 * Find something from the cache
 	 * @param func
-	 * @returns
+	 * @returns V
 	 */
 	public find(func: (item: V) => boolean) {
 		for (const item of this.values()) {
@@ -84,7 +84,7 @@ export class StorageBox<K, V> extends Map<K, V> {
 
 	/**
 	 * Maps all The Data in an Array
-	 * @param func
+	 * @param {func}
 	 * @returns An Array
 	 */
 	public map(func: (item: V) => boolean) {

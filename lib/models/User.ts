@@ -1,6 +1,8 @@
+import { Constants } from '..'
 import { Client } from '../Client'
 import { Endpoints, SnowFlake } from '../util/Constants'
 import { StorageBox } from '../util/StorageBox'
+import { UserFlags } from '../util/UserFlags'
 import { ApiGuild } from './ApiModels/ApiGuild'
 import { Base } from './Base'
 import { Guild } from './Guild'
@@ -28,9 +30,9 @@ export class User extends Base {
 
 	/**
 	 * The flags of the user
-	 * @type {number}
+	 * @type {UserFlags}
 	 */
-	public flags: number
+	public flags: UserFlags
 
 	/**
 	 * The client that this user belongs to
@@ -42,12 +44,10 @@ export class User extends Base {
 	 * @param {any} data The User data
 	 * @param {Client} client
 	 */
-	constructor(data: any, client: Client, bot: boolean = false) {
+	constructor(data: any, client: Client) {
 		super(data.id_string ? data.id_string : data.user_id_string)
 
 		this.guilds = new Array()
-
-		this.bot = bot
 
 		this.#_client = client
 
@@ -67,12 +67,6 @@ export class User extends Base {
 			})
 	}
 
-	getBotToken(botId: SnowFlake) {
-		return this.#_client.rest
-			.request('POST', Endpoints.AUTH_BOT(this.id, botId))
-			.then((data) => data.token)
-	}
-
 	get tag(): string {
 		return this.name + '#' + this.discriminator
 	}
@@ -83,7 +77,9 @@ export class User extends Base {
 		}
 
 		if ('flags' in data) {
-			this.flags = data.flags
+			this.flags = new UserFlags(data.flags)
+			if (this.flags.has(Constants.UserFlags.BOT_ACCOUNT)) this.bot = true
+			else this.bot = false
 		}
 
 		if ('guilds' in data && data.guilds != null) {
