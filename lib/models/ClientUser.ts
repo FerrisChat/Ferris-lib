@@ -1,6 +1,6 @@
 import { Client } from '../Client'
+import { UserFlags } from '../util/Bitflags'
 import { Endpoints, UserEditOptions } from '../util/Constants'
-import { UserFlags } from '../util/UserFlags'
 import { Base } from './Base'
 import { Guild } from './Guild'
 

@@ -176,7 +176,34 @@ export class WebsocketManager extends EventEmitter {
 					this.client.channels
 						.get(message.channelId)
 						.messages.set(message.id, message)
+				this.client.messages.set(message.id, message)
 				this.client.emit(Events.MESSAGE_CREATE, message)
+				break
+
+			case WebSocketEvents.MESSAGE_DELETE:
+				let deletedMessage
+				if (this.client.messages.has(payload.d.message.id)) {
+					deletedMessage = this.client.messages
+						.get(payload.d.message.id)
+						._patch(payload.d.message).deleted = true
+				} else if (
+					this.client.channels.has(
+						payload.d.message.channel_id_string
+					) &&
+					this.client.channels
+						.get(payload.d.message.channel_id_string)
+						.messages.has(payload.d.message.id)
+				) {
+					deletedMessage = this.client.channels
+						.get(payload.d.message.channel_id_string)
+						.messages.get(payload.d.message.id).deleted = true
+				} else {
+					deletedMessage = new Message(
+						payload.d.message,
+						this.client
+					).deleted = true
+				}
+				this.client.emit(Events.MESSAGE_DELETE, deletedMessage)
 				break
 
 			default:

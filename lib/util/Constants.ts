@@ -58,6 +58,7 @@ export enum Events {
 	RAW_WS = 'rawWs',
 	RAW_REST = 'rawRest',
 	MESSAGE_CREATE = 'messageCreate',
+	MESSAGE_DELETE = 'messageDelete',
 }
 
 export interface ClientEvents<T> {
@@ -65,6 +66,7 @@ export interface ClientEvents<T> {
 	(event: 'ready', listener: () => void): T
 	(event: 'rawWs' | 'rawRest', listener: (data: any) => void): T
 	(event: 'messageCreate', listener: (message: Message) => void): T
+	(event: 'messageDelete', listener: (message: Message) => void): T
 }
 
 /**
@@ -219,6 +221,11 @@ export type RequestMethods = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
  */
 export type SnowFlake = string
 
+export enum GuildFlags {
+	VERIFIED_GUILD = 1 << 0,
+	VERIFIED_SCAM = 1 << 2,
+}
+
 export enum UserFlags {
 	/**
 	 * The account is a bot
@@ -228,7 +235,7 @@ export enum UserFlags {
 	 * This account is a verified scam.
 	 * Verified is both verified by staff, and reported by a large amount of people.
 	 */
-	VERIFIED_SCAM = 1 << 2,
+	VERIFIED_SCAM = 1 << 1,
 	/**
 	 * This account could possibly be a scam, as many users have reported it as such.
 	 */

@@ -1,11 +1,9 @@
 import { Constants } from '..'
 import { Client } from '../Client'
+import { UserFlags } from '../util/Bitflags'
 import { Endpoints, SnowFlake } from '../util/Constants'
-import { StorageBox } from '../util/StorageBox'
-import { UserFlags } from '../util/UserFlags'
 import { ApiGuild } from './ApiModels/ApiGuild'
 import { Base } from './Base'
-import { Guild } from './Guild'
 
 /**
  * The user model
@@ -79,7 +77,6 @@ export class User extends Base {
 		if ('flags' in data) {
 			this.flags = new UserFlags(data.flags)
 			if (this.flags.has(Constants.UserFlags.BOT_ACCOUNT)) this.bot = true
-			else this.bot = false
 		}
 
 		if ('guilds' in data && data.guilds != null) {

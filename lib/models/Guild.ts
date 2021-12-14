@@ -1,4 +1,4 @@
-import { Role } from '..'
+import { GuildFlags, Role } from '..'
 import { Client } from '../Client'
 import {
 	ChannelEditOptions,
@@ -33,6 +33,8 @@ export class Guild extends Base {
 	 * @type {StorageBox<SnowFlake, GuildChannel>}
 	 */
 	public channels: StorageBox<SnowFlake, Channel>
+
+	public flags: GuildFlags
 
 	/**
 	 * A cache with the Members for the Guild
@@ -143,6 +145,11 @@ export class Guild extends Base {
 	_patch(data: any) {
 		if ('name' in data) {
 			this.name = data.name
+		}
+		if ('flags' in data && data.flags != null) {
+			this.flags = new GuildFlags(data.flags)
+		} else {
+			this.flags = null
 		}
 		if ('owner_id_string' in data) {
 			this.ownerId = data.owner_id_string
