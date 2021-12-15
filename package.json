@@ -1,6 +1,6 @@
 {
 	"name": "ferrislib",
-	"version": "0.0.3",
+	"version": "0.0.3-dev",
 	"description": "An Api wrapper to interact with FerrisChat Api",
 	"main": "build/index.js",
 	"directories": {
