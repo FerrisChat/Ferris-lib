@@ -181,6 +181,7 @@ export class WebsocketManager extends EventEmitter {
 				break
 
 			case WebSocketEvents.MESSAGE_DELETE:
+				payload.d.message.deleted = true
 				let deletedMessage
 				if (this.client.messages.has(payload.d.message.id)) {
 					deletedMessage = this.client.messages
@@ -200,7 +201,6 @@ export class WebsocketManager extends EventEmitter {
 				} else {
 					deletedMessage = new Message(payload.d.message, this.client)
 				}
-				deletedMessage.delelted = true
 				this.client.emit(Events.MESSAGE_DELETE, deletedMessage)
 				break
 

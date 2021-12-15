@@ -43,7 +43,8 @@ export class Message extends Base {
 		super(data.id_string)
 
 		this.#_client = client
-		this.deleted = false
+		if ('deleted' in data) this.deleted = data.deleted
+		else this.deleted = false
 		this.embeds = []
 
 		if ('content' in data) {
@@ -87,6 +88,8 @@ export class Message extends Base {
 		if ('channel_id_string' in data) {
 			this.channelId = data.channel_id_string
 		}
+		if ('deleted' in data) this.deleted = data.deleted
+		else this.deleted = false
 		if (this.channelId && this.#_client.channels.has(this.channelId))
 			this.channel = this.#_client.channels.get(this.channelId)
 		if (this.channel && !this.channel.messages.has(this.id))
