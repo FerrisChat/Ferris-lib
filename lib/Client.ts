@@ -1,4 +1,4 @@
-import EventEmitter from 'events'
+import { TypedEmitter } from 'tiny-typed-emitter'
 import {
 	ClientEvents,
 	ClientOptions,
@@ -17,6 +17,7 @@ import {
 	MessageEditOptions,
 	FetchChannelMessagesOptions,
 	UserEditOptions,
+	DefaulClientOptions,
 } from './util/Constants'
 import { FerrisError } from './errors/FerrislibError'
 import { WebsocketManager } from './gateway/WebsocketManager'
@@ -29,13 +30,14 @@ import { StorageBox } from './util/StorageBox'
 import { Invite } from './models/Invite'
 import { Role } from './models/Role'
 import { ClientUser } from './models/ClientUser'
+import { Util } from './util/Util'
 
 /**
  * Main class for interacting with Api and Gateway
  * @param {ClientOptions} clientOptions The options for the client
  * @extends EventEmitter
  */
-export class Client extends EventEmitter {
+export class Client extends TypedEmitter<ClientEvents> {
 	public channels: StorageBox<SnowFlake, Channel>
 
 	public messages: StorageBox<SnowFlake, Message>
@@ -76,25 +78,7 @@ export class Client extends EventEmitter {
 	constructor(clientOptions: ClientOptions = {}) {
 		super()
 
-		this.options = Object.assign(
-			{
-				rest: {
-					requestTimeout: 7,
-					retryLimit: 1,
-					retryAfter: 10,
-					headers: {},
-				},
-				cache: {
-					guilds: true,
-					users: true,
-					messages: true,
-					members: true,
-					channels: true,
-					roles: true,
-				},
-			},
-			clientOptions
-		)
+		this.options = Util.mergeDefault(DefaulClientOptions, clientOptions)
 
 		this.validateOptions()
 
@@ -516,6 +500,7 @@ export class Client extends EventEmitter {
 			typeof this.options.rest.retryLimit != 'number' ||
 			isNaN(this.options.rest.retryLimit)
 		) {
+			console.log(typeof this.options.rest.retryLimit)
 			throw new TypeError('The Rest Retry Limit must be a number.')
 		}
 		if (

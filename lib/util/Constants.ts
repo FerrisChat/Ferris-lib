@@ -61,12 +61,13 @@ export enum Events {
 	MESSAGE_DELETE = 'messageDelete',
 }
 
-export interface ClientEvents<T> {
-	(event: 'debug' | 'warn', listener: (message: string) => void): T
-	(event: 'ready', listener: () => void): T
-	(event: 'rawWs' | 'rawRest', listener: (data: any) => void): T
-	(event: 'messageCreate', listener: (message: Message) => void): T
-	(event: 'messageDelete', listener: (message: Message) => void): T
+export interface ClientEvents {
+	debug: (message: string) => void
+	messageCreate: (message: Message) => void
+	messageDelete: (message: Message) => void
+	rawRest: (data: any) => void
+	rawWs: (data: any) => void
+	ready: () => void
 }
 
 /**
@@ -82,7 +83,7 @@ export interface ClientOptions {
 		 */
 		requestTimeout?: number
 		/**
-		 * Ho wmany times should the client retry a Request
+		 * How many times should the client retry a Request
 		 */
 		retryLimit?: number
 		/**
@@ -116,6 +117,23 @@ export interface ClientOptions {
 
 		roles?: ModelCacheOptions<Role> | boolean
 	}
+}
+
+export const DefaulClientOptions: ClientOptions = {
+	rest: {
+		requestTimeout: 7,
+		retryAfter: 5,
+		retryLimit: 5,
+		headers: {},
+	},
+	cache: {
+		channels: true,
+		guilds: true,
+		members: true,
+		messages: true,
+		roles: true,
+		users: true,
+	},
 }
 
 /**

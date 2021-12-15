@@ -185,7 +185,7 @@ export class WebsocketManager extends EventEmitter {
 				if (this.client.messages.has(payload.d.message.id)) {
 					deletedMessage = this.client.messages
 						.get(payload.d.message.id)
-						._patch(payload.d.message).deleted = true
+						._patch(payload.d.message)
 				} else if (
 					this.client.channels.has(
 						payload.d.message.channel_id_string
@@ -196,13 +196,11 @@ export class WebsocketManager extends EventEmitter {
 				) {
 					deletedMessage = this.client.channels
 						.get(payload.d.message.channel_id_string)
-						.messages.get(payload.d.message.id).deleted = true
+						.messages.get(payload.d.message.id)
 				} else {
-					deletedMessage = new Message(
-						payload.d.message,
-						this.client
-					).deleted = true
+					deletedMessage = new Message(payload.d.message, this.client)
 				}
+				deletedMessage.delelted = true
 				this.client.emit(Events.MESSAGE_DELETE, deletedMessage)
 				break
 

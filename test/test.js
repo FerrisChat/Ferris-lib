@@ -1,5 +1,7 @@
 const Ferrislib = require('../build/index')
-const client = new Ferrislib.Client()
+const client = new Ferrislib.Client({
+	rest: { requestTimeout: 45 },
+})
 
 client.on('rawWs', console.log)
 client.on('rawRest', console.log)
@@ -16,11 +18,7 @@ client.on('messageCreate', (message) => {
 		})
 	}
 })
-client.on('messageDelete', (message) =>
-	console.log(
-		`Message from ${message.author.name} (${message.author.id}) deleted with content: ${message.content}`
-	)
-)
+client.on('messageDelete', (message) => console.log(message))
 
 client.login(
 	'MTEwMjg0NjYzNzc4MDYxNzQ4OTg5ODA4NTI4NTg4OA==.P38_LjfkXwZXoilnOq-_U18XISIKQAiCITkWNhrcSu6NBbh7__eyqghuCuFj5bJL-edSPu9MW_UMXVYn6-aK-Q=='
