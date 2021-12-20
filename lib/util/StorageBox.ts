@@ -60,7 +60,7 @@ export class StorageBox<K, V> extends Map<K, V> {
 	/**
 	 * @returns The first value of the cache
 	 */
-	public first(): V | V[] {
+	public first(): V {
 		for (const item of this.values()) {
 			return item
 		}

@@ -1,6 +1,7 @@
 import { GuildFlags, Role } from '..'
 import { Client } from '../Client'
 import {
+	ChannelCreateOptions,
 	ChannelEditOptions,
 	GuildEditOptions,
 	RoleCreateOptions,
@@ -73,7 +74,7 @@ export class Guild extends Base {
 		}
 		if ('channels' in data && data.channels != null) {
 			for (const raw_channel of data.channels) {
-				const channel = new Channel(raw_channel, this.#_client)
+				const channel = new Channel(raw_channel, this.#_client, this)
 				this.channels.set(channel.id, channel)
 				if (this.#_client.channels.has(channel.id))
 					this.#_client.channels.get(channel.id)._patch(raw_channel)
@@ -90,7 +91,7 @@ export class Guild extends Base {
 		this._patch(data)
 	}
 
-	createChannel(channelData: ChannelEditOptions): Promise<Channel> {
+	createChannel(channelData: ChannelCreateOptions): Promise<Channel> {
 		return this.#_client.createChannel(this.id, channelData)
 	}
 

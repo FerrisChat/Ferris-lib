@@ -1,4 +1,6 @@
 import { Guild, User, Channel, Message, Member, Role } from '../models'
+import { OldChannel } from '../models/Channel'
+import { OldMessage } from '../models/Message'
 
 /**
  * Model cache Options for the Client Model Caches
@@ -59,14 +61,22 @@ export enum Events {
 	RAW_REST = 'rawRest',
 	MESSAGE_CREATE = 'messageCreate',
 	MESSAGE_DELETE = 'messageDelete',
+	MESSAGE_UPDATE = 'messageUpdate',
+	CHANNEL_CREATE = 'channelCreate',
+	CHANNEL_DELETE = 'channelDelete',
+	CHANNEL_UPDATE = 'channelUpdate',
 }
 
 export interface ClientEvents {
+	channelCreate: (channel: Channel) => void
+	channelDelete: (channel: Channel) => void
+	channelUpdate: (oldChannel: OldChannel, newChannel: Channel) => void
 	debug: (message: string) => void
 	messageCreate: (message: Message) => void
 	messageDelete: (message: Message) => void
+	messageUpdate: (oldMessage: OldMessage, newMessage: Message) => void
 	rawRest: (data: any) => void
-	rawWs: (data: any) => void
+	rawWs: (data: WebSocketPayload) => void
 	ready: () => void
 }
 
@@ -295,6 +305,10 @@ export enum UserFlags {
 	 * This account is owned by a core developer/maintainer of FerrisChat itself.
 	 */
 	MAINTAINER = 1 << 11,
+	/**
+	 * This account won a Christmas event
+	 */
+	CHRISTMAS_EVENT_WINNER = 1 << 12,
 }
 
 export enum WebSocketCloseCodes {

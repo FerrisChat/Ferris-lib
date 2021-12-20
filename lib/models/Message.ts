@@ -106,3 +106,79 @@ export class Message extends Base {
 		return this
 	}
 }
+
+export class OldMessage extends Base {
+	/**
+	 * The contents of the Message
+	 * @type {string}
+	 */
+	public content: string
+
+	/**
+	 * The ChannelId of the Message
+	 * @type {SnowFlake}
+	 */
+	public channelId: SnowFlake
+	deleted: boolean
+	authorId: SnowFlake
+	editedAt?: string
+	embeds: Array<Embed>
+	nonce?: string
+
+	/**
+	 * The client that this message belongs to
+	 * @type {Client}
+	 */
+	#_client: Client
+
+	/**
+	 * @param {any} data The Message data
+	 * @param {Client} client
+	 */
+	constructor(data: any, client: Client) {
+		super(data.id_string)
+
+		this.#_client = client
+		if ('deleted' in data) this.deleted = data.deleted
+		else this.deleted = false
+		this.embeds = []
+
+		if ('content' in data) {
+			this.content = data.content
+		}
+		if ('channel_id_string' in data) {
+			this.channelId = data.channel_id_string
+		}
+		if ('author_id_string' in data) this.authorId = data.author_id_string
+		if ('embeds' in data) {
+			for (const embed of data.embeds) {
+				this.embeds.push(new Embed(embed))
+			}
+		}
+		if ('nonce' in data && data.nonce != null) this.nonce = data.nonce
+
+		this._patch(data)
+	}
+
+	_patch(data: any): this {
+		if ('deleted' in data) this.deleted = data.deleted
+		else this.deleted = false
+		this.embeds = []
+
+		if ('content' in data) {
+			this.content = data.content
+		}
+		if ('channel_id_string' in data) {
+			this.channelId = data.channel_id_string
+		}
+		if ('author_id_string' in data) this.authorId = data.author_id_string
+		if ('embeds' in data) {
+			for (const embed of data.embeds) {
+				this.embeds.push(new Embed(embed))
+			}
+		}
+		if ('nonce' in data && data.nonce != null) this.nonce = data.nonce
+
+		return this
+	}
+}

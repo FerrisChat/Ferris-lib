@@ -10,10 +10,21 @@ client.on('ready', async () => {
 	console.log('Client is ready!')
 })
 client.on('messageCreate', (message) => {
-	if (message.content.toLowerCase() === 'tsping') {
-		return message.channel.createMessage({
-			content: `Pong, Gateway Ping: \`${client.ws.latency}ms\` and Rest Ping: \`${client.rest.latency}ms\``,
-		})
+	switch (message.content) {
+		case 'tsping':
+			message.channel.createMessage({
+				content: `Pong, Gateway Ping: \`${client.ws.latency}ms\` and Rest Ping: \`${client.rest.latency}ms\``,
+			})
+			break
+		case 'tsedit':
+			message.channel
+				.createMessage({
+					content: 'Hi',
+				})
+				.then((m) => m.edit('Test Edit works'))
+			break
+		default:
+			return
 	}
 })
 client.on('messageDelete', (message) =>
@@ -21,6 +32,11 @@ client.on('messageDelete', (message) =>
 		`Message from ${message.author.name} (${message.author.id}) deleted with content: ${message.content}`
 	)
 )
+client.on('messageUpdate', (oldMessage, newMessage) => {
+	console.log(
+		`[Message Edited] OldMessage: ${oldMessage.content} | NewMessage: ${newMessage.content} | By: ${newMessage.author.name}`
+	)
+})
 
 client.login(
 	'MTEwMjg0NjYzNzc4MDYxNzQ4OTg5ODA4NTI4NTg4OA==.P38_LjfkXwZXoilnOq-_U18XISIKQAiCITkWNhrcSu6NBbh7__eyqghuCuFj5bJL-edSPu9MW_UMXVYn6-aK-Q=='

@@ -11,9 +11,11 @@ import {
 } from '../util/Constants'
 import { FerrisError } from '../errors/FerrislibError'
 import { inspect } from 'util'
-import { Message, User } from '..'
+import { Channel, Message, User } from '..'
 import { ClientUser } from '../models/ClientUser'
 import { Util } from '../util/Util'
+import { OldMessage } from '../models/Message'
+import { OldChannel } from '../models/Channel'
 
 /**
  * The class the Main client {@link Client} uses for interacting with the Gateway
@@ -163,42 +165,44 @@ export class WebsocketManager extends EventEmitter {
 				this.status = WebSocketStatus.CONNECTED
 				this.debug('Identify Recieved')
 				this.startHeartbeat()
+				this.debug('This Client is now ready.')
 				this.client.emit(Events.READY)
 				break
 
 			case WebSocketEvents.MESSAGE_CREATE:
 				const message = new Message(payload.d.message, this.client)
-				if (
-					this.client.channels.has(message.channelId) &&
-					!this.client.channels
-						.get(message.channelId)
-						.messages.has(message.id)
+				const messageChanel = Util.resolveChannel(
+					this.client,
+					payload.d.message.channel
 				)
-					this.client.channels
-						.get(message.channelId)
-						.messages.set(message.id, message)
-				this.client.messages.set(message.id, message)
+				if (!this.client.channels.has(messageChanel.id))
+					this.client.channels.set(messageChanel.id, messageChanel)
+				messageChanel.messages.set(message.id, message)
 				this.client.emit(Events.MESSAGE_CREATE, message)
 				break
 
 			case WebSocketEvents.MESSAGE_DELETE:
 				payload.d.message.deleted = true
 				let deletedMessage
-				if (this.client.messages.has(payload.d.message.id)) {
+				if (this.client.messages.has(payload.d.message.id_string)) {
 					deletedMessage = this.client.messages
-						.get(payload.d.message.id)
+						.get(payload.d.message.id_string)
 						._patch(payload.d.message)
+					this.client.messages.delete(payload.d.message.id_string)
 				} else if (
 					this.client.channels.has(
 						payload.d.message.channel_id_string
 					) &&
 					this.client.channels
 						.get(payload.d.message.channel_id_string)
-						.messages.has(payload.d.message.id)
+						.messages.has(payload.d.message.id_string)
 				) {
 					deletedMessage = this.client.channels
 						.get(payload.d.message.channel_id_string)
-						.messages.get(payload.d.message.id)
+						.messages.get(payload.d.message.id_string)
+					this.client.channels
+						.get(payload.d.message.channel_id_string)
+						.messages.delete(payload.d.message.id_string)
 				} else {
 					deletedMessage = new Message(payload.d.message, this.client)
 				}
@@ -206,14 +210,55 @@ export class WebsocketManager extends EventEmitter {
 				break
 
 			case WebSocketEvents.MESSAGE_UPDATE:
-				const old_message = Util.resolveMessage(
+				const old_message = new OldMessage(payload.d.old, this.client)
+				const new_message = Util.resolveMessage(
 					this.client,
 					payload.d.old
-				)
-				const new_message = new Message(payload.d.new, this.client)
+				)._patch(payload.d.new)
 
+				this.client.emit(
+					Events.MESSAGE_UPDATE,
+					old_message,
+					new_message
+				)
 				break
 
+			case WebSocketEvents.CHANNEL_CREATE:
+				const channel = new Channel(payload.d.channel, this.client)
+				this.client.channels.set(channel.id, channel)
+				this.client.emit(Events.CHANNEL_CREATE, channel)
+				break
+
+			case WebSocketEvents.CHANNEL_DELETE:
+				const delChannel = Util.resolveChannel(
+					this.client,
+					payload.d.channel
+				)
+				if (this.client.channels.has(delChannel.id))
+					this.client.channels.delete(delChannel.id)
+				if (
+					this.client.guilds
+						.get(delChannel.guildId)
+						.channels.has(delChannel.id)
+				)
+					this.client.guilds
+						.get(delChannel.guildId)
+						.channels.delete(delChannel.id)
+				this.client.emit(Events.CHANNEL_DELETE, delChannel)
+				break
+
+			case WebSocketEvents.CHANNEL_UPDATE:
+				const old_channel = new OldChannel(payload.d.old, this.client)
+				const new_channel = Util.resolveChannel(
+					this.client,
+					payload.d.old
+				)._patch(payload.d.new)
+				this.client.emit(
+					Events.CHANNEL_UPDATE,
+					old_channel,
+					new_channel
+				)
+				break
 			default:
 				return this.debug(
 					`Unhandled Event Recieved "${

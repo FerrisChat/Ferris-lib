@@ -73,9 +73,9 @@ export class Client extends TypedEmitter<ClientEvents> {
 	_token: string
 
 	/**
-	 * @param {ClientOptions} clientOptions The options for the Client
+	 * @arg {Object} clientOptions Ferris-lib client options
 	 */
-	constructor(clientOptions: ClientOptions = {}) {
+	constructor(clientOptions: ClientOptions = DefaulClientOptions) {
 		super()
 
 		this.options = Util.mergeDefault(DefaulClientOptions, clientOptions)
@@ -465,9 +465,9 @@ export class Client extends TypedEmitter<ClientEvents> {
 			throw new FerrisError('TOKEN_MUST_BE_STRING')
 		this.debug(
 			`Provided token: ${this._token
-				.split('.')
+				.split('=')
 				.map((val, i) => (i > 1 ? val.replace(/./g, '*') : val))
-				.join('.')}`
+				.join('=')}`
 		)
 		this.ws.start()
 	}
