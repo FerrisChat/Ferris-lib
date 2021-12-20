@@ -13,6 +13,7 @@ import { FerrisError } from '../errors/FerrislibError'
 import { inspect } from 'util'
 import { Message, User } from '..'
 import { ClientUser } from '../models/ClientUser'
+import { Util } from '../util/Util'
 
 /**
  * The class the Main client {@link Client} uses for interacting with the Gateway
@@ -202,6 +203,15 @@ export class WebsocketManager extends EventEmitter {
 					deletedMessage = new Message(payload.d.message, this.client)
 				}
 				this.client.emit(Events.MESSAGE_DELETE, deletedMessage)
+				break
+
+			case WebSocketEvents.MESSAGE_UPDATE:
+				const old_message = Util.resolveMessage(
+					this.client,
+					payload.d.old
+				)
+				const new_message = new Message(payload.d.new, this.client)
+
 				break
 
 			default:

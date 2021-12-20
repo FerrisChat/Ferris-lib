@@ -1,3 +1,6 @@
+import { Client } from '../Client'
+import { Message } from '../models'
+
 const has = (o, k) => Object.prototype.hasOwnProperty.call(o, k)
 export class Util {
 	/**
@@ -17,5 +20,21 @@ export class Util {
 			}
 		}
 		return given
+	}
+
+	/**
+	 * Retrieves a {@link Message} from the internal cache. If no message is found, a new {@link Message} is constructed.
+	 * @param {Client} client
+	 * @param {object} data The message data
+	 * @returns {Message} The reolves message
+	 */
+	static resolveMessage(client: Client, data: any): Message {
+		return (
+			client.messages.get(data.id_string) ??
+			client.channels
+				.get(data.channel_id_string)
+				?.messages.get(data.id_string) ??
+			new Message(data, client)
+		)
 	}
 }
