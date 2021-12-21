@@ -30,7 +30,7 @@
 	},
 	"homepage": "https://node.docs.ferris.chat/",
 	"devDependencies": {
-		"@types/node": "^16.4.13",
+		"@types/node": "^17.0.2",
 		"@types/ws": "^8.2.0",
 		"prettier": "^2.4.1",
 		"typedoc": "^0.22.8",
