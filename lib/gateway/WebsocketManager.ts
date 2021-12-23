@@ -153,6 +153,11 @@ export class WebsocketManager extends EventEmitter {
 			console.log(e)
 		}
 
+		if (
+			payload === null
+			|| !payload.c
+		) return this.debug("Recieved a null payload from Gateway, ignoring")
+
 		this.client.emit(Events.RAW_WS, payload)
 
 		switch (payload.c) {
@@ -261,8 +266,7 @@ export class WebsocketManager extends EventEmitter {
 				break
 			default:
 				return this.debug(
-					`Unhandled Event Recieved "${
-						payload.c
+					`Unhandled Event Recieved "${payload.c
 					}", Data: ${JSON.stringify(payload)}`
 				)
 		}
