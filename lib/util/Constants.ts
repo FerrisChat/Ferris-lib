@@ -314,7 +314,10 @@ export enum UserFlags {
 }
 
 export enum WebSocketCloseCodes {
-	ABNORMAL_CLOSURE = 1006,
+	INVALID_JSON = 2001,
+	IDENTIFY_OVER_1 = 2002,
+	INVALID_TOKEN = 2003,
+	DATA_SENT_BEFORE_IDENTIFY = 2004,
 }
 
 export enum WebSocketEvents {

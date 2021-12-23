@@ -137,8 +137,33 @@ export class WebsocketManager extends EventEmitter {
 		this.heartbeatInterval = null
 	}
 
-	private _WsOnClose(code, reason = 'Unknown') {
-		console.log(code, reason)
+	private _WsOnClose(code, _) {
+		this.debug(`Connection was closed with code ${code}, clearing interval...`)
+		if (this.heartbeatInterval) this.clearHeartbeatInterval()
+
+		if (code > 999 && code < 1020) {
+			this.debug("Reconnecting from a 1xxx error code")
+			return
+		} else if (code > 4999 && code < 5006) {
+			throw new FerrisError("GATEWAY_ERROR")
+		}
+
+		switch (code) {
+			case WebSocketCloseCodes.INVALID_JSON:
+				this.debug("An invalid json was sent to the Gateway, reconnecting...")
+				break;
+			case WebSocketCloseCodes.IDENTIFY_OVER_1:
+				this.debug("Client identified more than once, retrying")
+				break;
+			case WebSocketCloseCodes.INVALID_TOKEN:
+				throw new FerrisError("INVALID_TOKEN")
+			case WebSocketCloseCodes.DATA_SENT_BEFORE_IDENTIFY:
+				this.debug("Data was sent to the Gateway before Idenifying....")
+				throw new FerrisError("DATA_SENT_BEFORE_IDENTIFY")
+			default:
+				this.debug(`Unhandled close code: ${code}`)
+				return
+		}
 	}
 
 	private _WsOnError(err) {

@@ -24,15 +24,15 @@ class Messages {
 		`Please provide a token or email and password for the Client to login with.`
 	static MISSING_EMAIL = () =>
 		`Please provide an email for the Client to login with.`
-	static MISSING_PASSWORD = () =>
+	static MISSING_VALUE = () =>
 		`Please provide a password for the Client to login with.`
 
 	// xyz is invalid
-	static TOKEN_MUST_BE_STRING = () => `Provided Token is not a String.`
-	static EMAIL_MUST_BE_A_STRING = () => `Provided Email is not a String.`
-	static PASSWORD_MUST_BE_A_STRING = () =>
-		`Provided Password is not a String.`
+	static MUST_BE_STRING = (value) => `Provided ${value} is not a String.`
+	static INVALID_TOKEN = () => `The token that was provided is Invalid.`
 
 	// websocket manager
 	static WS_ALREADY_STARTED = () => `Websocket Manager has already started.`
+	static GATEWAY_ERROR = (err) => `Gateway Error`
+	static DATA_SENT_BEFORE_IDENTIFY = () => `Data was sent tp the Gateway before Identifying`
 }
