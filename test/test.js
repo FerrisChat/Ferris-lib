@@ -39,5 +39,5 @@ client.on('messageUpdate', (oldMessage, newMessage) => {
 })
 
 client.login(
-	'MTEwMjg0NjYzNzc4MDYxNzQ4OTg5ODA4NTI4NTg4OA==.P38_LjfkXwZXoilnOq-_U18XISIKQAiCITkWNhrcSu6NBbh7__eyqghuCuFj5bJL-edSPu9MW_UMXVYn6-aK-Q=='
+	'MTE1MTU2NTQ3Mzk5MTE4OTEwOTAyMjQ3OTA4OTY2NA==.JIVv50FBblb4-Os34BYjNUtOYTonyZ4lsWBYdXgY4yjHpc6lQbsGw2PGqBgAC4DHWy06WXHKqDeiwgPkb174hQ=='
 )

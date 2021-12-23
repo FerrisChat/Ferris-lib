@@ -48,6 +48,7 @@ export class User extends Base {
 		this.guilds = new Array()
 
 		this.#_client = client
+		this.bot = data.is_bot
 
 		this._patch(data)
 	}
@@ -73,6 +74,8 @@ export class User extends Base {
 		if ('name' in data) {
 			this.name = data.name
 		}
+
+		this.bot = data.is_bot
 
 		if ('flags' in data) {
 			this.flags = new UserFlags(data.flags)

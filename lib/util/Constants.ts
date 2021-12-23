@@ -197,8 +197,8 @@ export class Endpoints {
 	//Auth
 	static AUTH_USER = () => `/auth`
 	static AUTH_BOT = (botId) => `/users/me/bots/${botId}/auth`
-	static USER_BOT = (ownerId, botId) => `/users/${ownerId}/bots/${botId}`
-	static USER_BOTS = (ownerId) => `/users/${ownerId}/bots`
+	static USER_BOT = (botId) => `/users/me/bots/${botId}`
+	static USER_BOTS = () => `/users/me/bots`
 	static BOT = (botId) => `/bots/${botId}/add`
 
 	//Roles
