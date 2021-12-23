@@ -65,6 +65,7 @@ export enum Events {
 	CHANNEL_CREATE = 'channelCreate',
 	CHANNEL_DELETE = 'channelDelete',
 	CHANNEL_UPDATE = 'channelUpdate',
+	GUILD_CREATE = "guildCreate",
 }
 
 export interface ClientEvents {
@@ -72,6 +73,7 @@ export interface ClientEvents {
 	channelDelete: (channel: Channel) => void
 	channelUpdate: (oldChannel: OldChannel, newChannel: Channel) => void
 	debug: (message: string) => void
+	guildCreate: (guild: Guild) => void
 	messageCreate: (message: Message) => void
 	messageDelete: (message: Message) => void
 	messageUpdate: (oldMessage: OldMessage, newMessage: Message) => void
@@ -199,7 +201,7 @@ export class Endpoints {
 	static AUTH_BOT = (botId) => `/users/me/bots/${botId}/auth`
 	static USER_BOT = (botId) => `/users/me/bots/${botId}`
 	static USER_BOTS = () => `/users/me/bots`
-	static BOT = (botId) => `/bots/${botId}/add`
+	static BOT = (botId, guildId) => `/bots/${botId}/add/${guildId}`
 
 	//Roles
 	static ROLES = (guildId) => `/guilds/${guildId}/roles`

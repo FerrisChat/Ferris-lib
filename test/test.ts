@@ -10,6 +10,7 @@ client.on('rawWs', (payload) => console.log('RAW WS', payload))
 client.on('rawRest', (payload) => console.log('RAW REST', payload))
 client.on('ready', () => {
 	console.log('Client is Ready')
+	test()
 })
 
 client.on('messageCreate', async (message) => {
@@ -89,6 +90,18 @@ client.on('channelUpdate', (och, nch) =>
 	)
 )
 
+client.on("guildCreate", (guild) =>
+	console.log(
+		`Joined Guild: ${guild.name} with ${guild.members.size} members`
+	)
+)
+
 client.login(
 	'MTE1MTU2NTQ3Mzk5MTE4OTEwOTAyMjQ3OTA4OTY2NA==.JIVv50FBblb4-Os34BYjNUtOYTonyZ4lsWBYdXgY4yjHpc6lQbsGw2PGqBgAC4DHWy06WXHKqDeiwgPkb174hQ=='
 )
+
+async function test() {
+	const g = await client.createGuild({ name: "Test" })
+	await g.delete()
+	return client.ws.connection.close()
+}

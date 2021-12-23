@@ -11,7 +11,7 @@ import {
 } from '../util/Constants'
 import { FerrisError } from '../errors/FerrislibError'
 import { inspect } from 'util'
-import { Channel, Message, User } from '..'
+import { Channel, Guild, Message, User } from '..'
 import { ClientUser } from '../models/ClientUser'
 import { Util } from '../util/Util'
 import { OldMessage } from '../models/Message'
@@ -263,7 +263,13 @@ export class WebsocketManager extends EventEmitter {
 					old_channel,
 					new_channel
 				)
-				break
+				break;
+
+			case WebSocketEvents.GUILD_CREATE:
+				const new_guild = new Guild(payload.d.guild, this.client)
+				if (!this.client.guilds.has(new_guild.id)) this.client.guilds.set(new_guild.id, new_guild)
+				this.client.emit(Events.GUILD_CREATE, new_guild)
+				break;
 			default:
 				return this.debug(
 					`Unhandled Event Recieved "${payload.c

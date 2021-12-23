@@ -95,6 +95,7 @@ export class Guild extends Base {
 			}
 		}
 
+		if (!client.guilds.has(this.id)) client.guilds.set(this.id, this)
 		this._patch(data)
 	}
 
