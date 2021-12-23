@@ -10,6 +10,7 @@ import { Base } from './Base'
  * @extends Base
  */
 export class User extends Base {
+	public avatar?: string;
 	/**
 	 * The name of the user
 	 * @type {string}
@@ -80,6 +81,10 @@ export class User extends Base {
 		if ('flags' in data) {
 			this.flags = new UserFlags(data.flags)
 			if (this.flags.has(Constants.UserFlags.BOT_ACCOUNT)) this.bot = true
+		}
+
+		if ('avatar' in data && data.avatar != null) {
+			this.avatar = data.avatar
 		}
 
 		if ('guilds' in data && data.guilds != null) {

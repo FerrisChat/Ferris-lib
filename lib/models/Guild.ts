@@ -37,6 +37,8 @@ export class Guild extends Base {
 
 	public flags: GuildFlags
 
+	public icon?: string;
+
 	/**
 	 * A cache with the Members for the Guild
 	 * @type {StorageBox<SnowFlake, Member>}
@@ -69,6 +71,11 @@ export class Guild extends Base {
 		if ('name' in data) {
 			this.name = data.name
 		}
+
+		if ('icon' in data && data.icon != null) {
+			this.icon = data.icon
+		}
+
 		if ('owner_id_string' in data) {
 			this.ownerId = data.owner_id_string
 		}
@@ -146,6 +153,9 @@ export class Guild extends Base {
 	_patch(data: any) {
 		if ('name' in data) {
 			this.name = data.name
+		}
+		if ('icon' in data && data.icon != null) {
+			this.icon = data.icon
 		}
 		if ('flags' in data && data.flags != null) {
 			this.flags = new GuildFlags(data.flags)
