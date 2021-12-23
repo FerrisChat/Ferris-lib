@@ -65,7 +65,7 @@ export enum Events {
 	CHANNEL_CREATE = 'channelCreate',
 	CHANNEL_DELETE = 'channelDelete',
 	CHANNEL_UPDATE = 'channelUpdate',
-	GUILD_CREATE = "guildCreate",
+	GUILD_CREATE = 'guildCreate',
 }
 
 export interface ClientEvents {

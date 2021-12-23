@@ -37,7 +37,7 @@ export class Guild extends Base {
 
 	public flags: GuildFlags
 
-	public icon?: string;
+	public icon?: string
 
 	/**
 	 * A cache with the Members for the Guild

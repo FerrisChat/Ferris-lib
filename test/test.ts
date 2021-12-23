@@ -90,7 +90,7 @@ client.on('channelUpdate', (och, nch) =>
 	)
 )
 
-client.on("guildCreate", (guild) =>
+client.on('guildCreate', (guild) =>
 	console.log(
 		`Joined Guild: ${guild.name} with ${guild.members.size} members`
 	)
@@ -101,7 +101,7 @@ client.login(
 )
 
 async function test() {
-	const g = await client.createGuild({ name: "Test" })
+	const g = await client.createGuild({ name: 'Test' })
 	await g.delete()
 	return client.ws.connection.close()
 }

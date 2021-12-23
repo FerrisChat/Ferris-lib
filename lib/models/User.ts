@@ -10,7 +10,7 @@ import { Base } from './Base'
  * @extends Base
  */
 export class User extends Base {
-	public avatar?: string;
+	public avatar?: string
 	/**
 	 * The name of the user
 	 * @type {string}

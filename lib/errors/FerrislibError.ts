@@ -34,5 +34,6 @@ class Messages {
 	// websocket manager
 	static WS_ALREADY_STARTED = () => `Websocket Manager has already started.`
 	static GATEWAY_ERROR = (err) => `Gateway Error`
-	static DATA_SENT_BEFORE_IDENTIFY = () => `Data was sent tp the Gateway before Identifying`
+	static DATA_SENT_BEFORE_IDENTIFY = () =>
+		`Data was sent tp the Gateway before Identifying`
 }

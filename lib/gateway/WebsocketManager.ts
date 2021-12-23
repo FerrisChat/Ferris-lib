@@ -138,28 +138,32 @@ export class WebsocketManager extends EventEmitter {
 	}
 
 	private _WsOnClose(code, _) {
-		this.debug(`Connection was closed with code ${code}, clearing interval...`)
+		this.debug(
+			`Connection was closed with code ${code}, clearing interval...`
+		)
 		if (this.heartbeatInterval) this.clearHeartbeatInterval()
 
 		if (code > 999 && code < 1020) {
-			this.debug("Reconnecting from a 1xxx error code")
+			this.debug('Reconnecting from a 1xxx error code')
 			return
 		} else if (code > 4999 && code < 5006) {
-			throw new FerrisError("GATEWAY_ERROR")
+			throw new FerrisError('GATEWAY_ERROR')
 		}
 
 		switch (code) {
 			case WebSocketCloseCodes.INVALID_JSON:
-				this.debug("An invalid json was sent to the Gateway, reconnecting...")
-				break;
+				this.debug(
+					'An invalid json was sent to the Gateway, reconnecting...'
+				)
+				break
 			case WebSocketCloseCodes.IDENTIFY_OVER_1:
-				this.debug("Client identified more than once, retrying")
-				break;
+				this.debug('Client identified more than once, retrying')
+				break
 			case WebSocketCloseCodes.INVALID_TOKEN:
-				throw new FerrisError("INVALID_TOKEN")
+				throw new FerrisError('INVALID_TOKEN')
 			case WebSocketCloseCodes.DATA_SENT_BEFORE_IDENTIFY:
-				this.debug("Data was sent to the Gateway before Idenifying....")
-				throw new FerrisError("DATA_SENT_BEFORE_IDENTIFY")
+				this.debug('Data was sent to the Gateway before Idenifying....')
+				throw new FerrisError('DATA_SENT_BEFORE_IDENTIFY')
 			default:
 				this.debug(`Unhandled close code: ${code}`)
 				return
@@ -178,10 +182,8 @@ export class WebsocketManager extends EventEmitter {
 			console.log(e)
 		}
 
-		if (
-			payload === null
-			|| !payload.c
-		) return this.debug("Recieved a null payload from Gateway, ignoring")
+		if (payload === null || !payload.c)
+			return this.debug('Recieved a null payload from Gateway, ignoring')
 
 		this.client.emit(Events.RAW_WS, payload)
 
@@ -288,16 +290,18 @@ export class WebsocketManager extends EventEmitter {
 					old_channel,
 					new_channel
 				)
-				break;
+				break
 
 			case WebSocketEvents.GUILD_CREATE:
 				const new_guild = new Guild(payload.d.guild, this.client)
-				if (!this.client.guilds.has(new_guild.id)) this.client.guilds.set(new_guild.id, new_guild)
+				if (!this.client.guilds.has(new_guild.id))
+					this.client.guilds.set(new_guild.id, new_guild)
 				this.client.emit(Events.GUILD_CREATE, new_guild)
-				break;
+				break
 			default:
 				return this.debug(
-					`Unhandled Event Recieved "${payload.c
+					`Unhandled Event Recieved "${
+						payload.c
 					}", Data: ${JSON.stringify(payload)}`
 				)
 		}
