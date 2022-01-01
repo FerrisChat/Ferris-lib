@@ -69,7 +69,7 @@ export class WebsocketManager extends EventEmitter {
 			this.connection.on('close', this._WsOnClose.bind(this))
 			this.connection.on('error', this._WsOnError.bind(this))
 			this.connection.on('pong', this._WsOnPong.bind(this))
-			resolve(null)
+			this.on("ready", () => resolve(this.connection))
 		})
 	}
 
@@ -87,17 +87,6 @@ export class WebsocketManager extends EventEmitter {
 					`Encoutered an error sending Data packet: \n${inspect(err)}`
 				)
 		})
-	}
-
-	async reconnect() {
-		if (this.connection && this.connection.readyState === Websocket.OPEN) {
-			this.connection.terminate()
-		}
-
-		this.connection = null
-		this.status = WebSocketStatus.RECONNECTING
-		await new Promise((r) => setTimeout((e) => r(e), 5000))
-		this.connect()
 	}
 
 	async start() {
@@ -139,12 +128,13 @@ export class WebsocketManager extends EventEmitter {
 
 	private _WsOnClose(code, _) {
 		this.debug(
-			`Connection was closed with code ${code}, clearing interval...`
+			`Connection was closed with code ${code}, clearing heartbeat interval...`
 		)
 		if (this.heartbeatInterval) this.clearHeartbeatInterval()
 
 		if (code > 999 && code < 1020) {
 			this.debug('Reconnecting from a 1xxx error code')
+			this.reconnect()
 			return
 		} else if (code > 4999 && code < 5006) {
 			throw new FerrisError('GATEWAY_ERROR')
@@ -155,9 +145,11 @@ export class WebsocketManager extends EventEmitter {
 				this.debug(
 					'An invalid json was sent to the Gateway, reconnecting...'
 				)
+				this.reconnect()
 				break
 			case WebSocketCloseCodes.IDENTIFY_OVER_1:
 				this.debug('Client identified more than once, retrying')
+				this.reconnect()
 				break
 			case WebSocketCloseCodes.INVALID_TOKEN:
 				throw new FerrisError('INVALID_TOKEN')
@@ -199,6 +191,7 @@ export class WebsocketManager extends EventEmitter {
 				this.startHeartbeat()
 				this.debug('This Client is now ready.')
 				this.client.emit(Events.READY)
+				this.emit("ready")
 				break
 
 			case WebSocketEvents.MESSAGE_CREATE:
@@ -300,11 +293,22 @@ export class WebsocketManager extends EventEmitter {
 				break
 			default:
 				return this.debug(
-					`Unhandled Event Recieved "${
-						payload.c
+					`Unhandled Event Recieved "${payload.c
 					}", Data: ${JSON.stringify(payload)}`
 				)
 		}
+	}
+
+	async reconnect() {
+		if (this.connection && this.connection.readyState === Websocket.OPEN) {
+			this.debug("Open connection found, closing")
+			this.connection.terminate()
+		}
+
+		this.connection = null
+		this.status = WebSocketStatus.RECONNECTING
+		await new Promise((r) => setTimeout((e) => r(e), 5000))
+		return this.connect()
 	}
 
 	private _WsOnOpen() {
