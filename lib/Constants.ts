@@ -238,4 +238,4 @@ export enum WebSocketStatus {
 	IDENTIFYING = 5,
 }
 
-export const FERRIS_EPOCH = 1_577_836_800_000
+export const FERRIS_EPOCH = 1_641_016_800_000
