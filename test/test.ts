@@ -10,7 +10,7 @@ client.on('rawWs', (payload) => console.log('RAW WS', payload))
 client.on('rawRest', (payload) => console.log('RAW REST', payload))
 client.on('ready', () => {
 	console.log('Client is Ready')
-	test()
+	//test()
 })
 
 client.on('messageCreate', async (message) => {
@@ -35,8 +35,8 @@ client.on('messageCreate', async (message) => {
 			const tsch = await message.channel.guild.createChannel({
 				name: 'Ts-God',
 			})
-			tschm.edit('Done, Deleting...')
-			//await tsch.delete()
+			await tschm.edit('Done, Deleting...')
+			await tsch.delete()
 			tschm.edit('Done.')
 			break
 		case 'tsche':
@@ -97,11 +97,18 @@ client.on('guildCreate', (guild) =>
 )
 
 client.login(
-	'MTE1MTU2NTQ3Mzk5MTE4OTEwOTAyMjQ3OTA4OTY2NA==.JIVv50FBblb4-Os34BYjNUtOYTonyZ4lsWBYdXgY4yjHpc6lQbsGw2PGqBgAC4DHWy06WXHKqDeiwgPkb174hQ=='
+	'MTE5ODQ4MTY3OTQ1Mjk5NTE1MDUzNTk4MzEwNA==.2JaWfMds_sKD32tKk-9l19uSSGyknJ_3VaRhqEDMoRER7C63rHb6waeGfMj3p8CPjWkbTZ74uiRssO2w8PzBLw=='
 )
 
 async function test() {
-	const g = await client.createGuild({ name: 'Test' })
+	const g = await client.createGuild({ name: 'Test Guild' })
+	await client.fetchGuild(g.id, { fetchChannels: true, fetchMembers: true })
+	const ch = await g.createChannel({ name: "Test Channel" })
+	await ch.edit({ name: "Test Channel Edit" })
+	const msg = await ch.createMessage({ content: "Test Message" })
+	await msg.edit({ content: "Test Message Edit" })
+	await msg.delete()
+	await ch.delete()
 	await g.delete()
 	return client.ws.connection.close()
 }
