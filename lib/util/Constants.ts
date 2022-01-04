@@ -1,5 +1,6 @@
 import { Guild, User, Channel, Message, Member, Role } from '../models'
 import { OldChannel } from '../models/Channel'
+import { OldGuild } from '../models/Guild'
 import { OldMessage } from '../models/Message'
 
 /**
@@ -66,6 +67,7 @@ export enum Events {
 	CHANNEL_DELETE = 'channelDelete',
 	CHANNEL_UPDATE = 'channelUpdate',
 	GUILD_CREATE = 'guildCreate',
+	GUILD_UPDATE = "guildUpdate",
 }
 
 export interface ClientEvents {
@@ -74,6 +76,7 @@ export interface ClientEvents {
 	channelUpdate: (oldChannel: OldChannel, newChannel: Channel) => void
 	debug: (message: string) => void
 	guildCreate: (guild: Guild) => void
+	guildUpdate: (oldGuild: OldGuild, newGuild: Guild) => void
 	messageCreate: (message: Message) => void
 	messageDelete: (message: Message) => void
 	messageUpdate: (oldMessage: OldMessage, newMessage: Message) => void

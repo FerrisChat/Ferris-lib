@@ -84,8 +84,6 @@ export class Client extends TypedEmitter<ClientEvents> {
 
 		this.rest = new RestManager(this)
 
-		this.ws = new WebsocketManager(this)
-
 		this.user = null
 
 		this.users = new StorageBox(this.options.cache.users)
@@ -97,6 +95,8 @@ export class Client extends TypedEmitter<ClientEvents> {
 		this.users = new StorageBox(this.options.cache.users)
 
 		this.guilds = new StorageBox(this.options.cache.guilds)
+
+		this.ws = new WebsocketManager(this)
 	}
 
 	addRole(guildId: SnowFlake, memberId: SnowFlake, roleId: SnowFlake) {

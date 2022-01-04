@@ -16,6 +16,7 @@ import { ClientUser } from '../models/ClientUser'
 import { Util } from '../util/Util'
 import { OldMessage } from '../models/Message'
 import { OldChannel } from '../models/Channel'
+import { OldGuild } from '../models/Guild'
 
 /**
  * The class the Main client {@link Client} uses for interacting with the Gateway
@@ -197,8 +198,8 @@ export class WebsocketManager extends EventEmitter {
 			case WebSocketEvents.MESSAGE_CREATE:
 				const message = new Message(payload.d.message, this.client)
 				const messageChanel = Util.resolveChannel(
+					payload.d.message.channel,
 					this.client,
-					payload.d.message.channel
 				)
 				if (!this.client.channels.has(messageChanel.id))
 					this.client.channels.set(messageChanel.id, messageChanel)
@@ -237,8 +238,8 @@ export class WebsocketManager extends EventEmitter {
 			case WebSocketEvents.MESSAGE_UPDATE:
 				const old_message = new OldMessage(payload.d.old, this.client)
 				const new_message = Util.resolveMessage(
+					payload.d.old,
 					this.client,
-					payload.d.old
 				)._patch(payload.d.new)
 
 				this.client.emit(
@@ -256,8 +257,8 @@ export class WebsocketManager extends EventEmitter {
 
 			case WebSocketEvents.CHANNEL_DELETE:
 				const delChannel = Util.resolveChannel(
+					payload.d.channel,
 					this.client,
-					payload.d.channel
 				)
 				if (this.client.channels.has(delChannel.id))
 					this.client.channels.delete(delChannel.id)
@@ -275,8 +276,8 @@ export class WebsocketManager extends EventEmitter {
 			case WebSocketEvents.CHANNEL_UPDATE:
 				const old_channel = new OldChannel(payload.d.old, this.client)
 				const new_channel = Util.resolveChannel(
+					payload.d.old,
 					this.client,
-					payload.d.old
 				)._patch(payload.d.new)
 				this.client.emit(
 					Events.CHANNEL_UPDATE,
@@ -286,11 +287,21 @@ export class WebsocketManager extends EventEmitter {
 				break
 
 			case WebSocketEvents.GUILD_CREATE:
-				const new_guild = new Guild(payload.d.guild, this.client)
-				if (!this.client.guilds.has(new_guild.id))
-					this.client.guilds.set(new_guild.id, new_guild)
-				this.client.emit(Events.GUILD_CREATE, new_guild)
-				break
+				const guild = new Guild(payload.d.guild, this.client)
+				if (!this.client.guilds.has(guild.id))
+					this.client.guilds.set(guild.id, guild)
+				this.client.emit(Events.GUILD_CREATE, guild)
+				break;
+
+			case WebSocketEvents.GUILD_UPDATE:
+				const old_guild = new OldGuild(payload.d.old, this.client)
+				const new_guild = Util.resolveGuild(payload.d.old, this.client)._patch(payload.d.new)
+				this.client.emit(
+					Events.GUILD_UPDATE,
+					old_guild,
+					new_guild
+				)
+				break;
 			default:
 				return this.debug(
 					`Unhandled Event Recieved "${payload.c

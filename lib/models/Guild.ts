@@ -10,6 +10,7 @@ import {
 import { StorageBox } from '../util/StorageBox'
 import { Channel, Member } from './'
 import { Base } from './Base'
+import { OldChannel } from './Channel'
 import { Invite } from './Invite'
 
 /**
@@ -176,6 +177,111 @@ export class Guild extends Base {
 			for (const raw_member of data.members) {
 				const member = new Member(raw_member, this.#_client)
 				this.members.set(member.id, member)
+			}
+		}
+
+		return this
+	}
+}
+
+export class OldGuild extends Base {
+	/**
+	 * The owner of the guild
+	 * @type {SnowFlake}
+	 */
+	public ownerId: SnowFlake
+
+	/**
+	 * The name of the Guild
+	 * @type {string}
+	 */
+	public name: string
+
+	/**
+	 * A Cache with the Channels for the Guild
+	 * @type {Array<SnowFlake>}
+	 */
+	public channels: Array<SnowFlake>;
+
+	public flags: GuildFlags
+
+	public icon?: string
+
+	/**
+	 * A cache with the Members for the Guild
+	 * @type {Array<SnowFlake>}
+	 */
+	public members: Array<SnowFlake>
+
+	public roles: Array<SnowFlake>
+
+	/**
+	 * The client for the Guild
+	 * @type {Client}
+	 */
+	#_client: Client
+	constructor(data: any, client: Client) {
+		super(data.id_string)
+
+		this.#_client = client
+
+		if ('name' in data) {
+			this.name = data.name
+		}
+		if ('owner_id_string' in data) {
+			this.ownerId = data.owner_id_string
+		}
+		if ('flags' in data && data.flags != null) {
+			this.flags = new GuildFlags(data.flags)
+		}
+		if ('channels' in data && data.channels != null) {
+			this.channels = []
+			for (const channel of data.channels) {
+				this.channels.push(channel.id_string)
+			}
+		}
+		if ('members' in data && data.members != null) {
+			this.members = []
+			for (const member of data.members) {
+				this.members.push(member.id_string)
+			}
+		}
+		if ('roles' in data && data.roles != null) {
+			this.roles = []
+			for (const role of data.roles) {
+				this.roles.push(role.id_string)
+			}
+		}
+
+		this._patch(data)
+	}
+
+	_patch(data: any) {
+		if ('name' in data) {
+			this.name = data.name
+		}
+		if ('owner_id_string' in data) {
+			this.ownerId = data.owner_id_string
+		}
+		if ('flags' in data && data.flags != null) {
+			this.flags = new GuildFlags(data.flags)
+		}
+		if ('channels' in data && data.channels != null) {
+			this.channels = []
+			for (const channel of data.channels) {
+				this.channels.push(channel.id_string)
+			}
+		}
+		if ('members' in data && data.members != null) {
+			this.members = []
+			for (const member of data.members) {
+				this.members.push(member.id_string)
+			}
+		}
+		if ('roles' in data && data.roles != null) {
+			this.roles = []
+			for (const role of data.roles) {
+				this.roles.push(role.id_string)
 			}
 		}
 

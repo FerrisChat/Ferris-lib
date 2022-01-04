@@ -1,5 +1,5 @@
 import { Client } from '../Client'
-import { Message, Channel } from '../models'
+import { Message, Channel, Guild } from '../models'
 
 const has = (o, k) => Object.prototype.hasOwnProperty.call(o, k)
 export class Util {
@@ -22,7 +22,14 @@ export class Util {
 		return given
 	}
 
-	static resolveChannel(client: Client, data: any): Channel {
+	static resolveGuild(data: any, client: Client,): Guild {
+		return (
+			client.guilds.get(data.id_string) ??
+			new Guild(data, client)
+		)
+	}
+
+	static resolveChannel(data: any, client: Client): Channel {
 		// this will change once dm channels exists
 		return (
 			client.channels.get(data.id_string) ??
@@ -39,7 +46,7 @@ export class Util {
 	 * @param {object} data The message data
 	 * @returns {Message} The reolves message
 	 */
-	static resolveMessage(client: Client, data: any): Message {
+	static resolveMessage(data: any, client: Client,): Message {
 		return (
 			client.messages.get(data.id_string) ??
 			client.channels
