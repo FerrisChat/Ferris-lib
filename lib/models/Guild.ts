@@ -91,7 +91,7 @@ export class Guild extends Base {
 		}
 		if ('members' in data && data.members != null) {
 			for (const raw_member of data.members) {
-				const member = new Member(raw_member, this.#_client)
+				const member = new Member(raw_member, this, this.#_client)
 				this.members.set(member.id, member)
 			}
 		}
@@ -175,7 +175,7 @@ export class Guild extends Base {
 		}
 		if ('members' in data && data.members != null) {
 			for (const raw_member of data.members) {
-				const member = new Member(raw_member, this.#_client)
+				const member = new Member(raw_member, this, this.#_client)
 				this.members.set(member.id, member)
 			}
 		}

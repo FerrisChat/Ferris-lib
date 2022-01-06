@@ -11,7 +11,7 @@ import {
 } from '../util/Constants'
 import { FerrisError } from '../errors/FerrislibError'
 import { inspect } from 'util'
-import { Channel, Guild, Message, User } from '..'
+import { Channel, Guild, Member, Message, User } from '..'
 import { ClientUser } from '../models/ClientUser'
 import { Util } from '../util/Util'
 import { OldMessage } from '../models/Message'
@@ -301,6 +301,18 @@ export class WebsocketManager extends EventEmitter {
 					old_guild,
 					new_guild
 				)
+				break;
+			case WebSocketEvents.GUILD_DELETE:
+				const delguild = Util.resolveGuild(payload.d.guild, this.client)
+				if(this.client.guilds.has(delguild.id)) this.client.guilds.delete(delChannel.id)
+				this.client.emit(Events.GUILD_DELETE, delguild)	
+				break;
+			case WebSocketEvents.MEMBER_CREATE:
+				const mem_guild = Util.resolveGuild(payload.d.member.guild, this.client, false)
+				if(!mem_guild) throw new Error("Recieved Member Create event for a guild the client does not have access to")
+				const member = new Member(payload.d.member, mem_guild, this.client)	
+				mem_guild.members.set(member.id, member)
+				this.emit(Events.MEMBER_CREATE, member)
 				break;
 			default:
 				return this.debug(

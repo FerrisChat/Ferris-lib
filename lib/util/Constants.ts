@@ -68,6 +68,8 @@ export enum Events {
 	CHANNEL_UPDATE = 'channelUpdate',
 	GUILD_CREATE = 'guildCreate',
 	GUILD_UPDATE = "guildUpdate",
+	GUILD_DELETE = "guildDelete",
+	MEMBER_CREATE = "memberCreate"
 }
 
 export interface ClientEvents {
@@ -76,7 +78,9 @@ export interface ClientEvents {
 	channelUpdate: (oldChannel: OldChannel, newChannel: Channel) => void
 	debug: (message: string) => void
 	guildCreate: (guild: Guild) => void
+	guildDelete: (guild: Guild) => void
 	guildUpdate: (oldGuild: OldGuild, newGuild: Guild) => void
+	memberCreate: (member: Member) => void
 	messageCreate: (message: Message) => void
 	messageDelete: (message: Message) => void
 	messageUpdate: (oldMessage: OldMessage, newMessage: Message) => void

@@ -37,10 +37,14 @@ export class Member extends Base {
 	 * @param {any} data The Member data
 	 * @param {Client} client
 	 */
-	constructor(data: any, client: Client) {
+	constructor(data: any, guild: Guild, client: Client) {
 		super(data.user_id_string)
 
 		this.#_client = client
+
+		this.guild = guild
+		this.guildId = guild.id
+		this.user = client.users.get(data.user_id_string)
 
 		this._patch(data)
 	}

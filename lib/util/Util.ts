@@ -22,10 +22,10 @@ export class Util {
 		return given
 	}
 
-	static resolveGuild(data: any, client: Client,): Guild {
+	static resolveGuild(data: any, client: Client, create: boolean = true): Guild {
 		return (
-			client.guilds.get(data.id_string) ??
-			new Guild(data, client)
+			client.guilds.get(data.id_string) ?? create === true ?
+			new Guild(data, client) : null
 		)
 	}
 
@@ -46,7 +46,7 @@ export class Util {
 	 * @param {object} data The message data
 	 * @returns {Message} The reolves message
 	 */
-	static resolveMessage(data: any, client: Client,): Message {
+	static resolveMessage(data: any, client: Client): Message {
 		return (
 			client.messages.get(data.id_string) ??
 			client.channels
